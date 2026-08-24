@@ -1,11 +1,12 @@
   :root {
-    --main-color: hsl(125, 25%, 55%);
-    --main-color-dark: hsl(125, 25%, 45%);
-    --main-color-light: hsl(125, 25%, 70%);
+    --main-hue: 178;
+    --main-color: hsl(--main-hue, 74%, 67%);
+    --main-color-dark: hsl(--main-hue, 74%, 45%);
+    --main-color-light: hsl(--main-hue, 74%, 80%);
 
-    --notification-color: hsl(125, 70%, 55%);
+    --notification-color: hsl(--main-hue, 70%, 55%);
     
-    --preview-hue: 125;
+    --preview-hue: 178;
     --preview-color: hsl(var(--preview-hue), 70%, 55%);
   }
 
@@ -39,11 +40,6 @@
   }
 
 
-  .color-mode {
-    --main-color: hsl(var(--main-hue), 70%, 35%);
-    --main-color-dark: hsl(var(--main-hue), 70%, 40%);
-    --main-color-light: hsl(var(--main-hue), 70%, 75%);
-  }
 
   /* App Title */
   h1 {
