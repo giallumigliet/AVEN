@@ -187,16 +187,11 @@
     display: flex;
     flex-direction: column;
 
-    transform: translateY(150%);
-    transition: transform 0.4s ease;
     max-height: 80dvh;
 
     z-index: 1001;
   }
 
-  .panel.active {
-    transform: translateY(0);
-  }
 
 
   .panel-header {
