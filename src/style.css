@@ -1,7 +1,7 @@
   :root {
     --main-hue: 178;
     --main-color: hsl(--main-hue, 74%, 67%);
-    --main-color-dark: hsl(--main-hue, 74%, 45%);
+    --main-color-dark: hsl(--main-hue, 74%, 35%);
     --main-color-light: hsl(--main-hue, 74%, 80%);
 
     --notification-color: hsl(--main-hue, 70%, 55%);
