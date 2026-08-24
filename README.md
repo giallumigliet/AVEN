@@ -1,9 +1,10 @@
-# 💰 AVEN Web App
+# AVEN Web App
 <p align="center">
   <img width="150" height="150" src="aven.png" />
 </p>
 
-La web app di FINanza che ti fa sapere quanto hai speso o guadagnato fino ad ORA. Importa i tuoi cedolini e estratti conti del mese e prendi una visione a 360 gradi di come guadagni e spendi.
+AVEN — Automated Virtual Everyday Network  - AVEN è la rete che collega tutti gli aspetti della tua vita: task, timer, calendario, reminder, pagamenti, compleanni, notifiche ecc.
+
 
 Frontend: *HTML* / *CSS* / *JS*.  
 Hosting: *GitHub Pages*.  
