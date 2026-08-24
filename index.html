@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f0f0f0" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#141414" media="(prefers-color-scheme: dark)">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+  <title>FinOra AI</title>
+  <link rel="stylesheet" href="./src/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet">
+</head>
+<body>
+  <h1 id="app-title">FinOra AI</h1>
+
+  <div class="pdf-box">
+    <h3 id="pdf-box-title">Carica PDF Cedolino</h3>
+    <input
+      type="file"
+      id="pdfInput"
+      accept=".pdf,application/pdf"
+    >
+  </div>
+
+  
+
+  <div id="button-footer">
+    <button id="task-btn">Entrate</button>
+    <div id="auth-area">
+      <neutral-button id="login-btn">LOG IN</neutral-button>
+      <button id="profile-btn" class="hidden">
+        <img id="user-photo" />
+      </button>
+    </div>
+    <button id="stats-btn">Spese</button>
+  </div>
+
+
+
+  <div id="overlay"></div>
+
+  <div id="account-floating-panel"  class="hidden">
+    <account-button id="lightDark-btn">Light/Dark mode</account-button>
+    <account-button id="changeAccount-btn">Change account</account-button>
+    <account-button id="logout-btn">Logout</account-button>
+    <account-button id="resetData-btn">Reset data</account-button>
+  </div>
+
+
+
+  <div id="floating-panel">
+    <div class="panel-header" id="close-panel">CLOSE</div>
+
+    <div class="panel-content"></div>
+
+    <div class="panel-footer"></div>
+  </div>
+
+
+
+
+  <script type="module" src="./src/script.js"></script>
+
+</body>
+</html>

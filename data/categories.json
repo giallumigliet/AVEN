@@ -1,0 +1,74 @@
+[
+  {
+    "id": "auto-moto",
+    "name": "Auto / moto",
+    "icon": "🚗",
+    "sortOrder": 1
+  },
+  {
+    "id": "negozi",
+    "name": "Negozi",
+    "icon": "📁",
+    "sortOrder": 2
+  },
+  {
+    "id": "cibo",
+    "name": "Cibo",
+    "icon": "🍽️",
+    "sortOrder": 3
+  },
+  {
+    "id": "svago",
+    "name": "Svago",
+    "icon": "🎉",
+    "sortOrder": 4
+  },
+  {
+    "id": "trasporti",
+    "name": "Trasporti",
+    "icon": "🚆",
+    "sortOrder": 5
+  },
+  {
+    "id": "transazioni",
+    "name": "Transazioni",
+    "icon": "💳",
+    "sortOrder": 6
+  },
+  {
+    "id": "casa",
+    "name": "Casa",
+    "icon": "🏠",
+    "sortOrder": 7
+  },
+  {
+    "id": "benessere",
+    "name": "Benessere",
+    "icon": "❤️",
+    "sortOrder": 8
+  },
+  {
+    "id": "telefonia-servizi-digitali",
+    "name": "Telefonia e servizi digitali",
+    "icon": "📱",
+    "sortOrder": 9
+  },
+  {
+    "id": "viaggi",
+    "name": "Viaggi",
+    "icon": "✈️",
+    "sortOrder": 10
+  },
+  {
+    "id": "animali",
+    "name": "Animali",
+    "icon": "🐾",
+    "sortOrder": 11
+  },
+  {
+    "id": "regali",
+    "name": "Regali",
+    "icon": "🎁",
+    "sortOrder": 12
+  }
+]
