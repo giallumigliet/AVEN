@@ -172,7 +172,7 @@
   }
 
 
-  #floating-panel {
+  .panel {
     position: fixed;
 
     left: 10px;
@@ -194,7 +194,7 @@
     z-index: 1001;
   }
 
-  #floating-panel.active {
+  .panel.active {
     transform: translateY(0);
   }
 
