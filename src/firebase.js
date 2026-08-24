@@ -4,12 +4,13 @@ import { getAuth } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-aut
 import { getFirestore } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBD3S_nOgf5nlq8yWdGwUOkWOP5q0RFdfg",
-  authDomain: "finora-17178.firebaseapp.com",
-  projectId: "finora-17178",
-  storageBucket: "finora-17178.firebasestorage.app",
-  messagingSenderId: "205225330212",
-  appId: "1:205225330212:web:2ffc287194742584eb7ab1"
+  apiKey: "AIzaSyBWZL9-AJc9RqmwdiVkOBMVnk5ed3woNoo",
+  authDomain: "aven-aven.firebaseapp.com",
+  projectId: "aven-aven",
+  storageBucket: "aven-aven.firebasestorage.app",
+  messagingSenderId: "760754542696",
+  appId: "1:760754542696:web:f842dbd67cd5f8be0cc3dd",
+  measurementId: "G-ESVSP4MLMN"
 };
 
 const app = initializeApp(firebaseConfig);
