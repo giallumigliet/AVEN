@@ -295,17 +295,3 @@
     object-fit: cover;
   }
 
-
-
-  .pdf-box {
-    width: 200px;
-    padding: 20px;
-    border: 0px solid #ccc;
-    border-radius: 12px;
-    background: var(--bg-color);
-    box-shadow: 0 -5px 5px rgba(0,0,0,0.1);
-  }
-  
-  #pdf-box-title {
-    margin-top: 0;
-  }
