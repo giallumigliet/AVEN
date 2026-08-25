@@ -1,54 +1,402 @@
 <!DOCTYPE html>
 <html lang="it">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#f0f0f0" media="(prefers-color-scheme: light)">
-  <meta name="theme-color" content="#141414" media="(prefers-color-scheme: dark)">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta charset="UTF-8">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+  >
 
   <title>AVEN</title>
+
   <link rel="stylesheet" href="./src/style.css">
-  <link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet">
 </head>
+
+
 <body>
-  <h1 id="app-title">AVEN</h1>
 
-  <div id="recap-panel" class="panel">
-    <h2 id="recap-text">Buongiorno Gianluca</h2>
-  </div>
+  <div class="app" id="app">
 
-  
-  
 
-  <div id="button-footer">
-    <button id="task-btn">MENU</button>
-    <div id="auth-area">
-      <neutral-button id="login-btn">LOG IN</neutral-button>
-      <button id="profile-btn" class="hidden">
-        <img id="user-photo" />
-      </button>
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
+
+    <header class="topbar">
+
+      <div class="topbar-left">
+
+        <!-- Opens/closes the sidebar -->
+        <button
+          class="icon-button menu-button"
+          id="menu-button"
+          aria-label="Open menu"
+          aria-expanded="true"
+        >
+          ☰
+        </button>
+
+
+        <div class="brand">
+
+          <span class="status-dot"></span>
+
+          <span>AVEN</span>
+
+        </div>
+
+      </div>
+
+
+      <div class="topbar-right">
+
+        <!-- Hidden on small screens -->
+        <span class="time">
+          09:42
+        </span>
+
+
+        <!-- Weather -->
+        <button
+          class="weather-button"
+          type="button"
+          aria-label="Weather"
+        >
+
+          <span class="weather-icon">☀</span>
+
+          <span class="temperature">24°</span>
+
+        </button>
+
+
+        <!-- Account -->
+        <div class="account">
+
+          <button
+            class="profile-button"
+            id="profile-button"
+            type="button"
+            aria-label="Account"
+            aria-expanded="false"
+          >
+
+            <!-- Temporary image -->
+            <img
+              src="https://i.pravatar.cc/100?img=12"
+              alt="Profile"
+            >
+
+          </button>
+
+
+          <!-- Account floating menu -->
+
+          <div
+            class="account-menu"
+            id="account-menu"
+          >
+
+            <button
+              class="account-menu-item"
+              id="light-dark-button"
+              type="button"
+            >
+              Light/Dark mode
+            </button>
+
+
+            <button
+              class="account-menu-item"
+              id="change-account-button"
+              type="button"
+            >
+              Change account
+            </button>
+
+
+            <button
+              class="account-menu-item"
+              id="logout-button"
+              type="button"
+            >
+              Logout
+            </button>
+
+
+            <button
+              class="account-menu-item danger"
+              id="reset-data-button"
+              type="button"
+            >
+              Reset data
+            </button>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </header>
+
+
+
+    <!-- =====================================================
+         MAIN CONTENT
+    ====================================================== -->
+
+    <div class="content">
+
+
+      <!-- Mobile backdrop -->
+      <div
+        class="sidebar-backdrop"
+        id="sidebar-backdrop"
+      ></div>
+
+
+      <!-- ===================================================
+           SIDEBAR
+      ==================================================== -->
+
+      <aside
+        class="sidebar"
+        id="sidebar"
+      >
+
+        <button
+          class="nav-item active"
+          type="button"
+        >
+
+          <span class="nav-icon">□</span>
+
+          <span>Calendar</span>
+
+        </button>
+
+
+        <button
+          class="nav-item"
+          type="button"
+        >
+
+          <span class="nav-icon">♪</span>
+
+          <span>Music</span>
+
+        </button>
+
+
+        <button
+          class="nav-item"
+          type="button"
+        >
+
+          <span class="nav-icon">⌂</span>
+
+          <span>Home</span>
+
+        </button>
+
+
+        <button
+          class="nav-item"
+          type="button"
+        >
+
+          <span class="nav-icon">⚙</span>
+
+          <span>Impostazioni</span>
+
+        </button>
+
+      </aside>
+
+
+
+      <!-- ===================================================
+           MAIN
+      ==================================================== -->
+
+      <main>
+
+
+        <!-- Greeting -->
+
+        <section class="greeting">
+
+          <p class="greeting-subtitle">
+            Good evening
+          </p>
+
+          <h1 class="greeting-title">
+            How can I help?
+          </h1>
+
+        </section>
+
+
+
+        <!-- =================================================
+             ASSISTANT AREA
+        ================================================== -->
+
+        <section class="assistant-area">
+
+
+          <!-- Animated assistant core -->
+
+          <div class="assistant-core">
+
+            <span class="assistant-status">
+              Ready
+            </span>
+
+          </div>
+
+
+
+          <!-- Daily overview -->
+
+          <section class="daily-panel">
+
+            <div class="daily-header">
+
+              <div class="daily-title">
+
+                <span class="daily-label">
+                  Your day
+                </span>
+
+                <h2>
+                  Daily overview
+                </h2>
+
+              </div>
+
+
+              <span class="daily-date">
+                Today · Tuesday
+              </span>
+
+            </div>
+
+
+
+            <div class="daily-items">
+
+
+              <article class="daily-item">
+
+                <div class="daily-item-top">
+
+                  <span class="daily-item-icon">
+                    ✓
+                  </span>
+
+                  <span class="daily-item-count">
+                    4
+                  </span>
+
+                </div>
+
+                <span class="daily-item-name">
+                  Tasks
+                </span>
+
+              </article>
+
+
+
+              <article class="daily-item">
+
+                <div class="daily-item-top">
+
+                  <span class="daily-item-icon">
+                    ◷
+                  </span>
+
+                  <span class="daily-item-count">
+                    2
+                  </span>
+
+                </div>
+
+                <span class="daily-item-name">
+                  Events
+                </span>
+
+              </article>
+
+
+
+              <article class="daily-item">
+
+                <div class="daily-item-top">
+
+                  <span class="daily-item-icon">
+                    ♡
+                  </span>
+
+                  <span class="daily-item-count">
+                    1
+                  </span>
+
+                </div>
+
+                <span class="daily-item-name">
+                  Birthday
+                </span>
+
+              </article>
+
+            </div>
+
+          </section>
+
+        </section>
+
+
+
+        <!-- =================================================
+             COMMAND BAR
+        ================================================== -->
+
+        <form
+          class="command"
+          id="command-form"
+        >
+
+          <input
+            class="command-input"
+            type="text"
+            placeholder="Ask anything..."
+            autocomplete="off"
+          >
+
+
+          <button
+            class="mic-button"
+            type="button"
+            aria-label="Microphone"
+          >
+            🎙
+          </button>
+
+        </form>
+
+      </main>
+
     </div>
-    <button id="stats-btn">RECAP</button>
+
   </div>
 
 
-
-  <div id="overlay"></div>
-
-  <div id="account-floating-panel"  class="hidden">
-    <account-button id="lightDark-btn">Light/Dark mode</account-button>
-    <account-button id="changeAccount-btn">Change account</account-button>
-    <account-button id="logout-btn">Logout</account-button>
-    <account-button id="resetData-btn">Reset data</account-button>
-  </div>
-
-
-
-
-  <script type="module" src="./src/script.js"></script>
+  <script src="./src/script.js"></script>
 
 </body>
+
 </html>
