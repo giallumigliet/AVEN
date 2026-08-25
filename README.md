@@ -40,7 +40,7 @@ Login: *Google Auth*.
 
 ## 💾 How to use
 
-1. Remember or save the link https://giallumigliet.github.io/Finora/.  
+1. Remember or save the link https://giallumigliet.github.io/AVEN/.  
 
 
 ## ✨ Author
