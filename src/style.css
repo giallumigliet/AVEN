@@ -460,7 +460,7 @@ body.light-mode .auth-gate {
   align-items: center;
   border-radius: 10px;
   color: var(--color-text);
-  font-size: 12px;
+  font-size: 14px;
 }
 
 .weather-hour-time,
@@ -476,6 +476,7 @@ body.light-mode .auth-gate {
 
 .weather-hour-temperature,
 .weather-day-temperature {
+  font-size: 14px;
   white-space: nowrap;
 }
 
