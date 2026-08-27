@@ -470,6 +470,7 @@ body.light-mode .auth-gate {
 
 .weather-hour-icon,
 .weather-day-icon {
+  font-size: 14px;
   text-align: center;
 }
 
