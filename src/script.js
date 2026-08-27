@@ -29,6 +29,9 @@ const loginButton = document.getElementById("login-button");
 const menuButton = document.getElementById("menu-button");
 const sidebarBackdrop = document.getElementById("sidebar-backdrop");
 
+const checkCalendarSidebar = document.getElementById("check-calendar-sidebar");
+
+
 const profileButton = document.getElementById("profile-button");
 const userPhoto = document.getElementById("user-photo");
 const accountMenu = document.getElementById("account-menu");
@@ -159,6 +162,11 @@ navItems.forEach((item) => {
 
   });
 
+});
+
+
+checkCalendarSidebar.addEventListener("click", () => {
+  window.location.href = "https://giallumigliet.github.io/check_calendar/";
 });
 
 
