@@ -354,7 +354,7 @@ const weatherPanel = document.getElementById("weather-panel");
 const weatherData = await getWeather();
 const currentWeather = getCurrentWeather(weatherData);
 const hours = getHourlyPreview(weatherData);
-const days = getHourlyPreview(weatherData);
+const days = getNextDays(weatherData);
 
 
 weatherButton.innerHTML = `
