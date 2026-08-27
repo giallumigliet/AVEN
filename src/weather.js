@@ -1,0 +1,89 @@
+const API_URL = "https://api.open-meteo.com/v1/forecast";
+
+function getIcon(code) {
+    if (code === 0) return "☀️";
+    if ([1, 2].includes(code)) return "🌤️";
+    if (code === 3) return "☁️";
+    if ([45, 48].includes(code)) return "🌫️";
+    if ([51, 53, 55, 56, 57].includes(code)) return "🌦️";
+    if ([61, 63, 65, 66, 67].includes(code)) return "🌧️";
+    if ([71, 73, 75, 77].includes(code)) return "❄️";
+    if ([80, 81, 82].includes(code)) return "🌦️";
+    if ([95, 96, 99].includes(code)) return "⛈️";
+
+    return "❓";
+}
+
+export async function getWeather() {
+
+    // Posizione corrente
+    const position = await new Promise((resolve, reject) => {
+        navigator.geolocation.getCurrentPosition(
+            resolve,
+            reject
+        );
+    });
+
+    const lat = position.coords.latitude;
+    const lon = position.coords.longitude;
+
+    // Richiesta meteo
+    const url =
+        `${API_URL}?latitude=${lat}` +
+        `&longitude=${lon}` +
+        `&hourly=temperature_2m,weather_code` +
+        `&daily=temperature_2m_max,temperature_2m_min,weather_code` +
+        `&forecast_days=7` +
+        `&timezone=auto`;
+
+    const response = await fetch(url);
+    const location = await response.json();
+    const place = location.results[0].name
+
+
+    // OGGI - PREVISIONI ORARIE
+    // =========================
+
+    const today = new Date().toISOString().split("T")[0];
+
+    const todayHours = [];
+
+    for (let i = 0; i < data.hourly.time.length; i++) {
+
+        if (data.hourly.time[i].startsWith(today)) {
+
+            const code = data.hourly.weather_code[i];
+
+            todayHours.push({
+                hour: data.hourly.time[i].split("T")[1],
+                temperature: data.hourly.temperature_2m[i],
+                weatherCode: code,
+                icon: getIcon(code)
+            });
+        }
+    }
+
+
+    // PROSSIMI 6 GIORNI
+    // =========================
+
+    const nextDays = [];
+
+    for (let i = 1; i <= 6; i++) {
+
+        const code = data.daily.weather_code[i];
+
+        nextDays.push({
+            date: data.daily.time[i],
+            maxTemperature: data.daily.temperature_2m_max[i],
+            minTemperature: data.daily.temperature_2m_min[i],
+            weatherCode: code,
+            icon: getIcon(code)
+        });
+    }
+
+    return {
+        today: todayHours,
+        nextDays: nextDays
+    };
+}
