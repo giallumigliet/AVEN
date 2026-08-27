@@ -348,6 +348,8 @@ const weatherHourly = document.getElementById("weather-hourly");
 const weatherDaily = document.getElementById("weather-daily");
 const weatherWarning = document.querySelector(".weather-warning");
 
+const weatherPanel = document.getElementById("weather-panel");
+
 
 const weatherData = await getWeather();
 const currentWeather = getCurrentWeather(weatherData);
@@ -378,6 +380,49 @@ weatherDaily.innerHTML = days.map(day => `
         <span class="weather-day-temperature"> ${day.min}° / ${day.max}° </span>
     </div>
 `).join("");
+
+
+
+
+
+weatherButton.addEventListener("click", (event) => {
+
+  event.stopPropagation();
+
+  if (weatherPanel.classList.contains("open")) {
+    closeWeatherPanel();
+  } else {
+    openWeatherPanel();
+  }
+
+});
+
+
+function openWeatherPanel() {
+
+  weatherPanel.classList.add("open");
+  weatherButton.classList.add("active");
+  weatherButton.setAttribute("aria-expanded", "true");
+
+}
+
+
+function closeWeatherPanel() {
+
+  weatherPanel.classList.remove("open");
+  weatherButton.classList.remove("active");
+  weatherButton.setAttribute("aria-expanded", "false");
+
+}
+
+
+document.addEventListener("click", (event) => {
+
+  if (!event.target.closest(".weather")) {
+    closeWeatherPanel();
+  }
+
+});
 
 
 
