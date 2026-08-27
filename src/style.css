@@ -423,7 +423,7 @@ body.light-mode .auth-gate {
   width: 300px;
   padding: 12px 14px;
   display: grid;
-  grid-template-columns: auto auto;
+  grid-template-columns: max-content max-content;
   column-gap: 45px;
   border-radius: 20px;
   background: var(--color-panel);
