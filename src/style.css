@@ -461,6 +461,7 @@ body.light-mode .auth-gate {
   border-radius: 10px;
   color: var(--color-text);
   font-size: 14px;
+  gap: 1px;
 }
 
 .weather-hour-time,
