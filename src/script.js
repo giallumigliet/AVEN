@@ -11,6 +11,14 @@ import {
   deleteUser
 } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js";
 
+import {
+    getWeather,
+    getCurrentWeather,
+    getHourlyPreview,
+    getNextDays,
+    hasPrecipitationToday
+} from "./weather.js";
+
 
 // ELEMENTS =========================================================
 
@@ -31,6 +39,7 @@ const logoutButton = document.getElementById("logout-button");
 const resetDataButton = document.getElementById("reset-data-button");
 
 const navItems = document.querySelectorAll(".nav-item");
+
 
 
 // AUTH =========================================================
@@ -326,3 +335,50 @@ window.addEventListener("resize", () => {
   }
 
 });
+
+
+
+
+
+
+
+// WEATHER =========================================================
+const weatherButton = document.getElementById("weather-button");
+const weatherHourly = document.getElementById("weather-hourly");
+const weatherDaily = document.getElementById("weather-daily");
+const weatherWarning = document.querySelector(".weather-warning");
+
+
+const weatherData = await getWeather();
+const currentWeather = getCurrentWeather(weatherData);
+const hours = getHourlyPreview(weatherData);
+const days = getHourlyPreview(weatherData);
+
+
+weatherButton.innerHTML = `
+    <span class="weather-icon">${currentWeather.icon}</span>
+    <span class="temperature">${currentWeather.temperature}°</span>
+    <span class="weather-warning">${hasPrecipitationToday(weatherData) ? "⚠" : ""}</span>
+`;
+
+
+weatherHourly.innerHTML = hours.map(hour => `
+    <div class="weather-hour">
+        <span class="weather-hour-time"> ${hour.hour} </span>
+        <span class="weather-hour-icon"> ${hour.icon} </span>
+        <span class="weather-hour-temperature"> ${hour.temperature}° </span>
+    </div>
+`).join("");
+
+
+weatherDaily.innerHTML = days.map(day => `
+    <div class="weather-day">
+        <span class="weather-day-name"> ${day.day} </span>
+        <span class="weather-day-icon"> ${day.icon} </span>
+        <span class="weather-day-temperature"> ${day.min}° / ${day.max}° </span>
+    </div>
+`).join("");
+
+
+
+
