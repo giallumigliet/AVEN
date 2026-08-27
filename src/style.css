@@ -423,8 +423,8 @@ body.light-mode .auth-gate {
   width: 300px;
   padding: 12px 14px;
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  column-gap: 24px;
+  grid-template-columns: auto auto;
+  column-gap: 45px;
   border-radius: 20px;
   background: var(--color-panel);
   border: 1px solid var(--color-panel-border);
@@ -456,7 +456,7 @@ body.light-mode .auth-gate {
 .weather-day {
   min-height: 28px;
   display: grid;
-  grid-template-columns: 38px 24px auto;
+  grid-template-columns: 34px 22px auto;
   align-items: center;
   border-radius: 10px;
   color: var(--color-text);
