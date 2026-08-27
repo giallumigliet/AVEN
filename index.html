@@ -4,150 +4,100 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-
   <title>AVEN</title>
-
   <link rel="stylesheet" href="./src/style.css">
 </head>
 
 <body>
-
   <div class="app" id="app">
-
-    <!-- =====================================================
-         AUTH GATE
-    ====================================================== -->
-
+    
+    <!-- AUTH GATE ====================================================== -->
     <div class="auth-gate" id="auth-gate">
-
       <div class="auth-card">
-
         <div class="auth-orb">
           <span></span>
         </div>
-
         <div class="auth-status">AVEN</div>
-
         <h1>Welcome to AVEN</h1>
-
         <p>Sign in to continue</p>
-
         <button class="login-button" id="login-button" type="button">
           <span class="google-icon">G</span>
           Continue with Google
         </button>
-
       </div>
-
     </div>
-
-
-    <!-- =====================================================
-         HEADER
-    ====================================================== -->
-
+    
+    <!-- HEADER ====================================================== -->
     <header class="topbar">
-
       <div class="topbar-left">
-
         <button class="icon-button menu-button" id="menu-button" type="button" aria-label="Open menu" aria-expanded="true">
           ☰
         </button>
-
+        
         <div class="brand">
           <span class="status-dot"></span>
           <span>AVEN</span>
         </div>
-
       </div>
-
-
+      
       <div class="topbar-right">
-
         <span class="time">09:42</span>
-
+        
         <button class="weather-button" type="button" aria-label="Weather">
           <span class="weather-icon">☀</span>
           <span class="temperature">24°</span>
         </button>
 
-
+        
         <div class="account">
-
           <button class="profile-button" id="profile-button" type="button" aria-label="Account" aria-expanded="false">
             <img id="user-photo" src="https://i.pravatar.cc/100?img=12" alt="Profile">
           </button>
-
-
+          
           <div class="account-menu" id="account-menu">
-
-            <button class="account-menu-item" id="light-dark-button" type="button">
-              Light/Dark mode
-            </button>
-
-            <button class="account-menu-item" id="change-account-button" type="button">
-              Change account
-            </button>
-
-            <button class="account-menu-item" id="logout-button" type="button">
-              Logout
-            </button>
-
-            <button class="account-menu-item danger" id="reset-data-button" type="button">
-              Reset data
-            </button>
-
+            <button class="account-menu-item" id="light-dark-button" type="button"> Light/Dark mode </button>
+            <button class="account-menu-item" id="change-account-button" type="button"> Change account </button>
+            <button class="account-menu-item" id="logout-button" type="button"> Logout </button>
+            <button class="account-menu-item danger" id="reset-data-button" type="button"> Reset data </button>
           </div>
-
         </div>
-
       </div>
-
     </header>
-
-
-    <!-- =====================================================
-         CONTENT
-    ====================================================== -->
-
+    
+    <!-- CONTENT ====================================================== -->
     <div class="content">
-
       <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
 
 
-      <!-- ===================================================
-           SIDEBAR
-      ==================================================== -->
-
+      <!-- SIDEBAR ==================================================== -->
       <aside class="sidebar" id="sidebar">
-
         <button class="nav-item active" type="button">
           <span class="nav-icon">□</span>
-          <span>Calendar</span>
+          <span>Check calendar</span>
         </button>
 
         <button class="nav-item" type="button">
-          <span class="nav-icon">♪</span>
-          <span>Music</span>
+          <span class="nav-icon">☑</span>
+          <span>To do lists</span>
+        </button>
+
+        <button class="nav-item" type="button">
+          <span class="nav-icon">↺</span>
+          <span>Routines</span>
+        </button>
+
+        <button class="nav-item" type="button">
+          <span class="nav-icon">♡</span>
+          <span>Health</span>
         </button>
 
         <button class="nav-item" type="button">
           <span class="nav-icon">⌂</span>
           <span>Home</span>
         </button>
-
-        <button class="nav-item" type="button">
-          <span class="nav-icon">⚙</span>
-          <span>Impostazioni</span>
-        </button>
-
       </aside>
 
-
-      <!-- ===================================================
-           MAIN
-      ==================================================== -->
-
+      <!-- MAIN ==================================================== -->
       <main>
 
         <section class="greeting">
@@ -155,27 +105,20 @@
           <h1 class="greeting-title">How can I help?</h1>
         </section>
 
-
         <section class="assistant-area">
-
           <div class="assistant-core">
             <span class="assistant-status">Ready</span>
           </div>
 
-
           <section class="daily-panel">
-
             <div class="daily-header">
-
               <div class="daily-title">
                 <span class="daily-label">Your day</span>
                 <h2>Daily overview</h2>
               </div>
 
               <span class="daily-date">Today · Tuesday</span>
-
             </div>
-
 
             <div class="daily-items">
 
@@ -187,7 +130,6 @@
                 <span class="daily-item-name">Tasks</span>
               </article>
 
-
               <article class="daily-item">
                 <div class="daily-item-top">
                   <span class="daily-item-icon">◷</span>
@@ -195,7 +137,6 @@
                 </div>
                 <span class="daily-item-name">Events</span>
               </article>
-
 
               <article class="daily-item">
                 <div class="daily-item-top">
@@ -206,30 +147,19 @@
               </article>
 
             </div>
-
           </section>
-
         </section>
 
-
         <form class="command" id="command-form">
-
           <input class="command-input" type="text" placeholder="Ask anything..." autocomplete="off">
-
           <button class="mic-button" type="button" aria-label="Microphone">
             🎙
           </button>
-
         </form>
-
       </main>
-
     </div>
-
   </div>
 
-
   <script type="module" src="./src/script.js"></script>
-
 </body>
 </html>
