@@ -173,6 +173,7 @@ profileButton.addEventListener("click", (event) => {
   } else {
     openAccountMenu();
   }
+  closeWeatherPanel();
 
 });
 
@@ -394,6 +395,7 @@ weatherButton.addEventListener("click", (event) => {
   } else {
     openWeatherPanel();
   }
+  closeAccountMenu();
 
 });
 
