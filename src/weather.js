@@ -15,9 +15,9 @@ export function getWeatherIcon(code) {
     if ([61, 63, 65, 66, 67].includes(code)) return "🌧️";
     if ([71, 73, 75, 77].includes(code)) return "❄️";
     if ([80, 81, 82].includes(code)) return "🌦️";
-    if ([95, 96, 99].includes(code)) return "⛈️";
+    if ([95, 96, 99].includes(code)) return "⚡";
 
-    return "❓";
+    return "?";
 }
 
 
