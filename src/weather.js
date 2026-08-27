@@ -1,6 +1,12 @@
 const API_URL = "https://api.open-meteo.com/v1/forecast";
 
-function getIcon(code) {
+
+// ================================
+// WEATHER CODE → ICONA
+// ================================
+
+export function getWeatherIcon(code) {
+
     if (code === 0) return "☀️";
     if ([1, 2].includes(code)) return "🌤️";
     if (code === 3) return "☁️";
@@ -14,76 +20,255 @@ function getIcon(code) {
     return "❓";
 }
 
+
+// ================================
+// RECUPERA METEO
+// ================================
+
 export async function getWeather() {
 
-    // Posizione corrente
+    // Posizione
     const position = await new Promise((resolve, reject) => {
+
         navigator.geolocation.getCurrentPosition(
             resolve,
             reject
         );
+
     });
 
     const lat = position.coords.latitude;
     const lon = position.coords.longitude;
 
-    // Richiesta meteo
+
+    // API
     const url =
         `${API_URL}?latitude=${lat}` +
         `&longitude=${lon}` +
         `&hourly=temperature_2m,weather_code` +
-        `&daily=temperature_2m_max,temperature_2m_min,weather_code` +
+        `&daily=temperature_2m_max,temperature_2m_min,weather_code,precipitation_probability_max` +
         `&forecast_days=7` +
         `&timezone=auto`;
 
+
     const response = await fetch(url);
-    const location = await response.json();
-    const place = location.results[0].name
 
-
-    // OGGI - PREVISIONI ORARIE
-    // =========================
-
-    const today = new Date().toISOString().split("T")[0];
-
-    const todayHours = [];
-
-    for (let i = 0; i < data.hourly.time.length; i++) {
-
-        if (data.hourly.time[i].startsWith(today)) {
-
-            const code = data.hourly.weather_code[i];
-
-            todayHours.push({
-                hour: data.hourly.time[i].split("T")[1],
-                temperature: data.hourly.temperature_2m[i],
-                weatherCode: code,
-                icon: getIcon(code)
-            });
-        }
+    if (!response.ok) {
+        throw new Error("Errore nel recupero del meteo");
     }
 
+    const data = await response.json();
 
-    // PROSSIMI 6 GIORNI
-    // =========================
 
-    const nextDays = [];
+    return data;
+}
+
+
+// ================================
+// DATI ORARI
+// +1 +2 +3 +5 +8 +12 ORE
+// ================================
+
+export function getHourlyPreview(data) {
+
+    const offsets = [1, 2, 3, 5, 8, 12];
+
+    const currentTime = new Date();
+
+    const currentHour = currentTime.getHours();
+
+
+    return offsets.map(offset => {
+
+        const targetHour = currentHour + offset;
+
+        const index = data.hourly.time.findIndex(time => {
+
+            const hour = Number(
+                time.split("T")[1].split(":")[0]
+            );
+
+            return (
+                hour === targetHour % 24
+            );
+        });
+
+
+        if (index === -1) {
+            return null;
+        }
+
+
+        const code = data.hourly.weather_code[index];
+
+        return {
+
+            hour: data.hourly.time[index]
+                .split("T")[1]
+                .slice(0, 5),
+
+            temperature:
+                Math.round(
+                    data.hourly.temperature_2m[index]
+                ),
+
+            weatherCode: code,
+
+            icon: getWeatherIcon(code)
+
+        };
+
+    }).filter(Boolean);
+}
+
+
+// ================================
+// 6 GIORNI SUCCESSIVI
+// ================================
+
+export function getNextDays(data) {
+
+    const days = [];
 
     for (let i = 1; i <= 6; i++) {
 
         const code = data.daily.weather_code[i];
 
-        nextDays.push({
+        const date = new Date(
+            data.daily.time[i] + "T12:00:00"
+        );
+
+
+        days.push({
+
             date: data.daily.time[i],
-            maxTemperature: data.daily.temperature_2m_max[i],
-            minTemperature: data.daily.temperature_2m_min[i],
+
+            day: date.toLocaleDateString(
+                "it-IT",
+                {
+                    weekday: "short"
+                }
+            ),
+
+            min:
+                Math.round(
+                    data.daily.temperature_2m_min[i]
+                ),
+
+            max:
+                Math.round(
+                    data.daily.temperature_2m_max[i]
+                ),
+
             weatherCode: code,
-            icon: getIcon(code)
+
+            icon: getWeatherIcon(code)
+
         });
+
     }
 
+    return days;
+}
+
+
+// ================================
+// TEMPERATURA / ICONA ATTUALE
+// ================================
+
+export function getCurrentWeather(data) {
+
+    const now = new Date();
+
+    const currentHour =
+        now.getHours();
+
+
+    const index =
+        data.hourly.time.findIndex(time => {
+
+            const hour = Number(
+                time.split("T")[1].split(":")[0]
+            );
+
+            return hour === currentHour;
+
+        });
+
+
+    if (index === -1) {
+        return null;
+    }
+
+
+    const code =
+        data.hourly.weather_code[index];
+
+
     return {
-        today: todayHours,
-        nextDays: nextDays
+
+        temperature:
+            Math.round(
+                data.hourly.temperature_2m[index]
+            ),
+
+        weatherCode: code,
+
+        icon: getWeatherIcon(code)
+
     };
+}
+
+
+// ================================
+// PIOGGIA O PRECIPITAZIONI OGGI?
+// ================================
+
+export function hasPrecipitationToday(data) {
+
+    const today =
+        data.daily.time[0];
+
+
+    const startIndex =
+        data.hourly.time.findIndex(
+            time => time.startsWith(today)
+        );
+
+
+    if (startIndex === -1) {
+        return false;
+    }
+
+
+    // Controlliamo le ore di oggi
+    // e vediamo se il weather code indica
+    // pioggia / rovesci / temporale.
+
+    for (
+        let i = startIndex;
+        i < startIndex + 24 &&
+        i < data.hourly.time.length;
+        i++
+    ) {
+
+        const code =
+            data.hourly.weather_code[i];
+
+
+        if (
+            [51, 53, 55, 56, 57,
+             61, 63, 65, 66, 67,
+             80, 81, 82,
+             95, 96, 99].includes(code)
+        ) {
+
+            return true;
+
+        }
+
+    }
+
+
+    return false;
 }
