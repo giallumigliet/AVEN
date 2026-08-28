@@ -503,12 +503,14 @@ body.light-mode .auth-gate {
 .weather-hour-time,
 .weather-day-name {
   opacity: 0.65;
+  white-space: nowrap;
 }
 
 .weather-hour-icon,
 .weather-day-icon {
   font-size: 18px;
   text-align: center;
+  white-space: nowrap;
 }
 
 .weather-hour-temperature,
@@ -517,7 +519,12 @@ body.light-mode .auth-gate {
   white-space: nowrap;
 }
 
-
+.weather-hour-probability,
+.weather-day-probability{
+  font-size: 10px;
+  white-space: nowrap;
+  color: rgb(100, 216, 255);
+}
 
 
 
