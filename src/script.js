@@ -363,8 +363,8 @@ const dailyTab = document.getElementById("weather-daily-tab");
 const weatherData = await getWeather();
 
 const currentWeather = getCurrentWeather(weatherData.hourlyData);
-const hours = getHourlyPreview(weatherData.hourlyData);
-const days = getNextDays(weatherData.dailyData);
+const hours = getHourlyPreview(weatherData.hourly);
+const days = getNextDays(weatherData.daily);
 
 weatherButton.innerHTML = `
     <span class="weather-icon">${weatherData.location}</span>
