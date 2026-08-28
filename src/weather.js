@@ -191,23 +191,21 @@ export function getCurrentWeather(data) {
     const now = new Date();
     const currentHour = now.getHours();
 
-    const index =
-        data.time.findIndex(time => {
+    const index = data.time.findIndex(time => {
 
-            const hour = Number(
-                time.split("T")[1].split(":")[0]
-            );
+        const hour = Number(
+            time.split("T")[1].split(":")[0]
+        );
 
-            return hour === currentHour;
+        return hour === currentHour;
 
-        });
+    });
 
     if (index === -1) {
         return null;
     }
 
-    const code =
-        data.weather_code[index];
+    const code = data.weather_code[index];
 
     return {
 
