@@ -361,10 +361,10 @@ const dailyTab = document.getElementById("weather-daily-tab");
 
 
 const weatherData = await getWeather();
+const currentWeather = getCurrentWeather(weatherData);
+const hours = getHourlyPreview(weatherData);
+const days = getNextDays(weatherData);
 
-const currentWeather = getCurrentWeather(weatherData.hourly);
-const hours = getHourlyPreview(weatherData.hourly);
-const days = getNextDays(weatherData.daily);
 
 weatherButton.innerHTML = `
     <span class="weather-icon">${weatherData.location}</span>
@@ -379,7 +379,6 @@ weatherHourly.innerHTML = hours.map(hour => `
         <span class="weather-hour-time"> ${hour.hour} </span>
         <span class="weather-hour-icon"> ${hour.icon} </span>
         <span class="weather-hour-temperature"> ${hour.temperature}° </span>
-        <span class="weather-hour-probability"> ${hour.probability}% </span>
     </div>
 `).join("");
 
@@ -389,7 +388,6 @@ weatherDaily.innerHTML = days.map(day => `
         <span class="weather-day-name"> ${day.day} </span>
         <span class="weather-day-icon"> ${day.icon} </span>
         <span class="weather-day-temperature"> ${day.min}° / ${day.max}° </span>
-        <span class="weather-day-probability"> ${day.probability}% </span>
     </div>
 `).join("");
 
@@ -446,7 +444,6 @@ document.addEventListener("click", (event) => {
     closeWeatherPanel();
   }
 });
-
 
 
 
