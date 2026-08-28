@@ -359,6 +359,9 @@ const weatherWarning = document.querySelector(".weather-warning");
 
 const weatherPanel = document.getElementById("weather-panel");
 
+const hourlyTab = document.getElementById("weather-hourly-tab");
+const dailyTab = document.getElementById("weather-daily-tab");
+
 
 const weatherData = await getWeather();
 const currentWeather = getCurrentWeather(weatherData);
@@ -394,8 +397,25 @@ weatherDaily.innerHTML = days.map(day => `
 
 
 
-weatherButton.addEventListener("click", (event) => {
 
+hourlyTab.addEventListener("click", () => {
+  weatherHourly.style.display = "flex";
+  weatherDaily.style.display = "none";
+  hourlyTab.classList.add("active");
+  dailyTab.classList.remove("active");
+});
+
+dailyTab.addEventListener("click", () => {
+  weatherHourly.style.display = "none";
+  weatherDaily.style.display = "flex";
+  dailyTab.classList.add("active");
+  hourlyTab.classList.remove("active");
+});
+
+
+
+
+weatherButton.addEventListener("click", (event) => {
   event.stopPropagation();
 
   if (weatherPanel.classList.contains("open")) {
@@ -404,34 +424,27 @@ weatherButton.addEventListener("click", (event) => {
     openWeatherPanel();
   }
   closeAccountMenu();
-
 });
 
 
 function openWeatherPanel() {
-
   weatherPanel.classList.add("open");
   weatherButton.classList.add("active");
   weatherButton.setAttribute("aria-expanded", "true");
-
 }
 
 
 function closeWeatherPanel() {
-
   weatherPanel.classList.remove("open");
   weatherButton.classList.remove("active");
   weatherButton.setAttribute("aria-expanded", "false");
-
 }
 
 
 document.addEventListener("click", (event) => {
-
   if (!event.target.closest(".weather")) {
     closeWeatherPanel();
   }
-
 });
 
 
