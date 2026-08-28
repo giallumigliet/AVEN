@@ -453,8 +453,7 @@ body.light-mode .auth-gate {
 
 .weather-tab {
   flex: 1;
-  padding: 6px 4px;
-  width: 20px;
+  padding: 6px 6px;
   border: 0;
   border-radius: 9px;
   background: transparent;
