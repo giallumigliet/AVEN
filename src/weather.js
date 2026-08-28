@@ -29,19 +29,17 @@ export async function getWeather() {
 
     // Posizione
     const position = await new Promise((resolve, reject) => {
-
         navigator.geolocation.getCurrentPosition(
             resolve,
             reject
         );
-
     });
 
     const lat = position.coords.latitude;
     const lon = position.coords.longitude;
 
 
-    // API
+    // API meteo
     const url =
         `${API_URL}?latitude=${lat}` +
         `&longitude=${lon}` +
@@ -49,7 +47,6 @@ export async function getWeather() {
         `&daily=temperature_2m_max,temperature_2m_min,weather_code,precipitation_probability_max` +
         `&forecast_days=7` +
         `&timezone=auto`;
-
 
     const response = await fetch(url);
 
@@ -59,6 +56,13 @@ export async function getWeather() {
 
     const data = await response.json();
 
+    // Nome località
+    const geoResponse = await fetch(
+        `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json&accept-language=it`
+    );
+
+    const geoData = await geoResponse.json();
+    data.location = geoData.address.city || geoData.address.town || geoData.address.village ||  "";
 
     return data;
 }
