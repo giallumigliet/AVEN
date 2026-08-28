@@ -315,7 +315,7 @@ body.light-mode .auth-gate {
 
 
 .temperature {
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 500;
 }
 
@@ -459,7 +459,7 @@ body.light-mode .auth-gate {
   border-radius: 9px;
   background: transparent;
   color: var(--color-text);
-  font-size: 12px;
+  font-size: 14px;
   opacity: 0.5;
   cursor: pointer;
   transition: background var(--transition-fast), opacity var(--transition-fast);
@@ -928,11 +928,6 @@ button:active {
 
   .brand {
     font-size: 13px;
-  }
-
-
-  .time {
-    display: none;
   }
 
 
