@@ -347,17 +347,6 @@ window.addEventListener("resize", () => {
 
 
 
-// TIME =========================================================
-const time = document.querySelector(".time");
-
-function updateTime() {
-  time.textContent = new Date().toLocaleTimeString("it-IT", { hour: "2-digit", minute: "2-digit" });
-}
-
-updateTime();
-setInterval(updateTime, 30000);
-
-
 
 // WEATHER =========================================================
 const weatherButton = document.getElementById("weather-button");
