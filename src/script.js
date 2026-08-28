@@ -367,6 +367,7 @@ const days = getNextDays(weatherData);
 
 
 weatherButton.innerHTML = `
+    <span class="weather-icon">${weatherData.location}</span>
     <span class="weather-icon">${currentWeather.icon}</span>
     <span class="temperature">${currentWeather.temperature}°</span>
     <span class="weather-warning">${hasPrecipitationToday(weatherData) ? "⚠" : ""}</span>
