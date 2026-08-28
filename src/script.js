@@ -347,7 +347,15 @@ window.addEventListener("resize", () => {
 
 
 
+// TIME =========================================================
+const time = document.querySelectorAll(".time");
 
+function updateTime() {
+  time.textContent = new Date().toLocaleTimeString("it-IT", { hour: "2-digit", minute: "2-digit" });
+}
+
+updateTime();
+setInterval(updateTime, 30000);
 
 
 
