@@ -66,12 +66,12 @@ export async function getWeather() {
 
 // ================================
 // DATI ORARI
-// +1 +2 +3 +5 +8 +12 ORE
+// +1 +2 +3 +5 +8... ORE
 // ================================
 
 export function getHourlyPreview(data) {
 
-    const offsets = [1, 2, 3, 5, 8, 12];
+    const offsets = [1, 2, 3, 5, 7, 9, 12, 14];
 
     const currentTime = new Date();
 
