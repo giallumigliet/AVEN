@@ -389,7 +389,7 @@ weatherDaily.innerHTML = days.map(day => `
         <span class="weather-day-name"> ${day.day} </span>
         <span class="weather-day-icon"> ${day.icon} </span>
         <span class="weather-day-temperature"> ${day.min}° / ${day.max}° </span>
-        <span class="weather-hour-probability"> ${day.probability}% </span>
+        <span class="weather-day-probability"> ${day.probability}% </span>
     </div>
 `).join("");
 
