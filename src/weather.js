@@ -87,48 +87,43 @@ export function getHourlyPreview(data) {
     const offsets = [1, 2, 3, 5, 7, 9, 12, 14];
 
     const currentTime = new Date();
-
     const currentHour = currentTime.getHours();
-
 
     return offsets.map(offset => {
 
         const targetHour = currentHour + offset;
 
-        const index = data.hourly.time.findIndex(time => {
+        const index = data.time.findIndex(time => {
 
             const hour = Number(
                 time.split("T")[1].split(":")[0]
             );
 
-            return (
-                hour === targetHour % 24
-            );
-        });
+            return hour === targetHour % 24;
 
+        });
 
         if (index === -1) {
             return null;
         }
 
-
-        const code = data.hourly.weather_code[index];
+        const code = data.weather_code[index];
 
         return {
 
-            hour: data.hourly.time[index]
+            hour: data.time[index]
                 .split("T")[1]
                 .slice(0, 5),
 
             temperature:
                 Math.round(
-                    data.hourly.temperature_2m[index]
+                    data.temperature_2m[index]
                 ),
 
             weatherCode: code,
 
             probability:
-                data.hourly.precipitation_probability[index],
+                data.precipitation_probability[index],
 
             icon: getWeatherIcon(code)
 
@@ -136,7 +131,6 @@ export function getHourlyPreview(data) {
 
     }).filter(Boolean);
 }
-
 
 // ================================
 // 6 GIORNI SUCCESSIVI
@@ -179,7 +173,7 @@ export function getNextDays(data) {
             weatherCode: code,
 
             probability:
-                data.daily.precipitation_probability_max[index],
+                data.daily.precipitation_probability_max[i],
 
             icon: getWeatherIcon(code)
 
