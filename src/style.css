@@ -708,6 +708,7 @@ main {
 ========================================================= */
 
 .daily-panel {
+  display: none;
   position: relative;
   z-index: 5;
   width: 520px;
