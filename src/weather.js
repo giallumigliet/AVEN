@@ -45,8 +45,7 @@ export async function getWeather() {
         `&longitude=${lon}` +
         `&hourly=temperature_2m,weather_code,precipitation_probability` +
         `&forecast_days=2` +
-        `&timezone=auto` +
-        `&models=icon_ch2`;
+        `&timezone=auto`;
 
     const dailyUrl =
         `${API_URL}?latitude=${lat}` +
