@@ -453,7 +453,7 @@ body.light-mode .auth-gate {
 
 .weather-tab {
   flex: 1;
-  padding: 6px 8px;
+  padding: 6px 0px;
   border: 0;
   border-radius: 9px;
   background: transparent;
@@ -490,7 +490,7 @@ body.light-mode .auth-gate {
   border-radius: 10px;
   color: var(--color-text);
   font-size: 14px;
-  gap: 1px;
+  gap: 4px;
 }
 
 .weather-hour-time,
