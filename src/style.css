@@ -445,9 +445,39 @@ body.light-mode .auth-gate {
   transform: translateY(0) scale(1);
 }
 
-#weather-hourly,
-#weather-daily {
+
+.weather-tabs {
   display: flex;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+
+.weather-tab {
+  flex: 1;
+  padding: 6px 8px;
+  border: 0;
+  border-radius: 9px;
+  background: transparent;
+  color: var(--color-text);
+  font-size: 12px;
+  opacity: 0.5;
+  cursor: pointer;
+  transition: background var(--transition-fast), opacity var(--transition-fast);
+}
+
+.weather-tab.active {
+  background: var(--color-panel-border);
+  opacity: 1;
+}
+
+#weather-hourly {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+#weather-daily {
+  display: none;
   flex-direction: column;
   gap: 2px;
 }
