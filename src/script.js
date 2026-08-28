@@ -362,7 +362,7 @@ const dailyTab = document.getElementById("weather-daily-tab");
 
 const weatherData = await getWeather();
 
-const currentWeather = getCurrentWeather(weatherData.hourlyData);
+const currentWeather = getCurrentWeather(weatherData.hourly);
 const hours = getHourlyPreview(weatherData.hourly);
 const days = getNextDays(weatherData.daily);
 
