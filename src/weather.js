@@ -73,7 +73,7 @@ export async function getWeather() {
     const geoData = await geoResponse.json();
     const location = geoData.address.city || geoData.address.town || geoData.address.village ||  "";
 
-    return { location, hourlyData, dailyData };
+    return { location, hourly: hourlyData, daily: dailyData };
 }
 
 
