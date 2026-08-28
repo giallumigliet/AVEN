@@ -40,21 +40,30 @@ export async function getWeather() {
 
 
     // API meteo
-    const url =
+    const hourlyUrl =
         `${API_URL}?latitude=${lat}` +
         `&longitude=${lon}` +
-        `&hourly=temperature_2m,weather_code` +
+        `&hourly=temperature_2m,weather_code,precipitation_probability` +
+        `&forecast_days=2` +
+        `&timezone=auto` +
+        `&models=icon_ch2`;
+
+    const dailyUrl =
+        `${API_URL}?latitude=${lat}` +
+        `&longitude=${lon}` +
         `&daily=temperature_2m_max,temperature_2m_min,weather_code,precipitation_probability_max` +
         `&forecast_days=7` +
-        `&timezone=auto`;
+        `&timezone=auto` +
+        `&models=ecmwf_ifs025`;
 
-    const response = await fetch(url);
+    const [hourlyResponse, dailyResponse] = await Promise.all([ fetch(hourlyUrl), fetch(dailyUrl) ]);
 
-    if (!response.ok) {
+    if ((!hourlyResponse.ok || !dailyResponse.ok)) {
         throw new Error("Errore nel recupero del meteo");
     }
 
-    const data = await response.json();
+    const hourlyData = await hourlyResponse.json(); 
+    const dailyData = await dailyResponse.json();
 
     // Nome località
     const geoResponse = await fetch(
@@ -62,9 +71,9 @@ export async function getWeather() {
     );
 
     const geoData = await geoResponse.json();
-    data.location = geoData.address.city || geoData.address.town || geoData.address.village ||  "";
+    const location = geoData.address.city || geoData.address.town || geoData.address.village ||  "";
 
-    return data;
+    return { location, hourly: hourlyData, daily: dailyData };
 }
 
 
