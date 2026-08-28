@@ -40,29 +40,21 @@ export async function getWeather() {
 
 
     // API meteo
-    const hourlyUrl =
+    const url =
         `${API_URL}?latitude=${lat}` +
         `&longitude=${lon}` +
-        `&hourly=temperature_2m,weather_code,precipitation_probability` +
-        `&forecast_days=2` +
-        `&timezone=auto`;
-
-    const dailyUrl =
-        `${API_URL}?latitude=${lat}` +
-        `&longitude=${lon}` +
+        `&hourly=temperature_2m,weather_code` +
         `&daily=temperature_2m_max,temperature_2m_min,weather_code,precipitation_probability_max` +
         `&forecast_days=7` +
-        `&timezone=auto` +
-        `&models=ecmwf_ifs025`;
+        `&timezone=auto`;
 
-    const [hourlyResponse, dailyResponse] = await Promise.all([ fetch(hourlyUrl), fetch(dailyUrl) ]);
+    const response = await fetch(url);
 
-    if ((!hourlyResponse.ok || !dailyResponse.ok)) {
+    if (!response.ok) {
         throw new Error("Errore nel recupero del meteo");
     }
 
-    const hourlyData = await hourlyResponse.json(); 
-    const dailyData = await dailyResponse.json();
+    const data = await response.json();
 
     // Nome località
     const geoResponse = await fetch(
@@ -70,9 +62,9 @@ export async function getWeather() {
     );
 
     const geoData = await geoResponse.json();
-    const location = geoData.address.city || geoData.address.town || geoData.address.village ||  "";
+    data.location = geoData.address.city || geoData.address.town || geoData.address.village ||  "";
 
-    return { location, hourly: hourlyData, daily: dailyData };
+    return data;
 }
 
 
@@ -86,43 +78,45 @@ export function getHourlyPreview(data) {
     const offsets = [1, 2, 3, 5, 7, 9, 12, 14];
 
     const currentTime = new Date();
+
     const currentHour = currentTime.getHours();
+
 
     return offsets.map(offset => {
 
         const targetHour = currentHour + offset;
 
-        const index = data.time.findIndex(time => {
+        const index = data.hourly.time.findIndex(time => {
 
             const hour = Number(
                 time.split("T")[1].split(":")[0]
             );
 
-            return hour === targetHour % 24;
-
+            return (
+                hour === targetHour % 24
+            );
         });
+
 
         if (index === -1) {
             return null;
         }
 
-        const code = data.weather_code[index];
+
+        const code = data.hourly.weather_code[index];
 
         return {
 
-            hour: data.time[index]
+            hour: data.hourly.time[index]
                 .split("T")[1]
                 .slice(0, 5),
 
             temperature:
                 Math.round(
-                    data.temperature_2m[index]
+                    data.hourly.temperature_2m[index]
                 ),
 
             weatherCode: code,
-
-            probability:
-                data.precipitation_probability[index],
 
             icon: getWeatherIcon(code)
 
@@ -130,6 +124,7 @@ export function getHourlyPreview(data) {
 
     }).filter(Boolean);
 }
+
 
 // ================================
 // 6 GIORNI SUCCESSIVI
@@ -141,15 +136,16 @@ export function getNextDays(data) {
 
     for (let i = 1; i <= 6; i++) {
 
-        const code = data.weather_code[i];
+        const code = data.daily.weather_code[i];
 
         const date = new Date(
-            data.time[i] + "T12:00:00"
+            data.daily.time[i] + "T12:00:00"
         );
+
 
         days.push({
 
-            date: data.time[i],
+            date: data.daily.time[i],
 
             day: date.toLocaleDateString(
                 "it-IT",
@@ -160,18 +156,15 @@ export function getNextDays(data) {
 
             min:
                 Math.round(
-                    data.temperature_2m_min[i]
+                    data.daily.temperature_2m_min[i]
                 ),
 
             max:
                 Math.round(
-                    data.temperature_2m_max[i]
+                    data.daily.temperature_2m_max[i]
                 ),
 
             weatherCode: code,
-
-            probability:
-                data.precipitation_probability_max[i],
 
             icon: getWeatherIcon(code)
 
@@ -182,6 +175,7 @@ export function getNextDays(data) {
     return days;
 }
 
+
 // ================================
 // TEMPERATURA / ICONA ATTUALE
 // ================================
@@ -189,29 +183,37 @@ export function getNextDays(data) {
 export function getCurrentWeather(data) {
 
     const now = new Date();
-    const currentHour = now.getHours();
 
-    const index = data.time.findIndex(time => {
+    const currentHour =
+        now.getHours();
 
-        const hour = Number(
-            time.split("T")[1].split(":")[0]
-        );
 
-        return hour === currentHour;
+    const index =
+        data.hourly.time.findIndex(time => {
 
-    });
+            const hour = Number(
+                time.split("T")[1].split(":")[0]
+            );
+
+            return hour === currentHour;
+
+        });
+
 
     if (index === -1) {
         return null;
     }
 
-    const code = data.weather_code[index];
+
+    const code =
+        data.hourly.weather_code[index];
+
 
     return {
 
         temperature:
             Math.round(
-                data.temperature_2m[index]
+                data.hourly.temperature_2m[index]
             ),
 
         weatherCode: code,
@@ -220,6 +222,7 @@ export function getCurrentWeather(data) {
 
     };
 }
+
 
 // ================================
 // PIOGGIA O PRECIPITAZIONI OGGI?
