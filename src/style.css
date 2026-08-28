@@ -991,8 +991,6 @@ button:active {
     inset: 0;
     z-index: 150;
     background: rgba(0,0,0,0.35);
-    backdrop-filter: blur(2px);
-    -webkit-backdrop-filter: blur(2px);
     opacity: 1;
     visibility: visible;
     transition: opacity var(--transition-normal), visibility var(--transition-normal);
