@@ -310,7 +310,7 @@ body.light-mode .auth-gate {
 
 
 .weather-icon {
-  font-size: 16px;
+  font-size: 18px;
 }
 
 
@@ -420,7 +420,7 @@ body.light-mode .auth-gate {
   position: absolute;
   top: calc(100% + 10px);
   right: 0;
-  width: 230px;
+  width: max-content;
   padding: 12px;
   display: flex;
   flex-direction: column;
@@ -452,7 +452,7 @@ body.light-mode .auth-gate {
 }
 
 .weather-tab {
-  flex: none;
+  flex: 1;
   padding: 6px 0px;
   width: 20px;
   border: 0;
