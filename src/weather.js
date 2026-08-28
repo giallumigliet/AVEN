@@ -142,16 +142,15 @@ export function getNextDays(data) {
 
     for (let i = 1; i <= 6; i++) {
 
-        const code = data.daily.weather_code[i];
+        const code = data.weather_code[i];
 
         const date = new Date(
-            data.daily.time[i] + "T12:00:00"
+            data.time[i] + "T12:00:00"
         );
-
 
         days.push({
 
-            date: data.daily.time[i],
+            date: data.time[i],
 
             day: date.toLocaleDateString(
                 "it-IT",
@@ -162,18 +161,18 @@ export function getNextDays(data) {
 
             min:
                 Math.round(
-                    data.daily.temperature_2m_min[i]
+                    data.temperature_2m_min[i]
                 ),
 
             max:
                 Math.round(
-                    data.daily.temperature_2m_max[i]
+                    data.temperature_2m_max[i]
                 ),
 
             weatherCode: code,
 
             probability:
-                data.daily.precipitation_probability_max[i],
+                data.precipitation_probability_max[i],
 
             icon: getWeatherIcon(code)
 
@@ -184,7 +183,6 @@ export function getNextDays(data) {
     return days;
 }
 
-
 // ================================
 // TEMPERATURA / ICONA ATTUALE
 // ================================
@@ -192,13 +190,10 @@ export function getNextDays(data) {
 export function getCurrentWeather(data) {
 
     const now = new Date();
-
-    const currentHour =
-        now.getHours();
-
+    const currentHour = now.getHours();
 
     const index =
-        data.hourly.time.findIndex(time => {
+        data.time.findIndex(time => {
 
             const hour = Number(
                 time.split("T")[1].split(":")[0]
@@ -208,21 +203,18 @@ export function getCurrentWeather(data) {
 
         });
 
-
     if (index === -1) {
         return null;
     }
 
-
     const code =
-        data.hourly.weather_code[index];
-
+        data.weather_code[index];
 
     return {
 
         temperature:
             Math.round(
-                data.hourly.temperature_2m[index]
+                data.temperature_2m[index]
             ),
 
         weatherCode: code,
@@ -231,7 +223,6 @@ export function getCurrentWeather(data) {
 
     };
 }
-
 
 // ================================
 // PIOGGIA O PRECIPITAZIONI OGGI?
