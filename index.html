@@ -353,33 +353,6 @@
       
       </section>
 
-
-
-      <!-- BIRTHDAYS ==================================================== -->
-      
-      <section class="birthdays-page" id="birthdays-page" hidden>
-      
-        <div class="section-header">
-          <div>
-            <span class="section-label">People</span>
-            <h2>Birthdays</h2>
-          </div>
-      
-          <button
-            type="button"
-            class="primary-button"
-            id="add-birthday-button"
-          >
-            + Add birthday
-          </button>
-        </div>
-      
-        <div class="birthdays-list" id="birthdays-list">
-          <!-- Birthdays will appear here -->
-        </div>
-      
-      </section>
-      
       
       <!-- BIRTHDAY MODAL ==================================================== -->
       
@@ -394,18 +367,23 @@
           id="birthday-modal-backdrop"
         ></div>
       
-        <div class="birthday-modal-content">
+        <section
+          class="birthday-modal-content"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="birthday-modal-title"
+        >
       
           <div class="birthday-modal-header">
       
             <div>
-              <span class="section-label">New</span>
-              <h2>Add birthday</h2>
+              <span class="birthday-modal-label">Birthdays</span>
+              <h2 id="birthday-modal-title">Add birthday</h2>
             </div>
       
             <button
               type="button"
-              class="close-modal-button"
+              class="icon-button"
               id="close-birthday-modal"
               aria-label="Close"
             >
@@ -415,7 +393,9 @@
           </div>
       
       
-          <form id="birthday-form">
+          <form id="birthday-form" class="birthday-form">
+      
+            <!-- NAME -->
       
             <div class="birthday-field">
       
@@ -434,26 +414,74 @@
             </div>
       
       
+            <!-- DATE -->
+      
             <div class="birthday-field">
       
-              <label for="birthday-date">
+              <label>
                 Date of birth
               </label>
       
-              <input
-                id="birthday-date"
-                type="date"
-                required
-              >
+              <div class="birthday-date-fields">
+      
+                <input
+                  id="birthday-day"
+                  type="number"
+                  min="1"
+                  max="31"
+                  placeholder="Day"
+                  inputmode="numeric"
+                  required
+                >
+      
+                <select
+                  id="birthday-month"
+                  required
+                >
+                  <option value="" selected disabled>
+                    Month
+                  </option>
+      
+                  <option value="1">January</option>
+                  <option value="2">February</option>
+                  <option value="3">March</option>
+                  <option value="4">April</option>
+                  <option value="5">May</option>
+                  <option value="6">June</option>
+                  <option value="7">July</option>
+                  <option value="8">August</option>
+                  <option value="9">September</option>
+                  <option value="10">October</option>
+                  <option value="11">November</option>
+                  <option value="12">December</option>
+                </select>
+      
+                <input
+                  id="birthday-year"
+                  type="number"
+                  min="1900"
+                  max="2100"
+                  placeholder="Year"
+                  inputmode="numeric"
+                  required
+                >
+      
+              </div>
       
             </div>
       
       
+            <!-- PREVIEW -->
+      
             <div
               class="birthday-preview"
               id="birthday-preview"
-            ></div>
+            >
+              Enter a name and date
+            </div>
       
+      
+            <!-- ACTIONS -->
       
             <div class="birthday-actions">
       
@@ -476,7 +504,7 @@
       
           </form>
       
-        </div>
+        </section>
       
       </div>
 
