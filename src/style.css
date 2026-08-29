@@ -1563,8 +1563,6 @@ main {
   width: 54px;
   height: 54px;
 
-  padding: 8px;
-
   border-radius: 18px;
 
   background: var(--color-panel);
@@ -1584,6 +1582,18 @@ main {
     box-shadow var(--transition-normal);
 
   z-index: 100;
+}
+
+
+.add-panel.open {
+  width: 270px;
+  height: 190px;
+
+  border-radius: 24px;
+
+  box-shadow:
+    0 25px 80px rgba(0, 0, 0, 0.30),
+    0 0 50px var(--color-accent-soft);
 }
 
 .add-menu.open .add-panel {
@@ -1716,34 +1726,32 @@ main {
 
 
 .add-toggle {
-  width: 36px;
-  height: 36px;
-
   position: absolute;
-  top: 8px;
-  left: 8px;
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
-  border-radius: 11px;
+  padding: 0;
 
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
+  background: transparent;
+  border: 0;
 
   color: var(--color-text);
 
   cursor: pointer;
 
-  transition:
-    background var(--transition-fast),
-    transform var(--transition-normal);
+  z-index: 2;
 }
 
 
+
 .add-icon {
-  font-size: 24px;
+  font-size: 25px;
   font-weight: 300;
   line-height: 1;
 
@@ -1751,23 +1759,19 @@ main {
 }
 
 
-.add-panel.open {
-  width: 270px;
-  height: 190px;
-
-  border-radius: 24px;
-
-  box-shadow:
-    0 25px 80px rgba(0, 0, 0, 0.30),
-    0 0 50px var(--color-accent-soft);
-}
-
 
 .add-panel.open .add-icon {
   transform: rotate(45deg);
 }
 
+.add-panel.open .add-toggle {
+  inset: 8px auto auto 8px;
 
+  width: 36px;
+  height: 36px;
+
+  border-radius: 11px;
+}
 
 
 
