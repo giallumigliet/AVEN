@@ -477,14 +477,14 @@ body.light-mode .auth-gate {
 #weather-hourly {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   gap: 2px;
 }
 
 #weather-daily {
   display: none;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   gap: 2px;
 }
 
