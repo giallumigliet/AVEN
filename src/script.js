@@ -19,6 +19,8 @@ import {
     hasPrecipitationToday
 } from "./weather.js";
 
+import { initRoutines } from "./routines.js";
+
 
 // ELEMENTS =========================================================
 
@@ -453,6 +455,11 @@ document.addEventListener("click", (event) => {
     closeWeatherPanel();
   }
 });
+
+
+
+// ROUTINES =========================================================
+initRoutines();
 
 
 
