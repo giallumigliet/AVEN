@@ -20,6 +20,7 @@ import {
 } from "./weather.js";
 
 import { initRoutines } from "./routines.js";
+import { initBirthdays } from "./birthdays.js";
 
 
 // ELEMENTS =========================================================
@@ -460,6 +461,9 @@ document.addEventListener("click", (event) => {
 
 // ROUTINES =========================================================
 initRoutines();
+
+// BIRTHDAYS =========================================================
+initBirthdays();
 
 
 
