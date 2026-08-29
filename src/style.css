@@ -492,7 +492,7 @@ body.light-mode .auth-gate {
 .weather-day {
   min-height: 28px;
   display: grid;
-  grid-template-columns: 34px 22px mmax-content max-content;
+  grid-template-columns: 34px 22px max-content max-content;
   align-items: center;
   border-radius: 10px;
   color: var(--color-text);
