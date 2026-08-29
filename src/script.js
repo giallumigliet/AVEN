@@ -354,69 +354,35 @@ window.addEventListener("resize", () => {
 
 // ADD MENU =========================================================
 
-const addMenu = document.querySelector(".add-menu");
-const addMainButton = document.getElementById("add-main-button");
-const addRoutineButton = document.getElementById("add-routine-button");
-const addBirthdayButton = document.getElementById("add-birthday-button");
-const addTodoButton = document.getElementById("add-todo-button");
-const addEventButton = document.getElementById("add-event-button");
+const addPanel = document.getElementById("add-panel");
+const addToggle = document.getElementById("add-toggle");
 
-// OPEN / CLOSE =====================================================
+const addRoutineButton = document.getElementById("add-routine");
+const addBirthdayButton = document.getElementById("add-birthday");
+const addTodoButton = document.getElementById("add-todo");
 
-addMainButton.addEventListener("click", (event) => {
-  event.stopPropagation();
-  const isOpen = addMenu.classList.contains("open");
-  if (isOpen) {
-    closeAddMenu();
-  } else {
-    openAddMenu();
-  }
+
+addToggle.addEventListener("click", () => {
+  addPanel.classList.toggle("open");
 });
 
-function openAddMenu() {
-  addMenu.classList.add("open");
-  addMainButton.setAttribute(
-    "aria-expanded",
-    "true"
-  );
-}
-
-
-function closeAddMenu() {
-  addMenu.classList.remove("open");
-  addMainButton.setAttribute(
-    "aria-expanded",
-    "false"
-  );
-}
-
-
-document.addEventListener("click", (event) => {
-  if (!event.target.closest(".add-menu")) {
-    closeAddMenu();
-  }
-
-});
 
 addRoutineButton.addEventListener("click", () => {
-  closeAddMenu();
+  addPanel.classList.remove("open");
   openRoutineModal();
 });
 
+
 addBirthdayButton.addEventListener("click", () => {
-  closeAddMenu();
+  addPanel.classList.remove("open");
   openBirthdayModal();
 });
 
+
 addTodoButton.addEventListener("click", () => {
-  closeAddMenu();
-  // Da collegare quando creeremo il modal To-do.
-});
-
-
-addEventButton.addEventListener("click", () => {
-  closeAddMenu();
-  // Da collegare quando creeremo il modal Evento.
+  addPanel.classList.remove("open");
+  // futuro:
+  // openTodoModal();
 });
 
 
