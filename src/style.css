@@ -1548,6 +1548,8 @@ button:active {
 
 
 
+
+
 /* =========================================================
    MOBILE
 ========================================================= */
@@ -1797,6 +1799,63 @@ button:active {
   .account-menu {
     width: 210px;
     right: -4px;
+  }
+
+
+
+  .birthday-modal {
+    padding: 16px;
+  }
+
+
+  .birthday-modal-content {
+    width: calc(100vw - 32px);
+    max-width: calc(100vw - 32px);
+
+    padding: 20px;
+
+    border-radius: 23px;
+  }
+
+
+  .birthday-modal-header {
+    margin-bottom: 23px;
+  }
+
+
+  .birthday-modal-header h2 {
+    font-size: 20px;
+  }
+
+
+  .birthday-date-fields {
+    grid-template-columns:
+      0.7fr
+      1.4fr
+      1fr;
+
+    gap: 6px;
+  }
+
+
+  .birthday-field input,
+  .birthday-field select {
+    height: 46px;
+
+    padding-left: 11px;
+    padding-right: 11px;
+
+    font-size: 14px;
+  }
+
+
+  .birthday-actions {
+    width: 100%;
+  }
+
+
+  .birthday-actions button {
+    flex: 1;
   }
 
 }
