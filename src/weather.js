@@ -43,7 +43,7 @@ export async function getWeather() {
     const url =
         `${API_URL}?latitude=${lat}` +
         `&longitude=${lon}` +
-        `&hourly=temperature_2m,weather_code` +
+        `&hourly=temperature_2m,weather_code,precipitation_probability` +
         `&daily=temperature_2m_max,temperature_2m_min,weather_code,precipitation_probability_max` +
         `&forecast_days=7` +
         `&timezone=auto`;
@@ -118,6 +118,8 @@ export function getHourlyPreview(data) {
 
             weatherCode: code,
 
+            probability: precipitation_probability,
+
             icon: getWeatherIcon(code)
 
         };
@@ -165,6 +167,8 @@ export function getNextDays(data) {
                 ),
 
             weatherCode: code,
+
+            probability: precipitation_probability_max,
 
             icon: getWeatherIcon(code)
 
