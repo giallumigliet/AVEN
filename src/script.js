@@ -19,8 +19,8 @@ import {
     hasPrecipitationToday
 } from "./weather.js";
 
-import { initRoutines } from "./routines.js";
-import { initBirthdays } from "./birthdays.js";
+import { initRoutines, openRoutineModal } from "./routines.js";
+import { initBirthdays, openBirthdayModal } from "./birthdays.js";
 
 
 // ELEMENTS =========================================================
@@ -351,6 +351,83 @@ window.addEventListener("resize", () => {
 
 
 
+
+// ADD MENU =========================================================
+
+const addMenu = document.querySelector(".add-menu");
+const addMainButton = document.getElementById("add-main-button");
+const addRoutineButton = document.getElementById("add-routine-button");
+const addBirthdayButton = document.getElementById("add-birthday-button");
+const addTodoButton = document.getElementById("add-todo-button");
+const addEventButton = document.getElementById("add-event-button");
+
+// OPEN / CLOSE =====================================================
+
+addMainButton.addEventListener("click", (event) => {
+  event.stopPropagation();
+  const isOpen = addMenu.classList.contains("open");
+  if (isOpen) {
+    closeAddMenu();
+  } else {
+    openAddMenu();
+  }
+});
+
+function openAddMenu() {
+  addMenu.classList.add("open");
+  addMainButton.setAttribute(
+    "aria-expanded",
+    "true"
+  );
+}
+
+
+function closeAddMenu() {
+  addMenu.classList.remove("open");
+  addMainButton.setAttribute(
+    "aria-expanded",
+    "false"
+  );
+}
+
+
+document.addEventListener("click", (event) => {
+  if (!event.target.closest(".add-menu")) {
+    closeAddMenu();
+  }
+
+});
+
+addRoutineButton.addEventListener("click", () => {
+  closeAddMenu();
+  openRoutineModal();
+});
+
+addBirthdayButton.addEventListener("click", () => {
+  closeAddMenu();
+  openBirthdayModal();
+});
+
+addTodoButton.addEventListener("click", () => {
+  closeAddMenu();
+  // Da collegare quando creeremo il modal To-do.
+});
+
+
+addEventButton.addEventListener("click", () => {
+  closeAddMenu();
+  // Da collegare quando creeremo il modal Evento.
+});
+
+
+// ROUTINES =========================================================
+initRoutines();
+
+// BIRTHDAYS =========================================================
+initBirthdays();
+
+
+
 // WEATHER =========================================================
 const weatherButton = document.getElementById("weather-button");
 const weatherHourly = document.getElementById("weather-hourly");
@@ -459,11 +536,7 @@ document.addEventListener("click", (event) => {
 
 
 
-// ROUTINES =========================================================
-initRoutines();
 
-// BIRTHDAYS =========================================================
-initBirthdays();
 
 
 
