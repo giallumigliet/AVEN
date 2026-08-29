@@ -1490,8 +1490,6 @@ main {
 
 
 
-
-```css
 /* =========================================================
    ADD MENU
 ========================================================= */
@@ -1512,33 +1510,41 @@ main {
 ========================================================= */
 
 .add-main-button {
-  width: 58px;
-  height: 46px;
+  position: fixed;
+  left: 50%;
+  bottom: 24px;
+  transform: translateX(-50%);
+
+  width: 52px;
+  height: 52px;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
-  border-radius: 15px;
+  border-radius: 16px;
 
   background: var(--color-surface);
   border: 1px solid var(--color-border);
 
-  backdrop-filter: blur(25px);
-  -webkit-backdrop-filter: blur(25px);
-
   color: var(--color-text);
+  font-size: 26px;
+  font-weight: 300;
+  line-height: 1;
+
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
+
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.22);
 
   cursor: pointer;
-
-  box-shadow:
-    0 12px 35px rgba(0, 0, 0, 0.20);
 
   transition:
     background var(--transition-fast),
     border-color var(--transition-fast),
-    transform var(--transition-fast),
-    box-shadow var(--transition-fast);
+    transform var(--transition-fast);
+  
+  z-index: 100;
 }
 
 
@@ -1710,36 +1716,6 @@ main {
 }
 
 
-/* =========================================================
-   HOVER
-========================================================= */
-
-@media (hover: hover) {
-
-  .add-main-button:hover {
-    background: var(--color-surface-hover);
-    border-color: var(--color-panel-border);
-
-    box-shadow:
-      0 15px 40px rgba(0, 0, 0, 0.25);
-  }
-
-
-  .add-option:hover {
-    background: var(--color-surface-hover);
-    border-color: var(--color-border);
-
-    transform: translateY(-2px);
-  }
-
-}
-
-
-
-
-
-
-
 
 
 
@@ -1760,7 +1736,9 @@ main {
   .primary-button:hover { transform: translateY(-1px); }
 
   .add-main-button:hover {
-    transform: scale(1.06);
+    background: var(--color-surface-hover);
+    border-color: var(--color-panel-border);
+    transform: translateX(-50%) translateY(-2px);
 
     box-shadow:
       0 15px 40px rgba(0, 0, 0, 0.30);
