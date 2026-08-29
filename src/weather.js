@@ -118,7 +118,7 @@ export function getHourlyPreview(data) {
 
             weatherCode: code,
 
-            probability: precipitation_probability[index],
+            probability: data.hourly.precipitation_probability[index],
 
             icon: getWeatherIcon(code)
 
@@ -168,7 +168,7 @@ export function getNextDays(data) {
 
             weatherCode: code,
 
-            probability: precipitation_probability_max[i],
+            probability: data.daily.precipitation_probability_max[i],
 
             icon: getWeatherIcon(code)
 
