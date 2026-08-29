@@ -39,7 +39,7 @@ const birthdayPreview =
 
 // MODAL =========================================================
 
-function openBirthdayModal() {
+export function openBirthdayModal() {
 
   birthdayModal.classList.add("open");
 
