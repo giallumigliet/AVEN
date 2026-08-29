@@ -32,7 +32,7 @@ const weekdayButtons = document.querySelectorAll(".weekday-picker button");
 
 // MODAL =========================================================
 
-function openRoutineModal() {
+export function openRoutineModal() {
 
   routineModal.classList.add("open");
   routineModalBackdrop.classList.add("open");
