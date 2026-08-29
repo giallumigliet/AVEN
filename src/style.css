@@ -1236,23 +1236,103 @@ main {
 
 
 
-
 /* =========================================================
-   BIRTHDAY MODAL
+   BIRTHDAYS
 ========================================================= */
 
-.birthday-modal {
-  position: fixed;
-  inset: 0;
-  z-index: 500;
+.page-section {
+  width: min(680px, 90vw);
+  display: none;
+}
+
+
+.page-header {
   display: flex;
   align-items: center;
-  justify-content: center;
-  padding: 20px;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+
+.page-label {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--color-muted);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+}
+
+
+.page-header h2 {
+  font-size: 28px;
+  font-weight: 500;
+  letter-spacing: -1px;
+}
+
+
+.add-button {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--color-accent-soft);
+  border: 1px solid var(--color-border);
+  color: var(--color-accent);
+  font-size: 24px;
+  cursor: pointer;
+}
+
+
+/* BIRTHDAY LIST */
+
+.birthdays-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+
+.birthday-card {
+  min-height: 68px;
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+
+  border-radius: var(--radius-medium);
+
+  background: var(--color-card);
+  border: 1px solid var(--color-card-border);
+}
+
+
+.birthday-card-name {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+
+.birthday-card-date {
+  color: var(--color-muted);
+  font-size: 12px;
+}
+
+
+/* MODAL */
+
+.birthday-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 400;
+
+  background: rgba(0, 0, 0, 0.45);
+
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 
   opacity: 0;
   visibility: hidden;
-  pointer-events: none;
 
   transition:
     opacity var(--transition-fast),
@@ -1260,30 +1340,30 @@ main {
 }
 
 
-.birthday-modal.open {
+.birthday-modal-backdrop.open {
   opacity: 1;
   visibility: visible;
-  pointer-events: auto;
 }
 
 
-.birthday-modal-backdrop {
-  position: absolute;
+.birthday-modal {
+  position: fixed;
   inset: 0;
+  z-index: 401;
 
-  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  padding: 20px;
+
+  pointer-events: none;
 }
 
 
 .birthday-modal-content {
-  position: relative;
-  z-index: 1;
-
-  width: min(440px, calc(100vw - 32px));
-  max-width: calc(100vw - 32px);
+  width: min(430px, calc(100vw - 32px));
+  max-width: 100%;
 
   padding: 25px;
 
@@ -1296,87 +1376,62 @@ main {
   -webkit-backdrop-filter: blur(35px);
 
   box-shadow:
-    0 30px 100px rgba(0, 0, 0, 0.35),
+    0 30px 90px rgba(0, 0, 0, 0.35),
     0 0 70px var(--color-accent-soft);
 
-  transform: translateY(10px) scale(0.98);
+  opacity: 0;
+  transform: translateY(10px) scale(0.97);
 
-  transition: transform var(--transition-fast);
+  transition:
+    opacity var(--transition-fast),
+    transform var(--transition-fast);
+}
+
+
+.birthday-modal.open {
+  pointer-events: auto;
 }
 
 
 .birthday-modal.open .birthday-modal-content {
+  opacity: 1;
   transform: translateY(0) scale(1);
 }
 
-
-/* HEADER */
 
 .birthday-modal-header {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: 20px;
 
   margin-bottom: 25px;
 }
 
 
-.birthday-modal-label {
-  display: block;
-
-  margin-bottom: 5px;
-
-  color: var(--color-accent);
-
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-}
-
-
 .birthday-modal-header h2 {
-  font-size: 22px;
+  font-size: 21px;
   font-weight: 500;
-  letter-spacing: -0.6px;
 }
 
 
-.birthday-close-button {
-  width: 36px;
-  height: 36px;
-  flex-shrink: 0;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.close-button {
+  width: 34px;
+  height: 34px;
 
   border-radius: 50%;
 
   background: var(--color-surface);
-  border: 1px solid var(--color-border);
-
   color: var(--color-muted);
 
   font-size: 22px;
-  line-height: 1;
 
   cursor: pointer;
-
-  transition:
-    background var(--transition-fast),
-    color var(--transition-fast),
-    transform var(--transition-fast);
 }
 
 
 /* FORM */
 
-.birthday-form {
-  width: 100%;
-  min-width: 0;
-
+#birthday-form {
   display: flex;
   flex-direction: column;
   gap: 17px;
@@ -1395,14 +1450,13 @@ main {
 
 .birthday-field label {
   color: var(--color-muted);
-
-  font-size: 11px;
-  font-weight: 500;
+  font-size: 12px;
 }
 
 
 .birthday-field label span {
-  opacity: 0.55;
+  margin-left: 4px;
+  opacity: 0.6;
 }
 
 
@@ -1415,69 +1469,38 @@ main {
 
   padding: 0 14px;
 
-  border-radius: 14px;
-
-  background: var(--color-card);
   border: 1px solid var(--color-border);
-
-  color: var(--color-text);
-
-  font-size: 14px;
+  border-radius: 14px;
 
   outline: none;
 
-  box-sizing: border-box;
+  background: var(--color-surface);
+  color: var(--color-text);
 
-  transition:
-    border-color var(--transition-fast),
-    background var(--transition-fast),
-    box-shadow var(--transition-fast);
+  font-size: 15px;
+
+  box-sizing: border-box;
 }
 
 
 .birthday-field input:focus {
   border-color: var(--color-accent);
-
-  box-shadow:
-    0 0 0 3px var(--color-accent-soft);
+  box-shadow: 0 0 0 3px var(--color-accent-soft);
 }
 
-
-.birthday-field input::placeholder {
-  color: var(--color-muted-dark);
-}
-
-
-/* DATE INPUT */
-
-.birthday-field input[type="date"] {
-  appearance: none;
-  -webkit-appearance: none;
-}
-
-
-/* PREVIEW */
 
 .birthday-preview {
-  width: 100%;
-  min-height: 48px;
+  padding: 13px 15px;
 
-  display: flex;
-  align-items: center;
-
-  padding: 12px 14px;
-
-  border-radius: 14px;
+  border-radius: 13px;
 
   background: var(--color-accent-soft);
 
-  color: var(--color-text);
+  color: var(--color-muted);
 
-  font-size: 13px;
+  font-size: 12px;
 }
 
-
-/* ACTIONS */
 
 .birthday-actions {
   display: flex;
@@ -1491,33 +1514,31 @@ main {
 .secondary-button,
 .primary-button {
   min-height: 44px;
-
   padding: 0 17px;
 
   border-radius: 13px;
 
-  font-size: 13px;
-  font-weight: 500;
-
   cursor: pointer;
 
-  transition:
-    background var(--transition-fast),
-    transform var(--transition-fast);
+  font-size: 13px;
 }
 
 
 .secondary-button {
   background: var(--color-surface);
-  border: 1px solid var(--color-border);
   color: var(--color-muted);
+  border: 1px solid var(--color-border);
 }
 
 
 .primary-button {
-  background: var(--color-accent);
-  color: #071014;
+  background: var(--color-text);
+  color: var(--color-bg);
 }
+
+
+
+
 
 
 /* HOVER */
