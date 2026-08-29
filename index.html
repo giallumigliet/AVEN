@@ -355,6 +355,133 @@
 
 
 
+      <!-- BIRTHDAYS ==================================================== -->
+      
+      <section class="birthdays-page" id="birthdays-page" hidden>
+      
+        <div class="section-header">
+          <div>
+            <span class="section-label">People</span>
+            <h2>Birthdays</h2>
+          </div>
+      
+          <button
+            type="button"
+            class="primary-button"
+            id="add-birthday-button"
+          >
+            + Add birthday
+          </button>
+        </div>
+      
+        <div class="birthdays-list" id="birthdays-list">
+          <!-- Birthdays will appear here -->
+        </div>
+      
+      </section>
+      
+      
+      <!-- BIRTHDAY MODAL ==================================================== -->
+      
+      <div
+        class="birthday-modal"
+        id="birthday-modal"
+        aria-hidden="true"
+      >
+      
+        <div
+          class="birthday-modal-backdrop"
+          id="birthday-modal-backdrop"
+        ></div>
+      
+        <div class="birthday-modal-content">
+      
+          <div class="birthday-modal-header">
+      
+            <div>
+              <span class="section-label">New</span>
+              <h2>Add birthday</h2>
+            </div>
+      
+            <button
+              type="button"
+              class="close-modal-button"
+              id="close-birthday-modal"
+              aria-label="Close"
+            >
+              ×
+            </button>
+      
+          </div>
+      
+      
+          <form id="birthday-form">
+      
+            <div class="birthday-field">
+      
+              <label for="birthday-name">
+                Name
+              </label>
+      
+              <input
+                id="birthday-name"
+                type="text"
+                placeholder="Marco"
+                autocomplete="off"
+                required
+              >
+      
+            </div>
+      
+      
+            <div class="birthday-field">
+      
+              <label for="birthday-date">
+                Date of birth
+              </label>
+      
+              <input
+                id="birthday-date"
+                type="date"
+                required
+              >
+      
+            </div>
+      
+      
+            <div
+              class="birthday-preview"
+              id="birthday-preview"
+            ></div>
+      
+      
+            <div class="birthday-actions">
+      
+              <button
+                type="button"
+                class="secondary-button"
+                id="cancel-birthday"
+              >
+                Cancel
+              </button>
+      
+              <button
+                type="submit"
+                class="primary-button"
+              >
+                Add birthday
+              </button>
+      
+            </div>
+      
+          </form>
+      
+        </div>
+      
+      </div>
+
+
+
       
     </div>
   </div>
