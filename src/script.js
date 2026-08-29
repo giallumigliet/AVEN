@@ -375,10 +375,15 @@ weatherButton.innerHTML = `
 
 
 weatherHourly.innerHTML = hours.map(hour => `
+
     <div class="weather-hour">
         <span class="weather-hour-time"> ${hour.hour} </span>
         <span class="weather-hour-icon"> ${hour.icon} </span>
         <span class="weather-hour-temperature"> ${hour.temperature}° </span>
+        ${hour.probability >= 30
+            ? `<span class="weather-hour-probability">${hour.probability}%</span>`
+            : ""
+        }
     </div>
 `).join("");
 
@@ -388,6 +393,10 @@ weatherDaily.innerHTML = days.map(day => `
         <span class="weather-day-name"> ${day.day} </span>
         <span class="weather-day-icon"> ${day.icon} </span>
         <span class="weather-day-temperature"> ${day.min}° / ${day.max}° </span>
+        ${day.probability >= 30
+            ? `<span class="weather-day-probability">${day.probability}%</span>`
+            : ""
+        }
     </div>
 `).join("");
 
