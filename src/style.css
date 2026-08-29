@@ -1214,22 +1214,23 @@ main {
 }
 
 
+.routine-form input,
+.routine-form select {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
 
+.routine-form {
+  width: 100%;
+  min-width: 0;
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+.routine-field {
+  width: 100%;
+  min-width: 0;
+}
 
 
 
