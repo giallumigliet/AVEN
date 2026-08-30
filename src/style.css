@@ -2154,16 +2154,6 @@ button:active {
   }
 
 
-  .add-panel {
-    width: 215px;
-    bottom: 56px;
-
-    padding: 12px;
-
-    border-radius: 20px;
-  }
-
-
   .add-option {
     min-height: 72px;
   }
