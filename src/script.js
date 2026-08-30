@@ -367,6 +367,16 @@ addToggle.addEventListener("click", () => {
 });
 
 
+document.addEventListener("click", (event) => {
+  if (
+    addPanel.classList.contains("open") &&
+    !addPanel.contains(event.target)
+  ) {
+    addPanel.classList.remove("open");
+  }
+});
+
+
 addRoutineButton.addEventListener("click", () => {
   addPanel.classList.remove("open");
   openRoutineModal();
