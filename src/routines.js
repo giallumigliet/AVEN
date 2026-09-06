@@ -1,4 +1,7 @@
 // routines.js
+import { auth, db } from "./firebase.js";
+import { collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
+
 
 // ELEMENTS =========================================================
 
@@ -298,27 +301,76 @@ function getRoutineData() {
 }
 
 
-// SUBMIT =========================================================
 
-function handleRoutineSubmit(event) {
+// FIRESTORE =========================================================
+
+async function saveRoutine(routine) {
+
+  const user = auth.currentUser;
+
+  if (!user) {
+    throw new Error("User not authenticated.");
+  }
+
+  const routinesRef = collection(
+    db,
+    "users",
+    user.uid,
+    "routines"
+  );
+
+  await addDoc(routinesRef, {
+
+    ...routine,
+
+    createdAt: serverTimestamp(),
+    updatedAt: serverTimestamp()
+
+  });
+
+}
+
+
+
+// SUBMIT =========================================================
+async function handleRoutineSubmit(event) {
 
   event.preventDefault();
 
   const routine = getRoutineData();
 
-  console.log("New routine:", routine);
 
-  /*
-    FUTURO:
+  if (!routine.name) {
+    routineName.focus();
+    return;
+  }
 
-    qui salveremo la routine su Firestore.
 
-    Esempio:
+  try {
 
     await saveRoutine(routine);
-  */
 
-  closeRoutineModal();
+    console.log("Routine saved:", routine);
+
+    routineForm.reset();
+
+    routineTimes.innerHTML = "";
+    
+    weekdayButtons.forEach((button) => {
+      button.classList.remove("active");
+    });
+    updateRoutineFrequencyUI();
+
+    closeRoutineModal();
+
+  } catch (error) {
+
+    console.error(
+      "Error saving routine:",
+      error
+    );
+
+  }
 
 }
 
