@@ -35,6 +35,7 @@ const weekdayButtons = document.querySelectorAll(".weekday-picker button");
 const routinesPanel = document.getElementById("routines-panel");
 const closeRoutinesPanelButton = document.getElementById("close-routines-panel");
 const routinesList = document.getElementById("routines-list");
+const routinesPanelBackdrop = document.getElementById("routines-panel-backdrop");
 
 let editingRoutineId = null;
 let routinesPanelTrigger = null;
@@ -472,7 +473,11 @@ export function initRoutines() {
     return;
   }
 
-  routinesSidebar.addEventListener("click", openRoutinesPanel);
+  routinesSidebar.addEventListener("click", () => { openRoutinesPanel(); });
+  
+  closeRoutinesPanelButton.addEventListener("click", closeRoutinesPanel);
+  
+  routinesPanelBackdrop.addEventListener("click", closeRoutinesPanel);
 
   closeRoutineModalButton.addEventListener("click", closeRoutineModal);
   
@@ -714,43 +719,17 @@ function listenToRoutines() {
 
 
 function openRoutinesPanel() {
-
-  routinesPanelTrigger = document.activeElement;
-
   listenToRoutines();
 
   routinesPanel.classList.add("open");
-  routinesPanel.setAttribute("aria-hidden", "false");
-
-  closeRoutinesPanelButton.focus();
+  routinesSidebar.classList.add("active");
 }
 
 
 
 function closeRoutinesPanel() {
-
-  // Prima togliamo il focus dal contenuto del pannello
-  if (
-    routinesPanel.contains(document.activeElement) &&
-    document.activeElement instanceof HTMLElement
-  ) {
-    document.activeElement.blur();
-  }
-
   routinesPanel.classList.remove("open");
-
-  routinesPanel.setAttribute("aria-hidden", "true");
-
-  // Restituiamo il focus a chi aveva aperto il pannello
-  if (
-    routinesPanelTrigger &&
-    routinesPanelTrigger instanceof HTMLElement
-  ) {
-    routinesPanelTrigger.focus();
-  }
-
-  routinesPanelTrigger = null;
+  routinesSidebar.classList.remove("active");
 }
-
 
 
