@@ -36,19 +36,79 @@ const routinesPanel = document.getElementById("routines-panel");
 const closeRoutinesPanelButton = document.getElementById("close-routines-panel");
 const routinesList = document.getElementById("routines-list");
 
+let editingRoutineId = null;
+
 
 // MODAL =========================================================
 
 export function openRoutineModal() {
 
+  editingRoutineId = null;
+
+  routineForm.reset();
+  routineTimes.innerHTML = "";
+
+  weekdayButtons.forEach((button) => {
+    button.classList.remove("active");
+  });
+
+  updateRoutineFrequencyUI();
+
   routineModal.classList.add("open");
   routineModalBackdrop.classList.add("open");
-
   routineModal.setAttribute("aria-hidden", "false");
 
   routineName.focus();
-
 }
+
+
+
+function openRoutineEditModal(routineId, routine) {
+
+  editingRoutineId = routineId;
+
+  routineName.value = routine.name || "";
+
+  routineInterval.value = routine.interval || 1;
+
+  routineUnit.value = routine.unit || "days";
+
+  routineStart.value = routine.startDate || "";
+
+  monthlyDay.value = routine.monthlyDay || 1;
+
+  weekdayButtons.forEach((button) => {
+
+    const day = Number(button.dataset.day);
+
+    button.classList.toggle(
+      "active",
+      (routine.weekdays || []).includes(day)
+    );
+
+  });
+
+  routineTimes.innerHTML = "";
+
+  (routine.times || []).forEach((time) => {
+    addRoutineTime(time);
+  });
+
+  if (!routine.times || routine.times.length === 0) {
+    addRoutineTime();
+  }
+
+  updateRoutineFrequencyUI();
+
+  routineModal.classList.add("open");
+  routineModalBackdrop.classList.add("open");
+  routineModal.setAttribute("aria-hidden", "false");
+
+  routineName.focus();
+}
+
+
+
 
 
 function closeRoutineModal() {
@@ -327,6 +387,23 @@ async function saveRoutine(routine) {
     "routines"
   );
 
+  // MODIFICA
+  if (editingRoutineId) {
+
+    const routineRef = doc(
+      routinesRef,
+      editingRoutineId
+    );
+
+    await updateDoc(routineRef, {
+      ...routine,
+      updatedAt: serverTimestamp()
+    });
+
+    return;
+  }
+
+  // CREAZIONE
   await addDoc(routinesRef, {
 
     ...routine,
@@ -335,7 +412,6 @@ async function saveRoutine(routine) {
     updatedAt: serverTimestamp()
 
   });
-
 }
 
 
@@ -347,26 +423,31 @@ async function handleRoutineSubmit(event) {
 
   const routine = getRoutineData();
 
-
   if (!routine.name) {
     routineName.focus();
     return;
   }
 
-
   try {
 
     await saveRoutine(routine);
 
-    console.log("Routine saved:", routine);
+    console.log(
+      editingRoutineId
+        ? "Routine updated:"
+        : "Routine saved:",
+      routine
+    );
+
+    editingRoutineId = null;
 
     routineForm.reset();
-
     routineTimes.innerHTML = "";
-    
+
     weekdayButtons.forEach((button) => {
       button.classList.remove("active");
     });
+
     updateRoutineFrequencyUI();
 
     closeRoutineModal();
@@ -379,7 +460,6 @@ async function handleRoutineSubmit(event) {
     );
 
   }
-
 }
 
 
@@ -450,6 +530,15 @@ function renderRoutines(snapshot) {
 
     item.className = "routine-list-item";
 
+    item.addEventListener("click", () => {
+    
+      openRoutineEditModal(
+        routineId,
+        routine
+      );
+    
+    });
+
     item.innerHTML = `
       <div class="routine-list-info">
         <div class="routine-list-name"></div>
@@ -474,8 +563,15 @@ function renderRoutines(snapshot) {
 
     const toggle = item.querySelector(".routine-enabled-toggle");
 
+    toggle.addEventListener("click", (event) => {
+      event.stopPropagation();
+    });
+    
     toggle.addEventListener("change", () => {
-      updateRoutineEnabled(routineId, toggle.checked);
+      updateRoutineEnabled(
+        routineId,
+        toggle.checked
+      );
     });
 
     routinesList.appendChild(item);
