@@ -513,6 +513,28 @@ document.addEventListener("click", (event) => {
 
 
 
+// HEALTH =========================================================
+async function loadHealthData() {
+    try {
+        if (!AVENHealth.isAvailable()) {
+            console.log("HealthKit non disponibile");
+            return;
+        }
+
+        const health = await AVENHealth.getToday();
+
+        console.log("Passi:", health.steps);
+        console.log("Km:", health.distanceKm);
+
+        // Qui aggiorni l'interfaccia di AVEN
+        // oppure salvi i dati su Firebase
+    } catch (error) {
+        console.error("Errore HealthKit:", error);
+    }
+}
+
+
+loadHealthData();
 
 
 
