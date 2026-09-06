@@ -1,160 +1,145 @@
 /**
- * AVEN - HealthKit Bridge
+ * AVEN - HealthKit bridge
  *
- * Questo file NON accede direttamente a Apple Health.
- * Prepara il collegamento tra la web app AVEN e la parte
- * nativa iOS che utilizzerà HealthKit.
+ * Questo modulo gestisce la comunicazione tra AVEN Web
+ * e la parte nativa iOS che, in futuro, parlerà con HealthKit.
  *
- * Funziona anche normalmente da browser:
- * se HealthKit non è disponibile, restituisce un errore
- * controllabile invece di rompere AVEN.
+ * In un normale browser (PC, Safari, GitHub Pages) HealthKit
+ * non è disponibile: le funzioni restituiscono un errore.
+ *
+ * In AVEN iOS, il codice Swift registrerà il message handler:
+ *
+ * window.webkit.messageHandlers.avenHealth
  */
 
-window.AVENHealth = (() => {
 
-    /**
-     * Verifica se AVEN è aperto dentro la versione iOS
-     * che contiene il bridge nativo HealthKit.
-     */
-    function isAvailable() {
-        return (
-            window.webkit &&
-            window.webkit.messageHandlers &&
-            window.webkit.messageHandlers.avenHealth
+
+/** Controlla se AVEN sta girando dentro una WebView iOS che espone il bridge HealthKit.*/
+export function isHealthKitAvailable() {
+    return Boolean(
+        window.webkit?.messageHandlers?.avenHealth
+    );
+}
+
+/**Richiede all'app iOS il permesso di leggere i dati di salute necessari ad AVEN.
+ * Sarà il codice Swift a gestire realmente la richiesta dei permessi HealthKit.*/
+export function requestHealthPermission() {
+    return new Promise((resolve, reject) => {
+
+        if (!isHealthKitAvailable()) {
+            reject(
+                new Error(
+                    "HealthKit non disponibile in questo ambiente."
+                )
+            );
+            return;
+        }
+
+        const requestId = crypto.randomUUID();
+
+        function handlePermission(event) {
+            const data = event.detail;
+
+            if (data?.requestId !== requestId) {
+                return;
+            }
+
+            window.removeEventListener(
+                "aven-health-permission",
+                handlePermission
+            );
+
+            if (data.success) {
+                resolve(true);
+            } else {
+                reject(
+                    new Error(
+                        data.error ||
+                        "Permesso HealthKit non concesso."
+                    )
+                );
+            }
+        }
+
+        window.addEventListener(
+            "aven-health-permission",
+            handlePermission
         );
-    }
 
-    /**
-     * Richiede all'app iOS il permesso di leggere:
-     * - passi
-     * - distanza percorsa
-     */
-    function requestPermission() {
-        return new Promise((resolve, reject) => {
-
-            if (!isAvailable()) {
-                reject(
-                    new Error(
-                        "HealthKit non disponibile: AVEN è aperto nel browser."
-                    )
-                );
-                return;
-            }
-
-            const requestId = crypto.randomUUID();
-
-            window.addEventListener(
-                `aven-health-permission-${requestId}`,
-                (event) => {
-                    window.removeEventListener(
-                        `aven-health-permission-${requestId}`,
-                        arguments.callee
-                    );
-
-                    if (event.detail?.success) {
-                        resolve(true);
-                    } else {
-                        reject(
-                            new Error(
-                                event.detail?.error ||
-                                "Permesso HealthKit non concesso."
-                            )
-                        );
-                    }
-                },
-                { once: true }
-            );
-
-            window.webkit.messageHandlers.avenHealth.postMessage({
-                action: "requestPermission",
-                requestId
-            });
+        window.webkit.messageHandlers.avenHealth.postMessage({
+            action: "requestPermission",
+            requestId
         });
-    }
+    });
+}
 
-    /**
-     * Richiede i dati relativi alla giornata corrente.
-     *
-     * Risultato atteso:
-     *
-     * {
-     *   steps: 8432,
-     *   distanceKm: 6.21,
-     *   date: "2026-09-06"
-     * }
-     */
-    function getToday() {
-        return new Promise((resolve, reject) => {
+/**Recupera i dati della giornata corrente.
+ * Risultato previsto:
+ * {
+ *     steps: 8432,
+ *     distanceKm: 6.21,
+ *     date: "2026-09-06"
+ * }
+ * Sarà il codice Swift a interrogare HealthKit e a restituire questi valori.*/
+export function getTodayHealth() {
+    return new Promise((resolve, reject) => {
 
-            if (!isAvailable()) {
-                reject(
-                    new Error(
-                        "HealthKit non disponibile: AVEN è aperto nel browser."
-                    )
-                );
+        if (!isHealthKitAvailable()) {
+            reject(
+                new Error(
+                    "HealthKit non disponibile in questo ambiente."
+                )
+            );
+            return;
+        }
+
+        const requestId = crypto.randomUUID();
+
+        function handleHealthResult(event) {
+            const data = event.detail;
+
+            if (data?.requestId !== requestId) {
                 return;
             }
 
-            const requestId = crypto.randomUUID();
-
-            function handleResult(event) {
-                const data = event.detail;
-
-                if (data?.requestId !== requestId) {
-                    return;
-                }
-
-                window.removeEventListener(
-                    "aven-health-result",
-                    handleResult
-                );
-
-                if (data.success) {
-                    resolve(data.data);
-                } else {
-                    reject(
-                        new Error(
-                            data.error ||
-                            "Impossibile leggere i dati HealthKit."
-                        )
-                    );
-                }
-            }
-
-            window.addEventListener(
+            window.removeEventListener(
                 "aven-health-result",
-                handleResult
+                handleHealthResult
             );
 
-            window.webkit.messageHandlers.avenHealth.postMessage({
-                action: "getToday",
-                requestId
-            });
+            if (data.success) {
+                resolve(data.data);
+            } else {
+                reject(
+                    new Error(
+                        data.error ||
+                        "Impossibile recuperare i dati HealthKit."
+                    )
+                );
+            }
+        }
+
+        window.addEventListener(
+            "aven-health-result",
+            handleHealthResult
+        );
+
+        window.webkit.messageHandlers.avenHealth.postMessage({
+            action: "getToday",
+            requestId
         });
-    }
+    });
+}
 
-    /**
-     * Funzione comoda:
-     * chiede i dati e restituisce un oggetto pronto
-     * per essere salvato su Firebase.
-     */
-    async function syncToday() {
+/**Recupera i dati di oggi e li prepara nel formato che AVEN potrà eventualmente salvare su Firebase. */
+export async function syncTodayHealth() {
 
-        const health = await getToday();
-
-        return {
-            steps: health.steps ?? 0,
-            distanceKm: health.distanceKm ?? 0,
-            date: health.date,
-            source: "apple-health"
-        };
-    }
+    const health = await getTodayHealth();
 
     return {
-        isAvailable,
-        requestPermission,
-        getToday,
-        syncToday
+        date: health.date,
+        steps: health.steps ?? 0,
+        distanceKm: health.distanceKm ?? 0,
+        source: "apple-health"
     };
-
-})();
+}
