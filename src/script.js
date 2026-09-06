@@ -514,24 +514,50 @@ document.addEventListener("click", (event) => {
 
 
 // HEALTH =========================================================
-async function loadHealthData() {
-    if (!isHealthKitAvailable()) {
-        console.log("HealthKit non disponibile.");
-        return;
-    }
+const healthSidebar = document.getElementById("health-sidebar");
+const healthPanel = document.getElementById("health-panel");
+const healthClose = document.getElementById("health-close");
 
-    try {
-        const health = await getTodayHealth();
+const healthSteps = document.getElementById("health-steps");
+const healthDistance = document.getElementById("health-distance");
+const healthConnectButton = document.getElementById("health-connect-button");
+const healthStatus = document.getElementById("health-status");
 
-        console.log("Passi:", health.steps);
-        console.log("Km:", health.distanceKm);
 
-    } catch (error) {
-        console.error("HealthKit:", error);
-    }
+function openHealthPanel() {
+  healthPanel.classList.add("open");
+  healthSidebar.classList.add("active");
 }
 
-loadHealthData();
+
+function closeHealthPanel() {
+  healthPanel.classList.remove("open");
+  healthSidebar.classList.remove("active");
+}
 
 
+healthSidebar.addEventListener("click", async () => {
 
+  openHealthPanel();
+
+  if (!isHealthKitAvailable()) {
+    healthStatus.textContent =
+      "Apple Health è disponibile nell'app AVEN per iPhone.";
+    return;
+  }
+
+  healthStatus.textContent = "";
+});
+
+
+healthClose.addEventListener("click", closeHealthPanel);
+
+document.addEventListener("click", (event) => {
+  if (
+    healthPanel.classList.contains("open") &&
+    !healthPanel.contains(event.target) &&
+    !event.target.closest("#health-sidebar")
+  ) {
+    closeHealthPanel();
+  }
+});
