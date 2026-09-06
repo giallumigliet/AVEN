@@ -513,6 +513,8 @@ document.addEventListener("click", (event) => {
 
 
 // HEALTH =========================================================
+// HEALTH =========================================================
+
 const healthSidebar = document.getElementById("health-sidebar");
 const healthPanel = document.getElementById("health-panel");
 const healthClose = document.getElementById("health-close");
@@ -522,22 +524,34 @@ const healthDistance = document.getElementById("health-distance");
 const healthConnectButton = document.getElementById("health-connect-button");
 const healthStatus = document.getElementById("health-status");
 
-
 function openHealthPanel() {
   healthPanel.classList.add("open");
   healthSidebar.classList.add("active");
 }
-
 
 function closeHealthPanel() {
   healthPanel.classList.remove("open");
   healthSidebar.classList.remove("active");
 }
 
-
-healthSidebar.addEventListener("click", async () => {
-
+healthSidebar.addEventListener("click", () => {
   openHealthPanel();
+
+  if (!isHealthKitAvailable()) {
+    healthStatus.textContent =
+      "Apple Health è disponibile nell'app AVEN per iPhone.";
+
+    healthConnectButton.disabled = true;
+    return;
+  }
+
+  healthStatus.textContent = "";
+  healthConnectButton.disabled = false;
+});
+
+healthClose.addEventListener("click", closeHealthPanel);
+
+healthConnectButton.addEventListener("click", async () => {
 
   if (!isHealthKitAvailable()) {
     healthStatus.textContent =
@@ -545,18 +559,46 @@ healthSidebar.addEventListener("click", async () => {
     return;
   }
 
-  healthStatus.textContent = "";
+  healthConnectButton.disabled = true;
+  healthStatus.textContent = "Connecting to Apple Health…";
+
+  try {
+
+    await requestHealthPermission();
+
+    const health = await getTodayHealth();
+
+    healthSteps.textContent =
+      Number(health.steps || 0).toLocaleString("it-IT");
+
+    healthDistance.textContent =
+      Number(health.distanceKm || 0).toFixed(2);
+
+    healthStatus.textContent = "Dati aggiornati";
+
+  } catch (error) {
+
+    console.error("HealthKit:", error);
+
+    healthStatus.textContent =
+      error.message ||
+      "Impossibile leggere i dati Apple Health.";
+
+  } finally {
+
+    healthConnectButton.disabled = false;
+
+  }
 });
 
-
-healthClose.addEventListener("click", closeHealthPanel);
-
 document.addEventListener("click", (event) => {
+
   if (
     healthPanel.classList.contains("open") &&
-    !healthPanel.contains(event.target) &&
-    !event.target.closest("#health-sidebar")
+    !event.target.closest("#health-sidebar") &&
+    !event.target.closest("#health-panel")
   ) {
     closeHealthPanel();
   }
+
 });
