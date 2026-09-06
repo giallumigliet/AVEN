@@ -3,39 +3,19 @@
 
 // ELEMENTS =========================================================
 
-const birthdaysSidebar =
-  document.getElementById("birthdays-sidebar");
+const birthdaysSidebar = document.getElementById("birthdays-sidebar");
+const birthdayModal = document.getElementById("birthday-modal");
+const birthdayModalBackdrop = document.getElementById("birthday-modal-backdrop");
+const closeBirthdayModalButton = document.getElementById("close-birthday-modal");
+const deleteBirthdayButton = document.getElementById("delete-birthday");
 
-const birthdayModal =
-  document.getElementById("birthday-modal");
+const birthdayForm = document.getElementById("birthday-form");
 
-const birthdayModalBackdrop =
-  document.getElementById("birthday-modal-backdrop");
-
-const closeBirthdayModalButton =
-  document.getElementById("close-birthday-modal");
-
-const cancelBirthdayButton =
-  document.getElementById("cancel-birthday");
-
-const birthdayForm =
-  document.getElementById("birthday-form");
-
-const birthdayName =
-  document.getElementById("birthday-name");
-
-const birthdayDay =
-  document.getElementById("birthday-day");
-
-const birthdayMonth =
-  document.getElementById("birthday-month");
-
-const birthdayYear =
-  document.getElementById("birthday-year");
-
-const birthdayPreview =
-  document.getElementById("birthday-preview");
-
+const birthdayName = document.getElementById("birthday-name");
+const birthdayDay = document.getElementById("birthday-day");
+const birthdayMonth = document.getElementById("birthday-month");
+const birthdayYear = document.getElementById("birthday-year");
+const birthdayPreview = document.getElementById("birthday-preview");
 
 // MODAL =========================================================
 
@@ -271,60 +251,18 @@ export function initBirthdays() {
   }
 
 
-  birthdaysSidebar.addEventListener(
-    "click",
-    openBirthdayModal
-  );
+  birthdaysSidebar.addEventListener("click", openBirthdayModal);
 
+  closeBirthdayModalButton.addEventListener("click", closeBirthdayModal);
 
-  closeBirthdayModalButton.addEventListener(
-    "click",
-    closeBirthdayModal
-  );
+  birthdayModalBackdrop.addEventListener("click", closeBirthdayModal);
 
+  birthdayName.addEventListener("input", updateBirthdayPreview);
+  birthdayDay.addEventListener("input", updateBirthdayPreview);
+  birthdayMonth.addEventListener("change", updateBirthdayPreview);
+  birthdayYear.addEventListener("input", updateBirthdayPreview);
 
-  cancelBirthdayButton.addEventListener(
-    "click",
-    closeBirthdayModal
-  );
-
-
-  birthdayModalBackdrop.addEventListener(
-    "click",
-    closeBirthdayModal
-  );
-
-
-  birthdayName.addEventListener(
-    "input",
-    updateBirthdayPreview
-  );
-
-
-  birthdayDay.addEventListener(
-    "input",
-    updateBirthdayPreview
-  );
-
-
-  birthdayMonth.addEventListener(
-    "change",
-    updateBirthdayPreview
-  );
-
-
-  birthdayYear.addEventListener(
-    "input",
-    updateBirthdayPreview
-  );
-
-
-  birthdayForm.addEventListener(
-    "submit",
-    handleBirthdaySubmit
-  );
-
+  birthdayForm.addEventListener("submit", handleBirthdaySubmit);
 
   updateBirthdayPreview();
-
 }
