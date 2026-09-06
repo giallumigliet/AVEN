@@ -475,8 +475,6 @@ export function initRoutines() {
 
   routinesSidebar.addEventListener("click", () => { openRoutinesPanel(); });
   
-  closeRoutinesPanelButton.addEventListener("click", closeRoutinesPanel);
-  
   routinesPanelBackdrop.addEventListener("click", closeRoutinesPanel);
 
   closeRoutineModalButton.addEventListener("click", closeRoutineModal);
@@ -584,18 +582,16 @@ function renderRoutines(snapshot) {
     item.className = "routine-list-item";
 
     item.addEventListener("click", (event) => {
-    
-      if (
-        event.target.closest(".routine-switch")
-      ) {
+      if (event.target.closest(".routine-switch")) {
         return;
       }
+    
+      closeRoutinesPanel();
     
       openRoutineEditModal(
         routineId,
         routine
       );
-    
     });
 
     item.innerHTML = `
