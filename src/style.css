@@ -1238,12 +1238,38 @@ main {
 
 .routines-panel {
   position: fixed;
-  top: 50%;
-  left: 50%;
+  inset: 0;
+
+  z-index: 500;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 20px;
+
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+
+  transition:
+    opacity var(--transition-normal),
+    visibility var(--transition-normal);
+}
+
+.routines-panel.open {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+
+.routines-panel-content {
+  position: relative;
+  z-index: 1;
+
   width: min(520px, calc(100vw - 32px));
   max-height: min(680px, calc(100vh - 48px));
-
-  transform: translate(-50%, -48%) scale(.96);
 
   display: flex;
   flex-direction: column;
@@ -1257,26 +1283,16 @@ main {
   backdrop-filter: blur(30px);
   -webkit-backdrop-filter: blur(30px);
 
-  box-shadow: 0 25px 80px rgba(0,0,0,.30);
+  box-shadow: 0 25px 80px rgba(0, 0, 0, .30);
 
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
+  transform: translateY(10px) scale(.97);
 
   transition:
-    opacity var(--transition-normal),
-    transform var(--transition-normal),
-    visibility var(--transition-normal);
-
-  z-index: 200;
+    transform var(--transition-normal);
 }
 
-.routines-panel.open {
-  transform: translate(-50%, -50%) scale(1);
-
-  opacity: 1;
-  visibility: visible;
-  pointer-events: auto;
+.routines-panel.open .routines-panel-content {
+  transform: translateY(0) scale(1);
 }
 
 
@@ -1729,9 +1745,12 @@ main {
 
 /* BACKDROP ----------------------------------------------------- */
 
-.health-panel-backdrop, .routines-panel-backdrop {
+.health-panel-backdrop,
+.routines-panel-backdrop {
   position: absolute;
   inset: 0;
+
+  z-index: 0;
 
   background: rgba(0, 0, 0, 0.42);
 
