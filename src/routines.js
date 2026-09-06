@@ -502,6 +502,54 @@ export function initRoutines() {
 
 
 
+function getRoutineFrequencyText(routine) {
+  const interval = routine.interval || 1;
+
+  if (routine.unit === "days") {
+    return interval === 1
+      ? "Ogni giorno"
+      : `Ogni ${interval} giorni`;
+  }
+
+  if (routine.unit === "weeks") {
+    const dayNames = [
+      "domenica",
+      "lunedì",
+      "martedì",
+      "mercoledì",
+      "giovedì",
+      "venerdì",
+      "sabato"
+    ];
+
+    const days = (routine.weekdays || [])
+      .map(day => dayNames[day])
+      .filter(Boolean);
+
+    let text = interval === 1
+      ? "Ogni settimana"
+      : `Ogni ${interval} settimane`;
+
+    if (days.length === 1) {
+      text += ` · ${days[0]}`;
+    } else if (days.length > 1) {
+      text += ` · ${days.join(", ")}`;
+    }
+
+    return text;
+  }
+
+  if (routine.unit === "months") {
+    const day = routine.monthlyDay || 1;
+
+    return interval === 1
+      ? `Ogni mese · giorno ${day}`
+      : `Ogni ${interval} mesi · giorno ${day}`;
+  }
+
+  return "";
+}
+
 
 
 
