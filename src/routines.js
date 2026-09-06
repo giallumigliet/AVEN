@@ -32,6 +32,10 @@ const routinePreview = document.getElementById("routine-preview");
 
 const weekdayButtons = document.querySelectorAll(".weekday-picker button");
 
+const routinesPanel = document.getElementById("routines-panel");
+const closeRoutinesPanelButton = document.getElementById("close-routines-panel");
+const routinesList = document.getElementById("routines-list");
+
 
 // MODAL =========================================================
 
@@ -388,69 +392,189 @@ export function initRoutines() {
     return;
   }
 
+  routinesSidebar.addEventListener("click", openRoutinesPanel);
 
-  routinesSidebar.addEventListener(
-    "click",
-    openRoutineModal
-  );
+  closeRoutineModalButton.addEventListener("click", closeRoutineModal);
+  
+  closeRoutinesPanelButton.addEventListener("click", closeRoutinesPanel);
 
+  cancelRoutineButton.addEventListener("click", closeRoutineModal);
 
-  closeRoutineModalButton.addEventListener(
-    "click",
-    closeRoutineModal
-  );
+  routineModalBackdrop.addEventListener("click", closeRoutineModal);
 
+  routineUnit.addEventListener("change", updateRoutineFrequencyUI);
 
-  cancelRoutineButton.addEventListener(
-    "click",
-    closeRoutineModal
-  );
+  routineInterval.addEventListener("input", updateRoutinePreview);
 
+  monthlyDay.addEventListener("input", updateRoutinePreview);
 
-  routineModalBackdrop.addEventListener(
-    "click",
-    closeRoutineModal
-  );
+  routineStart.addEventListener("change", updateRoutinePreview);
 
+  addRoutineTimeButton.addEventListener("click", () => addRoutineTime());
 
-  routineUnit.addEventListener(
-    "change",
-    updateRoutineFrequencyUI
-  );
-
-
-  routineInterval.addEventListener(
-    "input",
-    updateRoutinePreview
-  );
-
-
-  monthlyDay.addEventListener(
-    "input",
-    updateRoutinePreview
-  );
-
-
-  routineStart.addEventListener(
-    "change",
-    updateRoutinePreview
-  );
-
-
-  addRoutineTimeButton.addEventListener(
-    "click",
-    () => addRoutineTime()
-  );
-
-
-  routineForm.addEventListener(
-    "submit",
-    handleRoutineSubmit
-  );
-
+  routineForm.addEventListener("submit", handleRoutineSubmit);
 
   setupWeekdayPicker();
 
   updateRoutineFrequencyUI();
 
+}
+
+
+
+
+
+
+function renderRoutines(snapshot) {
+
+  routinesList.innerHTML = "";
+
+  if (snapshot.empty) {
+
+    routinesList.innerHTML = `
+      <div class="routines-empty">
+        <span>Nessuna routine</span>
+        <small>Creane una con il pulsante +</small>
+      </div>
+    `;
+
+    return;
+  }
+
+  snapshot.forEach((documentSnapshot) => {
+
+    const routine = documentSnapshot.data();
+    const routineId = documentSnapshot.id;
+
+    const item = document.createElement("div");
+
+    item.className = "routine-list-item";
+
+    item.innerHTML = `
+      <div class="routine-list-info">
+        <div class="routine-list-name"></div>
+        <div class="routine-list-frequency"></div>
+      </div>
+
+      <label class="routine-switch">
+        <input
+          type="checkbox"
+          class="routine-enabled-toggle"
+          ${routine.enabled !== false ? "checked" : ""}
+        >
+        <span class="routine-switch-track"></span>
+      </label>
+    `;
+
+    item.querySelector(".routine-list-name").textContent =
+      routine.name || "Routine senza nome";
+
+    item.querySelector(".routine-list-frequency").textContent =
+      getRoutineFrequencyText(routine);
+
+    const toggle = item.querySelector(".routine-enabled-toggle");
+
+    toggle.addEventListener("change", () => {
+      updateRoutineEnabled(routineId, toggle.checked);
+    });
+
+    routinesList.appendChild(item);
+  });
+}
+
+
+
+
+async function updateRoutineEnabled(routineId, enabled) {
+
+  const user = auth.currentUser;
+
+  if (!user) {
+    console.error("User not authenticated.");
+    return;
+  }
+
+  try {
+
+    const routineRef = doc(
+      db,
+      "users",
+      user.uid,
+      "routines",
+      routineId
+    );
+
+    await updateDoc(routineRef, {
+      enabled
+    });
+
+    console.log(
+      `Routine ${routineId} ${enabled ? "enabled" : "disabled"}`
+    );
+
+  } catch (error) {
+
+    console.error(
+      "Error updating routine:",
+      error
+    );
+
+  }
+}
+
+
+
+
+let routinesUnsubscribe = null;
+
+function listenToRoutines() {
+
+  const user = auth.currentUser;
+
+  if (!user) {
+    return;
+  }
+
+  if (routinesUnsubscribe) {
+    routinesUnsubscribe();
+  }
+
+  const routinesRef = collection(
+    db,
+    "users",
+    user.uid,
+    "routines"
+  );
+
+  routinesUnsubscribe = onSnapshot(
+    routinesRef,
+    (snapshot) => {
+      renderRoutines(snapshot);
+    },
+    (error) => {
+      console.error(
+        "Error loading routines:",
+        error
+      );
+    }
+  );
+}
+
+
+
+
+function openRoutinesPanel() {
+
+  listenToRoutines();
+
+  routinesPanel.classList.add("open");
+  routinesPanel.setAttribute("aria-hidden", "false");
+}
+
+
+
+function closeRoutinesPanel() {
+
+  routinesPanel.classList.remove("open");
+  routinesPanel.setAttribute("aria-hidden", "true");
 }
