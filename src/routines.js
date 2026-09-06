@@ -11,7 +11,7 @@ const routineModal = document.getElementById("routine-modal");
 const routineModalBackdrop = document.getElementById("routine-modal-backdrop");
 
 const closeRoutineModalButton = document.getElementById("close-routine-modal");
-const cancelRoutineButton = document.getElementById("cancel-routine");
+
 const deleteRoutineButton = document.getElementById("delete-routine");
 
 const routineForm = document.getElementById("routine-form");
@@ -521,8 +521,6 @@ export function initRoutines() {
   closeRoutinesPanelButton.addEventListener("click", closeRoutinesPanel);
 
   deleteRoutineButton.addEventListener("click", deleteRoutine);
-
-  cancelRoutineButton.addEventListener("click", closeRoutineModal);
 
   routineModalBackdrop.addEventListener("click", closeRoutineModal);
 
