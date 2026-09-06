@@ -513,8 +513,6 @@ document.addEventListener("click", (event) => {
 
 
 // HEALTH =========================================================
-// HEALTH =========================================================
-
 const healthSidebar = document.getElementById("health-sidebar");
 const healthPanel = document.getElementById("health-panel");
 const healthClose = document.getElementById("health-close");
