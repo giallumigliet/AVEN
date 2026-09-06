@@ -1524,9 +1524,7 @@ main {
 
 /* BACKDROP ----------------------------------------------------- */
 
-.health-panel::before {
-  content: "";
-
+.health-panel-backdrop {
   position: absolute;
   inset: 0;
 
@@ -1575,7 +1573,6 @@ main {
 .health-panel.open .health-panel-content {
   transform: translateY(0) scale(1);
 }
-
 
 /* HEADER ------------------------------------------------------- */
 
