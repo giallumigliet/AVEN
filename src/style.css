@@ -1489,6 +1489,298 @@ main {
 
 
 
+/* =========================================================
+   HEALTH PANEL
+========================================================= */
+
+.health-panel {
+  position: fixed;
+  inset: 0;
+
+  z-index: 500;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 20px;
+
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+
+  transition:
+    opacity var(--transition-normal),
+    visibility var(--transition-normal);
+}
+
+
+.health-panel.open {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+
+/* BACKDROP ----------------------------------------------------- */
+
+.health-panel::before {
+  content: "";
+
+  position: absolute;
+  inset: 0;
+
+  background: rgba(0, 0, 0, 0.42);
+
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+
+/* CONTENT ------------------------------------------------------ */
+
+.health-panel-content {
+  position: relative;
+  z-index: 1;
+
+  width: min(480px, calc(100vw - 32px));
+
+  padding: 20px;
+
+  border-radius: var(--radius-large);
+
+  background:
+    linear-gradient(
+      145deg,
+      var(--color-panel),
+      var(--color-surface)
+    );
+
+  border: 1px solid var(--color-panel-border);
+
+  backdrop-filter: blur(35px);
+  -webkit-backdrop-filter: blur(35px);
+
+  box-shadow:
+    0 30px 100px rgba(0, 0, 0, 0.35),
+    0 0 80px var(--color-accent-soft);
+
+  transform: translateY(10px) scale(0.97);
+
+  transition:
+    transform var(--transition-normal);
+}
+
+
+.health-panel.open .health-panel-content {
+  transform: translateY(0) scale(1);
+}
+
+
+/* HEADER ------------------------------------------------------- */
+
+.health-panel-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+
+  gap: 15px;
+
+  margin-bottom: 20px;
+}
+
+
+.health-panel-title {
+  display: flex;
+  flex-direction: column;
+
+  gap: 3px;
+}
+
+
+.health-panel-label {
+  color: var(--color-accent);
+
+  font-size: 10px;
+  font-weight: 600;
+
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+
+
+.health-panel-header h2 {
+  font-size: 23px;
+  font-weight: 500;
+
+  letter-spacing: -0.7px;
+}
+
+
+.health-panel-date {
+  margin-top: 3px;
+
+  color: var(--color-muted);
+
+  font-size: 11px;
+}
+
+
+/* CLOSE -------------------------------------------------------- */
+
+.health-close {
+  width: 34px;
+  height: 34px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+
+  color: var(--color-muted);
+
+  font-size: 20px;
+  font-weight: 300;
+
+  cursor: pointer;
+
+  transition:
+    background var(--transition-fast),
+    color var(--transition-fast),
+    transform var(--transition-fast);
+}
+
+
+/* STATS -------------------------------------------------------- */
+
+.health-stats {
+  display: grid;
+
+  grid-template-columns: repeat(2, 1fr);
+
+  gap: 8px;
+
+  margin-bottom: 14px;
+}
+
+
+.health-stat {
+  min-height: 125px;
+
+  padding: 15px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  border-radius: var(--radius-medium);
+
+  background: var(--color-card);
+  border: 1px solid var(--color-card-border);
+
+  transition:
+    background var(--transition-fast),
+    transform var(--transition-fast),
+    border-color var(--transition-fast);
+}
+
+
+.health-stat-icon {
+  width: 32px;
+  height: 32px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 10px;
+
+  background: var(--color-accent-soft);
+
+  color: var(--color-accent);
+
+  font-size: 15px;
+}
+
+
+.health-stat-value {
+  margin-top: 12px;
+
+  color: var(--color-text);
+
+  font-size: 28px;
+  font-weight: 500;
+
+  letter-spacing: -1px;
+}
+
+
+.health-stat-label {
+  color: var(--color-muted);
+
+  font-size: 11px;
+
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+
+/* CONNECT ------------------------------------------------------ */
+
+.health-connect-button {
+  width: 100%;
+  min-height: 42px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0 15px;
+
+  border-radius: 12px;
+
+  background: var(--color-accent);
+
+  color: #081014;
+
+  font-size: 12px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background var(--transition-fast),
+    transform var(--transition-fast);
+}
+
+
+/* STATUS ------------------------------------------------------- */
+
+.health-status {
+  min-height: 16px;
+
+  margin-top: 10px;
+
+  color: var(--color-muted);
+
+  font-size: 11px;
+
+  line-height: 1.4;
+
+  text-align: center;
+}
+
+
+
+
+
+
 
 /* =========================================================
    ADD MENU
@@ -1806,6 +2098,23 @@ main {
     background: var(--color-surface-hover);
     border-color: var(--color-border);
     transform: translateY(-2px);
+  }
+
+
+  .health-close:hover {
+    background: var(--color-surface-hover);
+    color: var(--color-text);
+    transform: scale(1.05);
+  }
+
+  .health-stat:hover {
+    background: var(--color-surface-hover);
+    border-color: var(--color-border);
+    transform: translateY(-2px);
+  }
+
+  .health-connect-button:hover {
+    transform: translateY(-1px);
   }
 
 }
@@ -2156,6 +2465,44 @@ button:active {
 
   .add-option {
     min-height: 72px;
+  }
+
+
+
+    /* HEALTH PANEL */
+
+  .health-panel {
+    padding: 16px;
+  }
+
+
+  .health-panel-content {
+    width: calc(100vw - 32px);
+
+    padding: 20px;
+
+    border-radius: 23px;
+  }
+
+
+  .health-panel-header {
+    margin-bottom: 17px;
+  }
+
+
+  .health-panel-header h2 {
+    font-size: 20px;
+  }
+
+
+  .health-stat {
+    min-height: 110px;
+    padding: 12px;
+  }
+
+
+  .health-stat-value {
+    font-size: 24px;
   }
 
 
