@@ -55,17 +55,16 @@ export function openBirthdayModal() {
 }
 
 
+
 function closeBirthdayModal() {
+  // Sposta il focus fuori dal modal prima di nasconderlo
+  if (document.activeElement instanceof HTMLElement) {
+    document.activeElement.blur();
+  }
 
   birthdayModal.classList.remove("open");
-
   birthdayModalBackdrop.classList.remove("open");
-
-  birthdayModal.setAttribute(
-    "aria-hidden",
-    "true"
-  );
-
+  birthdayModal.setAttribute("aria-hidden", "true");
 }
 
 
