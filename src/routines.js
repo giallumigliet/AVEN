@@ -1,6 +1,6 @@
 // routines.js
 import { auth, db } from "./firebase.js";
-import { collection, addDoc, serverTimestamp, onSnapshot, doc, updateDoc } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
+import { collection, addDoc, serverTimestamp, onSnapshot, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
 
 
 // ELEMENTS =========================================================
@@ -12,6 +12,7 @@ const routineModalBackdrop = document.getElementById("routine-modal-backdrop");
 
 const closeRoutineModalButton = document.getElementById("close-routine-modal");
 const cancelRoutineButton = document.getElementById("cancel-routine");
+const deleteRoutineButton = document.getElementById("delete-routine");
 
 const routineForm = document.getElementById("routine-form");
 const routineName = document.getElementById("routine-name");
@@ -45,6 +46,7 @@ let routinesPanelTrigger = null;
 export function openRoutineModal() {
 
   editingRoutineId = null;
+  deleteRoutineButton.hidden = true;
 
   routineForm.reset();
   routineTimes.innerHTML = "";
@@ -67,6 +69,8 @@ export function openRoutineModal() {
 function openRoutineEditModal(routineId, routine) {
 
   editingRoutineId = routineId;
+  deleteRoutineButton.hidden = false;
+
 
   routineName.value = routine.name || "";
 
@@ -416,6 +420,41 @@ async function saveRoutine(routine) {
 }
 
 
+async function deleteRoutine() {
+  const user = auth.currentUser;
+
+  if (!user || !editingRoutineId) {
+    return;
+  }
+
+  const confirmed = confirm(
+    "Sei sicuro di voler eliminare questa routine?"
+  );
+
+  if (!confirmed) {
+    return;
+  }
+
+  try {
+    const routineRef = doc(
+      db,
+      "users",
+      user.uid,
+      "routines",
+      editingRoutineId
+    );
+
+    await deleteDoc(routineRef);
+
+    editingRoutineId = null;
+
+    closeRoutineModal();
+
+  } catch (error) {
+    console.error("Error deleting routine:", error);
+  }
+}
+
 
 // SUBMIT =========================================================
 async function handleRoutineSubmit(event) {
@@ -480,6 +519,8 @@ export function initRoutines() {
   closeRoutineModalButton.addEventListener("click", closeRoutineModal);
   
   closeRoutinesPanelButton.addEventListener("click", closeRoutinesPanel);
+
+  deleteRoutineButton.addEventListener("click", deleteRoutine);
 
   cancelRoutineButton.addEventListener("click", closeRoutineModal);
 
