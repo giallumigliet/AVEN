@@ -1455,6 +1455,50 @@ main {
 
 
 
+
+/* DELETE ROUTINE */
+
+.danger-button {
+  width: 100%;
+  margin-top: 16px;
+  padding: 12px 16px;
+
+  border: 1px solid rgba(220, 70, 70, 0.35);
+  border-radius: 12px;
+
+  background: rgba(220, 70, 70, 0.08);
+  color: #d95c5c;
+
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+
+.danger-button:active {
+  transform: scale(0.98);
+}
+
+.danger-button:focus-visible {
+  outline: 2px solid rgba(220, 70, 70, 0.5);
+  outline-offset: 2px;
+}
+
+.danger-button[hidden] {
+  display: none;
+}
+
+
+
+
 /* =========================================================
    BIRTHDAY MODAL
 ========================================================= */
@@ -2336,6 +2380,12 @@ main {
 
   .health-connect-button:hover {
     transform: translateY(-1px);
+  }
+
+  .danger-button:hover {
+    background: rgba(220, 70, 70, 0.16);
+    border-color: rgba(220, 70, 70, 0.55);
+    color: #e05252;
   }
 
 }
