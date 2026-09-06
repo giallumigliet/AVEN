@@ -1595,7 +1595,7 @@ main {
 }
 
 
-.health-panel-label {
+.panel-label {
   color: var(--color-accent);
 
   font-size: 10px;
