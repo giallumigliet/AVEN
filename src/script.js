@@ -21,7 +21,7 @@ import {
 
 import { initRoutines, openRoutineModal } from "./routines.js";
 import { initBirthdays, openBirthdayModal } from "./birthdays.js";
-
+import { isHealthKitAvailable, requestHealthPermission, getTodayHealth } from "./health.js";
 
 // ELEMENTS =========================================================
 
@@ -515,24 +515,21 @@ document.addEventListener("click", (event) => {
 
 // HEALTH =========================================================
 async function loadHealthData() {
-    try {
-        if (!AVENHealth.isAvailable()) {
-            console.log("HealthKit non disponibile");
-            return;
-        }
+    if (!isHealthKitAvailable()) {
+        console.log("HealthKit non disponibile.");
+        return;
+    }
 
-        const health = await AVENHealth.getToday();
+    try {
+        const health = await getTodayHealth();
 
         console.log("Passi:", health.steps);
         console.log("Km:", health.distanceKm);
 
-        // Qui aggiorni l'interfaccia di AVEN
-        // oppure salvi i dati su Firebase
     } catch (error) {
-        console.error("Errore HealthKit:", error);
+        console.error("HealthKit:", error);
     }
 }
-
 
 loadHealthData();
 
