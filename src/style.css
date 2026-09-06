@@ -1729,7 +1729,7 @@ main {
 
 /* BACKDROP ----------------------------------------------------- */
 
-.health-panel-backdrop, routines-panel-backdrop {
+.health-panel-backdrop, .routines-panel-backdrop {
   position: absolute;
   inset: 0;
 
