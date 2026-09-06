@@ -498,50 +498,75 @@
       <!-- HEALTH PANEL -->
       <div class="health-panel" id="health-panel">
       
-        <div class="health-panel-header">
-          <div>
-            <span class="daily-label">Health</span>
-            <h2>Today's activity</h2>
+        <div class="health-panel-content">
+      
+          <div class="health-panel-header">
+            <div class="health-panel-title">
+              <span class="health-panel-label">Health</span>
+              <h2>Today's activity</h2>
+              <span class="health-panel-date">Today</span>
+            </div>
+      
+            <button
+              class="health-close"
+              id="health-close"
+              type="button"
+              aria-label="Close"
+            >
+              ×
+            </button>
+          </div>
+      
+          <div class="health-stats">
+      
+            <div class="health-stat">
+              <span class="health-stat-icon">👟</span>
+      
+              <span
+                class="health-stat-value"
+                id="health-steps"
+              >
+                —
+              </span>
+      
+              <span class="health-stat-label">
+                steps
+              </span>
+            </div>
+      
+            <div class="health-stat">
+              <span class="health-stat-icon">📍</span>
+      
+              <span
+                class="health-stat-value"
+                id="health-distance"
+              >
+                —
+              </span>
+      
+              <span class="health-stat-label">
+                km
+              </span>
+            </div>
+      
           </div>
       
           <button
-            class="health-close"
-            id="health-close"
+            class="health-connect-button"
+            id="health-connect-button"
             type="button"
-            aria-label="Close"
           >
-            ×
+            Connect Apple Health
           </button>
-        </div>
       
-        <div class="health-stats">
-      
-          <div class="health-stat">
-            <span class="health-stat-icon">👟</span>
-            <span class="health-stat-value" id="health-steps">—</span>
-            <span class="health-stat-label">steps</span>
-          </div>
-      
-          <div class="health-stat">
-            <span class="health-stat-icon">📍</span>
-            <span class="health-stat-value" id="health-distance">—</span>
-            <span class="health-stat-label">km</span>
-          </div>
+          <p
+            class="health-status"
+            id="health-status"
+          ></p>
       
         </div>
-      
-        <button
-          class="health-connect-button"
-          id="health-connect-button"
-          type="button"
-        >
-          Connect Apple Health
-        </button>
-      
-        <p class="health-status" id="health-status"></p>
       
       </div>
-
 
 
     
