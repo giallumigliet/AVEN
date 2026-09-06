@@ -33,7 +33,7 @@ const menuButton = document.getElementById("menu-button");
 const sidebarBackdrop = document.getElementById("sidebar-backdrop");
 
 const checkCalendarSidebar = document.getElementById("check-calendar-sidebar");
-
+const healthSidebar = document.getElementById("health-sidebar");
 
 const profileButton = document.getElementById("profile-button");
 const userPhoto = document.getElementById("user-photo");
