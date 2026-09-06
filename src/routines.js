@@ -37,7 +37,7 @@ const closeRoutinesPanelButton = document.getElementById("close-routines-panel")
 const routinesList = document.getElementById("routines-list");
 
 let editingRoutineId = null;
-
+let routinesPanelTrigger = null;
 
 // MODAL =========================================================
 
@@ -715,16 +715,42 @@ function listenToRoutines() {
 
 function openRoutinesPanel() {
 
+  routinesPanelTrigger = document.activeElement;
+
   listenToRoutines();
 
   routinesPanel.classList.add("open");
   routinesPanel.setAttribute("aria-hidden", "false");
+
+  closeRoutinesPanelButton.focus();
 }
 
 
 
 function closeRoutinesPanel() {
 
+  // Prima togliamo il focus dal contenuto del pannello
+  if (
+    routinesPanel.contains(document.activeElement) &&
+    document.activeElement instanceof HTMLElement
+  ) {
+    document.activeElement.blur();
+  }
+
   routinesPanel.classList.remove("open");
+
   routinesPanel.setAttribute("aria-hidden", "true");
+
+  // Restituiamo il focus a chi aveva aperto il pannello
+  if (
+    routinesPanelTrigger &&
+    routinesPanelTrigger instanceof HTMLElement
+  ) {
+    routinesPanelTrigger.focus();
+  }
+
+  routinesPanelTrigger = null;
 }
+
+
+
