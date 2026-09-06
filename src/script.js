@@ -523,6 +523,8 @@ const healthSteps = document.getElementById("health-steps");
 const healthDistance = document.getElementById("health-distance");
 const healthConnectButton = document.getElementById("health-connect-button");
 const healthStatus = document.getElementById("health-status");
+const healthPanelBackdrop = document.getElementById("health-panel-backdrop");
+
 
 function openHealthPanel() {
   healthPanel.classList.add("open");
@@ -591,14 +593,4 @@ healthConnectButton.addEventListener("click", async () => {
   }
 });
 
-document.addEventListener("click", (event) => {
-
-  if (
-    healthPanel.classList.contains("open") &&
-    !event.target.closest("#health-sidebar") &&
-    !event.target.closest("#health-panel")
-  ) {
-    closeHealthPanel();
-  }
-
-});
+healthPanelBackdrop.addEventListener("click", closeHealthPanel);
