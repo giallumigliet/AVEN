@@ -578,7 +578,13 @@ function renderRoutines(snapshot) {
 
     item.className = "routine-list-item";
 
-    item.addEventListener("click", () => {
+    item.addEventListener("click", (event) => {
+    
+      if (
+        event.target.closest(".routine-switch")
+      ) {
+        return;
+      }
     
       openRoutineEditModal(
         routineId,
