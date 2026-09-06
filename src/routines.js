@@ -1,6 +1,6 @@
 // routines.js
 import { auth, db } from "./firebase.js";
-import { collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
+import { collection, addDoc, serverTimestamp, onSnapshot, doc, updateDoc } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
 
 
 // ELEMENTS =========================================================
@@ -297,6 +297,8 @@ function getRoutineData() {
       routineStart.value || null,
 
     times: getRoutineTimes()
+
+    enabled: true
 
   };
 
