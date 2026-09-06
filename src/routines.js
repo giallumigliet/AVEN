@@ -48,12 +48,14 @@ export function openRoutineModal() {
 
 
 function closeRoutineModal() {
+  // Sposta il focus fuori dal modal prima di nasconderlo
+  if (document.activeElement instanceof HTMLElement) {
+    document.activeElement.blur();
+  }
 
   routineModal.classList.remove("open");
   routineModalBackdrop.classList.remove("open");
-
   routineModal.setAttribute("aria-hidden", "true");
-
 }
 
 
