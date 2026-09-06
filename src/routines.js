@@ -300,7 +300,7 @@ function getRoutineData() {
     startDate:
       routineStart.value || null,
 
-    times: getRoutineTimes()
+    times: getRoutineTimes(),
 
     enabled: true
 
