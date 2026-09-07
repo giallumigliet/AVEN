@@ -374,7 +374,7 @@ function getBirthdayCountdown(
   days
 ) {
   if (days === 0) {
-    return "Today, Happy birthday!";
+    return "Today, Happy birthday! 🎉";
   }
 
   if (days === 1) {
