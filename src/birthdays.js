@@ -364,7 +364,7 @@ function formatBirthdayDate(
     "en-US",
     {
       day: "numeric",
-      month: "long"
+      month: "short"
     }
   );
 }
