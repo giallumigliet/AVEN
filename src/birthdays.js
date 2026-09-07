@@ -661,8 +661,6 @@ function renderBirthdays(
 
 
 
-let birthdaysUnsubscribe = null;
-
 function listenToBirthdays() {
   const user = auth.currentUser;
 
