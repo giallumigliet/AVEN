@@ -609,11 +609,11 @@ function renderBirthdays(
 
           <div class="birthday-list-name"></div>
 
-          <div class="birthday-list-date"></div>
+          <div class="birthday-list-age"></div>
 
         </div>
 
-        <div class="birthday-list-age"></div>
+        <div class="birthday-list-date"></div>
       `;
 
       item.querySelector(
