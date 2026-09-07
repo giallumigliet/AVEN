@@ -625,17 +625,17 @@ function renderBirthdays(
       item.querySelector(
         ".birthday-list-date"
       ).textContent =
-        `${formatBirthdayDate(
-          data.day,
-          data.month
-        )} · ${getBirthdayCountdown(
+        `${getBirthdayCountdown(
           daysUntil
         )}`;
 
       item.querySelector(
         ".birthday-list-age"
       ).textContent =
-        age;
+        `${formatBirthdayDate(
+          data.day,
+          data.month
+        )} · Turns ${age}`;
 
       item.addEventListener(
         "click",
