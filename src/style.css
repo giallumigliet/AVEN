@@ -1492,7 +1492,7 @@ main {
 }
 
 .birthday-list-name,
-.birthday-list-date {
+.birthday-list-age {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -1503,12 +1503,12 @@ main {
   font-weight: 600;
 }
 
-.birthday-list-date {
+.birthday-list-age {
   color: var(--color-muted);
   font-size: 11px;
 }
 
-.birthday-list-age {
+.birthday-list-date {
   flex: 0 0 auto;
   min-width: 32px;
   text-align: center;
