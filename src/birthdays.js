@@ -378,7 +378,11 @@ function getBirthdayCountdown(
   }
 
   if (days === 1) {
-    return "Tomorrow";
+    return "Tomorrow ⚠️";
+  }
+
+  if (days > 1  && days < 5) {
+    return `In ${days} days 🕒`;
   }
 
   return `In ${days} days`;
