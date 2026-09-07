@@ -12,10 +12,8 @@ import {
 } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
 
 
-// ELEMENTS =========================================================
 
 // ELEMENTS =========================================================
-
 const birthdaysSidebar = document.getElementById("birthdays-sidebar");
 
 const birthdaysPanel = document.getElementById("birthdays-panel");
@@ -376,11 +374,11 @@ function getBirthdayCountdown(
   days
 ) {
   if (days === 0) {
-    return "Today · Happy birthday!";
+    return "Today, Happy birthday!";
   }
 
   if (days === 1) {
-    return "Tomorrow · 1 day";
+    return "Tomorrow";
   }
 
   return `In ${days} days`;
