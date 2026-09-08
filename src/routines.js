@@ -38,10 +38,11 @@ const closeRoutinesPanelButton = document.getElementById("close-routines-panel")
 const routinesList = document.getElementById("routines-list");
 const routinesPanelBackdrop = document.getElementById("routines-panel-backdrop");
 
-const routineCategory = document.getElementById("routine-category");
+const routineCategoryPicker = document.getElementById("routine-category-picker");
 const routineCategoryFilter = document.getElementById("routine-category-filter");
 
 let selectedRoutineCategory = "all";
+let routineFormCategory = "";
 let editingRoutineId = null;
 let routinesPanelTrigger = null;
 
@@ -64,12 +65,15 @@ const ROUTINE_CATEGORIES = [
 // MODAL =========================================================
 
 export function openRoutineModal() {
-
   editingRoutineId = null;
+
   deleteRoutineButton.hidden = true;
 
   routineForm.reset();
   routineTimes.innerHTML = "";
+
+  routineFormCategory = "";
+  renderRoutineCategoryPicker();
 
   weekdayButtons.forEach((button) => {
     button.classList.remove("active");
@@ -96,7 +100,8 @@ function openRoutineEditModal(routineId, routine) {
   routineUnit.value = routine.unit || "days";
   routineStart.value = routine.startDate || "";
   monthlyDay.value = routine.monthlyDay || 1;
-  routineCategory.value = routine.category || "";
+  routineFormCategory = routine.category || "";
+  renderRoutineCategoryPicker();
 
   weekdayButtons.forEach((button) => {
 
@@ -364,7 +369,7 @@ function getRoutineData() {
 
     name: routineName.value.trim(),
 
-    category: routineCategory.value,
+    category: routineFormCategory,
 
     interval: Math.max(
       1,
@@ -611,6 +616,56 @@ function getRoutineFrequencyText(routine) {
 }
 
 
+function renderRoutineCategoryPicker() {
+
+  routineCategoryPicker.innerHTML = `
+    <button
+      type="button"
+      class="routine-category-option ${
+        routineFormCategory === "" ? "active" : ""
+      }"
+      data-category=""
+    >
+      <span class="routine-category-option-icon">✦</span>
+      <span class="routine-category-option-name">None</span>
+    </button>
+
+    ${ROUTINE_CATEGORIES.map(
+      (category) => `
+        <button
+          type="button"
+          class="routine-category-option ${
+            routineFormCategory === category.id
+              ? "active"
+              : ""
+          }"
+          data-category="${category.id}"
+        >
+          <span class="routine-category-option-icon">
+            ${category.icon}
+          </span>
+          <span class="routine-category-option-name">
+            ${category.label}
+          </span>
+        </button>
+      `
+    ).join("")}
+  `;
+
+  routineCategoryPicker
+    .querySelectorAll(".routine-category-option")
+    .forEach((button) => {
+
+      button.addEventListener("click", () => {
+
+        routineFormCategory =
+          button.dataset.category;
+
+        renderRoutineCategoryPicker();
+      });
+
+    });
+}
 
 
 function renderRoutineCategories(routines) {
