@@ -73,7 +73,7 @@ export function openRoutineModal() {
   routineTimes.innerHTML = "";
 
   routineFormCategory = "";
-  renderRoutineCategoryPicker();
+  RoutineCategoryPicker();
 
   weekdayButtons.forEach((button) => {
     button.classList.remove("active");
@@ -101,7 +101,7 @@ function openRoutineEditModal(routineId, routine) {
   routineStart.value = routine.startDate || "";
   monthlyDay.value = routine.monthlyDay || 1;
   routineFormCategory = routine.category || "";
-  renderRoutineCategoryPicker();
+  RoutineCategoryPicker();
 
   weekdayButtons.forEach((button) => {
 
@@ -616,7 +616,7 @@ function getRoutineFrequencyText(routine) {
 }
 
 
-function renderRoutineCategoryPicker() {
+function RoutineCategoryPicker() {
 
   routineCategoryPicker.innerHTML = `
     <button
@@ -661,7 +661,7 @@ function renderRoutineCategoryPicker() {
         routineFormCategory =
           button.dataset.category;
 
-        renderRoutineCategoryPicker();
+        RoutineCategoryPicker();
       });
 
     });
