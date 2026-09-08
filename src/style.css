@@ -1457,6 +1457,70 @@ main {
 
 
 
+.routine-category-filter {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 2px 2px 14px;
+  margin-bottom: 4px;
+  scrollbar-width: none;
+}
+
+.routine-category-filter::-webkit-scrollbar {
+  display: none;
+}
+
+.routine-category-item {
+  flex: 0 0 auto;
+  min-width: 52px;
+  height: 52px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  padding: 6px 9px;
+  border: 1px solid var(--color-card-border);
+  border-radius: 15px;
+  background: var(--color-card);
+  color: var(--color-muted);
+  cursor: pointer;
+  transition:
+    background .2s ease,
+    border-color .2s ease,
+    color .2s ease,
+    transform .2s ease;
+}
+
+.routine-category-item.active {
+  background: var(--color-accent-soft);
+  border-color: var(--color-accent);
+  color: var(--color-text);
+}
+
+.routine-category-item:hover {
+  transform: translateY(-2px);
+}
+
+.routine-category-icon {
+  font-size: 18px;
+  line-height: 1;
+}
+
+.routine-category-count {
+  font-size: 9px;
+  font-weight: 600;
+  line-height: 1;
+}
+
+
+
+
+
+
+
+
+
 /* BIRTHDAY LIST */
 
 .birthdays-list {
