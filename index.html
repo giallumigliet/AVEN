@@ -169,6 +169,116 @@
 
       </main>
 
+
+      <!-- TODO MODAL ================================================ -->
+      <div class="todo-modal" id="todo-modal" aria-hidden="true">
+        <div
+          class="todo-modal-backdrop"
+          id="todo-modal-backdrop"
+        ></div>
+      
+        <section
+          class="todo-modal-content"
+          role="dialog"
+          aria-modal="true"
+        >
+      
+          <div class="todo-modal-header">
+            <span class="panel-label">NEW TO DO</span>
+      
+            <button
+              type="button"
+              class="icon-button"
+              id="close-todo-modal"
+              aria-label="Close"
+            >
+              ×
+            </button>
+          </div>
+      
+          <form id="todo-form">
+      
+            <div class="form-field">
+              <input
+                type="text"
+                id="todo-text"
+                placeholder="What needs to be done?"
+                autocomplete="off"
+                required
+              >
+            </div>
+      
+            <div class="form-field">
+              <label>Category</label>
+      
+              <div
+                class="routine-category-picker"
+                id="todo-category-picker"
+              ></div>
+            </div>
+      
+            <div class="todo-actions">
+              <button
+                type="button"
+                id="delete-todo"
+                class="danger-button"
+                hidden
+              >
+                Delete
+              </button>
+      
+              <button
+                type="submit"
+                class="primary-button"
+              >
+                Add to do
+              </button>
+            </div>
+      
+          </form>
+      
+        </section>
+      </div>
+
+      
+      <!-- TODO PANEL ================================================ -->
+      <div class="todos-panel" id="todos-panel" aria-hidden="true">
+        <div
+          class="todos-panel-backdrop"
+          id="todos-panel-backdrop"
+        ></div>
+      
+        <div class="todos-panel-content">
+      
+          <div class="todos-panel-header">
+            <div>
+              <span class="panel-label">TO DO</span>
+            </div>
+      
+            <button
+              type="button"
+              class="close-todos-panel"
+              id="close-todos-panel"
+              aria-label="Close"
+            >
+              ×
+            </button>
+          </div>
+      
+          <div
+            class="todo-category-filter"
+            id="todo-category-filter"
+          ></div>
+      
+          <div
+            class="todos-list"
+            id="todos-list"
+          ></div>
+      
+        </div>
+      </div>
+
+      
       <!-- ROUTINE MODAL ================================================ -->
       <div class="modal-backdrop" id="routine-modal-backdrop"></div>
       
