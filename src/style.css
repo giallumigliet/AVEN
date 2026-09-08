@@ -886,23 +886,23 @@ main {
 
 
 
-
-
-
 /* =========================================================
-   ROUTINE MODAL
+   ROUTINE / TODO MODAL
 ========================================================= */
 
 .modal-backdrop {
   position: fixed;
   inset: 0;
   z-index: 500;
+
   background: rgba(0, 0, 0, 0.45);
+
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
 
   opacity: 0;
   visibility: hidden;
+
   transition:
     opacity var(--transition-normal),
     visibility var(--transition-normal);
@@ -914,7 +914,12 @@ main {
 }
 
 
-.routine-modal {
+/* =========================================================
+   ROUTINE MODAL
+========================================================= */
+
+.routine-modal,
+.todo-modal {
   position: fixed;
   top: 50%;
   left: 50%;
@@ -946,7 +951,10 @@ main {
 
   opacity: 0;
   visibility: hidden;
-  transform: translate(-50%, -47%) scale(0.97);
+
+  transform:
+    translate(-50%, -47%)
+    scale(0.97);
 
   transition:
     opacity var(--transition-normal),
@@ -954,47 +962,64 @@ main {
     visibility var(--transition-normal);
 }
 
-
-.routine-modal.open {
+.routine-modal.open,
+.todo-modal.open {
   opacity: 1;
   visibility: visible;
-  transform: translate(-50%, -50%) scale(1);
+
+  transform:
+    translate(-50%, -50%)
+    scale(1);
 }
 
 
-.routine-modal-header {
+/* =========================================================
+   MODAL HEADER
+========================================================= */
+
+.routine-modal-header,
+.todo-modal-header {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
+
   gap: 15px;
   margin-bottom: 20px;
 }
 
-
-.routine-modal-header h2 {
+.routine-modal-header h2,
+.todo-modal-header h2 {
   margin-top: 3px;
+
   font-size: 19px;
   font-weight: 500;
   letter-spacing: -0.6px;
 }
 
 
+/* =========================================================
+   ROUTINE FORM
+========================================================= */
+
 .routine-field {
+  width: 100%;
+  min-width: 0;
+
   margin-bottom: 16px;
 }
 
-
 .routine-field > label {
   display: block;
+
   margin-bottom: 6px;
 
   color: var(--color-muted);
   font-size: 11px;
   font-weight: 500;
+
   text-transform: uppercase;
   letter-spacing: 1px;
 }
-
 
 .routine-input,
 .routine-select,
@@ -1014,24 +1039,21 @@ main {
     background var(--transition-fast);
 }
 
-
 .routine-input {
   width: 100%;
   padding: 0 12px;
 }
 
-
 .interval-input {
   width: 70px;
   padding: 0 12px;
+
   text-align: center;
 }
-
 
 .routine-input.small {
   width: 100px;
 }
-
 
 .routine-input:focus,
 .routine-select:focus,
@@ -1039,7 +1061,6 @@ main {
   border-color: var(--color-accent);
   background: var(--color-surface-hover);
 }
-
 
 .repeat-row {
   display: flex;
@@ -1050,19 +1071,16 @@ main {
   font-size: 15px;
 }
 
-
 .routine-select {
   padding: 0 12px;
   cursor: pointer;
 }
-
 
 .weekday-picker {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   gap: 5px;
 }
-
 
 .weekday-picker button {
   height: 36px;
@@ -1083,45 +1101,44 @@ main {
     border-color var(--transition-fast);
 }
 
-
 .weekday-picker button.active {
   background: var(--color-accent-soft);
   border-color: var(--color-accent);
   color: var(--color-accent);
 }
 
-
 .field-label-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
+
   margin-bottom: 9px;
 }
-
 
 .field-label-row label {
   color: var(--color-muted);
   font-size: 11px;
   font-weight: 500;
+
   text-transform: uppercase;
   letter-spacing: 1px;
 }
 
-
 .field-label-row label span {
   opacity: 0.65;
+
   text-transform: none;
   letter-spacing: 0;
 }
 
-
 .add-time-button {
   background: transparent;
+
   color: var(--color-accent);
   font-size: 12px;
+
   cursor: pointer;
 }
-
 
 .routine-times {
   display: flex;
@@ -1129,16 +1146,15 @@ main {
   gap: 5px;
 }
 
-
 .routine-time-row {
   display: flex;
   align-items: center;
   gap: 8px;
 }
 
-
 .routine-time-row input {
   flex: 1;
+
   height: 40px;
   padding: 0 11px;
 
@@ -1148,7 +1164,6 @@ main {
   background: var(--color-card);
   color: var(--color-text);
 }
-
 
 .remove-time-button {
   width: 36px;
@@ -1162,10 +1177,10 @@ main {
   cursor: pointer;
 }
 
-
 .routine-preview {
   margin-top: 3px;
   margin-bottom: 16px;
+
   padding: 10px 12px;
 
   border-radius: 14px;
@@ -1178,24 +1193,150 @@ main {
 }
 
 
-.routine-actions {
+/* =========================================================
+   TODO FORM
+========================================================= */
+
+.todo-field {
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+.todo-field > label {
+  display: block;
+
+  margin-bottom: 6px;
+
+  color: var(--color-muted);
+  font-size: 11px;
+  font-weight: 500;
+
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.todo-input {
+  width: 100%;
+  height: 46px;
+
+  padding: 0 13px;
+
+  border: 1px solid var(--color-border);
+  border-radius: 13px;
+
+  background: var(--color-card);
+  color: var(--color-text);
+
+  outline: none;
+
+  font-size: 14px;
+
+  transition:
+    border-color var(--transition-fast),
+    background var(--transition-fast);
+}
+
+.todo-input:focus {
+  border-color: var(--color-accent);
+  background: var(--color-surface-hover);
+}
+
+
+/* =========================================================
+   CATEGORY PICKER
+========================================================= */
+
+.routine-category-picker {
+  display: flex;
+  gap: 8px;
+
+  overflow-x: auto;
+
+  padding: 2px 2px 6px;
+
+  scrollbar-width: none;
+}
+
+.routine-category-picker::-webkit-scrollbar {
+  display: none;
+}
+
+.routine-category-option {
+  flex: 0 0 64px;
+
+  height: 64px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  gap: 5px;
+  padding: 6px;
+
+  border: 1px solid var(--color-card-border);
+  border-radius: 15px;
+
+  background: var(--color-card);
+  color: var(--color-muted);
+
+  cursor: pointer;
+
+  transition:
+    background var(--transition-fast),
+    border-color var(--transition-fast),
+    color var(--transition-fast),
+    transform var(--transition-fast);
+}
+
+.routine-category-option.active {
+  background: var(--color-accent-soft);
+  border-color: var(--color-accent);
+  color: var(--color-text);
+}
+
+.routine-category-option:hover {
+  transform: translateY(-2px);
+}
+
+.routine-category-option-icon {
+  font-size: 20px;
+  line-height: 1;
+}
+
+.routine-category-option-name {
+  font-size: 9px;
+  font-weight: 600;
+  line-height: 1;
+}
+
+
+/* =========================================================
+   MODAL ACTIONS
+========================================================= */
+
+.routine-actions,
+.todo-actions {
   display: flex;
   justify-content: flex-end;
+
   gap: 8px;
   padding-top: 4px;
 }
 
-
 .secondary-button,
 .primary-button {
   min-height: 40px;
+
   padding: 0 15px;
+
   border-radius: 12px;
+
   font-size: 12px;
   font-weight: 500;
+
   cursor: pointer;
 }
-
 
 .secondary-button {
   background: var(--color-card);
@@ -1203,40 +1344,19 @@ main {
   border: 1px solid var(--color-border);
 }
 
-
 .primary-button {
   background: var(--color-text);
   color: var(--color-bg);
 }
 
 
-[hidden] {
-  display: none !important;
-}
+/* =========================================================
+   PANELS
+========================================================= */
 
-
-.routine-form input,
-.routine-form select {
-  width: 100%;
-  max-width: 100%;
-  min-width: 0;
-  box-sizing: border-box;
-}
-
-.routine-form {
-  width: 100%;
-  min-width: 0;
-}
-
-.routine-field {
-  width: 100%;
-  min-width: 0;
-}
-
-
-
-
-.todos-panel, .routines-panel, .birthdays-panel {
+.todos-panel,
+.routines-panel,
+.birthdays-panel {
   position: fixed;
   inset: 0;
 
@@ -1257,14 +1377,17 @@ main {
     visibility var(--transition-normal);
 }
 
-.todos-panel.open, .routines-panel.open, .birthdays-panel.open {
+.todos-panel.open,
+.routines-panel.open,
+.birthdays-panel.open {
   opacity: 1;
   visibility: visible;
   pointer-events: auto;
 }
 
-
-.todos-panel-content, .routines-panel-content, .birthdays-panel-content {
+.todos-panel-content,
+.routines-panel-content,
+.birthdays-panel-content {
   position: relative;
   z-index: 1;
 
@@ -1283,9 +1406,12 @@ main {
   backdrop-filter: blur(30px);
   -webkit-backdrop-filter: blur(30px);
 
-  box-shadow: 0 25px 80px rgba(0, 0, 0, .30);
+  box-shadow:
+    0 25px 80px rgba(0, 0, 0, .30);
 
-  transform: translateY(10px) scale(.97);
+  transform:
+    translateY(10px)
+    scale(.97);
 
   transition:
     transform var(--transition-normal);
@@ -1294,10 +1420,15 @@ main {
 .todos-panel.open .todos-panel-content,
 .routines-panel.open .routines-panel-content,
 .birthdays-panel.open .birthdays-panel-content {
-  transform: translateY(0) scale(1);
+  transform:
+    translateY(0)
+    scale(1);
 }
 
 
+/* =========================================================
+   PANEL HEADER
+========================================================= */
 
 .todos-panel-header,
 .routines-panel-header,
@@ -1309,14 +1440,18 @@ main {
   margin-bottom: 20px;
 }
 
-
-.routines-panel-header h2 {
+.routines-panel-header h2,
+.todos-panel-header h2,
+.birthdays-panel-header h2 {
   margin: 0;
   font-size: 22px;
 }
 
-.routines-panel-header p {
+.routines-panel-header p,
+.todos-panel-header p,
+.birthdays-panel-header p {
   margin: 4px 0 0;
+
   color: var(--color-text-muted);
   font-size: 12px;
 }
@@ -1344,29 +1479,44 @@ main {
 }
 
 
+/* =========================================================
+   TODO LIST
+========================================================= */
 
 .todos-list {
   display: flex;
   flex-direction: column;
+
   gap: 8px;
+
   overflow-y: auto;
   min-height: 0;
 }
 
 .todo-list-item {
   min-height: 58px;
+
   display: flex;
   align-items: center;
+
   gap: 12px;
   padding: 10px 14px;
+
   border: 1px solid var(--color-card-border);
   border-radius: 16px;
+
   background: var(--color-card);
+
   cursor: pointer;
+
   transition:
     background .2s ease,
     border-color .2s ease,
     transform .2s ease;
+}
+
+.todo-list-item:hover {
+  background: var(--color-surface-hover);
 }
 
 .todo-list-item.completed {
@@ -1380,6 +1530,10 @@ main {
 .todo-list-text {
   flex: 1;
   min-width: 0;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+
   font-size: 14px;
 }
 
@@ -1390,16 +1544,22 @@ main {
 
 .todo-check input {
   position: absolute;
+
+  width: 1px;
+  height: 1px;
+
   opacity: 0;
-  pointer-events: none;
 }
 
 .todo-check span {
   width: 20px;
   height: 20px;
+
   display: block;
+
   border: 1px solid var(--color-border);
   border-radius: 50%;
+
   background: transparent;
 }
 
@@ -1410,16 +1570,22 @@ main {
 
 .todo-list-category {
   flex: 0 0 auto;
+
   font-size: 17px;
+  line-height: 1;
 }
 
 .todos-empty {
   padding: 32px 16px;
+
   display: flex;
   flex-direction: column;
   align-items: center;
+
   gap: 5px;
+
   text-align: center;
+
   color: var(--color-muted);
 }
 
@@ -1428,15 +1594,19 @@ main {
 }
 
 
+/* =========================================================
+   ROUTINE LIST
+========================================================= */
 
 .routines-list {
   display: flex;
   flex-direction: column;
+
   gap: 8px;
 
   overflow-y: auto;
+  min-height: 0;
 }
-
 
 .routine-list-item {
   min-height: 68px;
@@ -1455,11 +1625,12 @@ main {
   border: 1px solid var(--color-card-border);
 }
 
-
 .routine-list-info {
   min-width: 0;
+
   display: flex;
   flex-direction: column;
+
   gap: 4px;
 }
 
@@ -1482,6 +1653,9 @@ main {
 }
 
 
+/* =========================================================
+   ROUTINE SWITCH
+========================================================= */
 
 .routine-switch {
   position: relative;
@@ -1543,13 +1717,20 @@ main {
 }
 
 
+/* =========================================================
+   ROUTINE CATEGORY FILTER
+========================================================= */
 
 .routine-category-filter {
   display: flex;
+
   gap: 8px;
+
   overflow-x: auto;
+
   padding: 2px 2px 14px;
   margin-bottom: 4px;
+
   scrollbar-width: none;
 }
 
@@ -1559,19 +1740,26 @@ main {
 
 .routine-category-item {
   flex: 0 0 auto;
+
   min-width: 52px;
   height: 52px;
+
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+
   gap: 6px;
   padding: 6px 9px;
+
   border: 1px solid var(--color-card-border);
   border-radius: 15px;
+
   background: var(--color-card);
   color: var(--color-muted);
+
   cursor: pointer;
+
   transition:
     background .2s ease,
     border-color .2s ease,
@@ -1601,60 +1789,27 @@ main {
 }
 
 
-.routine-category-picker {
-  display: flex;
-  gap: 8px;
-  overflow-x: auto;
-  padding: 2px 2px 6px;
-  scrollbar-width: none;
+/* =========================================================
+   FORM FIX
+========================================================= */
+
+.routine-form {
+  width: 100%;
+  min-width: 0;
 }
 
-.routine-category-picker::-webkit-scrollbar {
-  display: none;
+.routine-form input,
+.routine-form select {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+
+  box-sizing: border-box;
 }
 
-.routine-category-option {
-  flex: 0 0 64px;
-  height: 64px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 5px;
-  padding: 6px;
-  border: 1px solid var(--color-card-border);
-  border-radius: 15px;
-  background: var(--color-card);
-  color: var(--color-muted);
-  cursor: pointer;
-  transition:
-    background .2s ease,
-    border-color .2s ease,
-    color .2s ease,
-    transform .2s ease;
+[hidden] {
+  display: none !important;
 }
-
-.routine-category-option.active {
-  background: var(--color-accent-soft);
-  border-color: var(--color-accent);
-  color: var(--color-text);
-}
-
-.routine-category-option-icon {
-  font-size: 20px;
-  line-height: 1;
-}
-
-.routine-category-option-name {
-  font-size: 9px;
-  font-weight: 600;
-  line-height: 1;
-}
-
-
-
-
-
 
 /* BIRTHDAY LIST */
 
