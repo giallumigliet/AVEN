@@ -19,6 +19,7 @@ import {
     hasPrecipitationToday
 } from "./weather.js";
 
+import { initTodos, openTodoModal } from "./todo.js";
 import { initRoutines, openRoutineModal } from "./routines.js";
 import { initBirthdays, openBirthdayModal } from "./birthdays.js";
 import { isHealthKitAvailable, requestHealthPermission, getTodayHealth } from "./health.js";
@@ -390,8 +391,7 @@ addBirthdayButton.addEventListener("click", () => {
 
 addTodoButton.addEventListener("click", () => {
   addPanel.classList.remove("open");
-  // futuro:
-  // openTodoModal();
+  openTodoModal();
 });
 
 
@@ -401,7 +401,8 @@ initRoutines();
 // BIRTHDAYS =========================================================
 initBirthdays();
 
-
+// TODOS =========================================================
+initTodos();
 
 // WEATHER =========================================================
 const weatherButton = document.getElementById("weather-button");
