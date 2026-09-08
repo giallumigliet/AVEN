@@ -39,9 +39,27 @@ const routinesList = document.getElementById("routines-list");
 const routinesPanelBackdrop = document.getElementById("routines-panel-backdrop");
 
 const routineCategory = document.getElementById("routine-category");
+const routineCategoryFilter = document.getElementById("routine-category-filter");
 
+let selectedRoutineCategory = "all";
 let editingRoutineId = null;
 let routinesPanelTrigger = null;
+
+const ROUTINE_CATEGORIES = [
+  { id: "money", label: "Money", icon: "💰" },
+  { id: "home", label: "Home", icon: "🏠" },
+  { id: "car", label: "Car", icon: "🚗" },
+  { id: "health", label: "Health", icon: "❤️" },
+  { id: "training", label: "Training", icon: "🏋️" },
+  { id: "work", label: "Work", icon: "💼" },
+  { id: "study", label: "Study", icon: "📚" },
+  { id: "people", label: "People", icon: "👨‍👩‍👧" },
+  { id: "pets", label: "Pets", icon: "🐾" },
+  { id: "tech", label: "Tech", icon: "💻" },
+  { id: "freeTime", label: "Free time", icon: "🎨" }
+];
+
+
 
 // MODAL =========================================================
 
@@ -595,38 +613,130 @@ function getRoutineFrequencyText(routine) {
 
 
 
+function renderRoutineCategories(routines) {
+  const counts = {};
+
+  ROUTINE_CATEGORIES.forEach((category) => {
+    counts[category.id] = 0;
+  });
+
+  routines.forEach((routine) => {
+    if (routine.category) {
+      counts[routine.category] =
+        (counts[routine.category] || 0) + 1;
+    }
+  });
+
+  const allCount = routines.length;
+
+  routineCategoryFilter.innerHTML = `
+    <button
+      type="button"
+      class="routine-category-item ${
+        selectedRoutineCategory === "all" ? "active" : ""
+      }"
+      data-category="all"
+    >
+      <span class="routine-category-icon">✦</span>
+      <span class="routine-category-count">${allCount}</span>
+    </button>
+
+    ${ROUTINE_CATEGORIES.map(
+      (category) => `
+        <button
+          type="button"
+          class="routine-category-item ${
+            selectedRoutineCategory === category.id
+              ? "active"
+              : ""
+          }"
+          data-category="${category.id}"
+        >
+          <span class="routine-category-icon">
+            ${category.icon}
+          </span>
+          <span class="routine-category-count">
+            ${counts[category.id] || 0}
+          </span>
+        </button>
+      `
+    ).join("")}
+  `;
+
+  routineCategoryFilter
+    .querySelectorAll(".routine-category-item")
+    .forEach((button) => {
+      button.addEventListener("click", () => {
+        selectedRoutineCategory =
+          button.dataset.category;
+
+        renderRoutineCategories(routines);
+        renderRoutinesList(routines);
+      });
+    });
+}
+
+
+
+
+
 function renderRoutines(snapshot) {
+  const routines = [];
+
+  snapshot.forEach((documentSnapshot) => {
+    routines.push({
+      id: documentSnapshot.id,
+      ...documentSnapshot.data()
+    });
+  });
+
+  renderRoutineCategories(routines);
+
+  renderRoutinesList(routines);
+}
+
+
+
+function renderRoutinesList(routines) {
 
   routinesList.innerHTML = "";
 
-  if (snapshot.empty) {
+  const filteredRoutines =
+    selectedRoutineCategory === "all"
+      ? routines
+      : routines.filter(
+          (routine) =>
+            routine.category === selectedRoutineCategory
+        );
+
+  if (filteredRoutines.length === 0) {
 
     routinesList.innerHTML = `
       <div class="routines-empty">
         <span>Nessuna routine</span>
-        <small>Creane una con il pulsante +</small>
+        <small>Nessuna routine in questa categoria</small>
       </div>
     `;
 
     return;
   }
 
-  snapshot.forEach((documentSnapshot) => {
+  filteredRoutines.forEach((routine) => {
 
-    const routine = documentSnapshot.data();
-    const routineId = documentSnapshot.id;
+    const routineId = routine.id;
 
     const item = document.createElement("div");
 
     item.className = "routine-list-item";
 
     item.addEventListener("click", (event) => {
+
       if (event.target.closest(".routine-switch")) {
         return;
       }
-    
+
       closeRoutinesPanel();
-    
+
       openRoutineEditModal(
         routineId,
         routine
@@ -649,29 +759,41 @@ function renderRoutines(snapshot) {
       </label>
     `;
 
-    item.querySelector(".routine-list-name").textContent =
+    item.querySelector(
+      ".routine-list-name"
+    ).textContent =
       routine.name || "Routine senza nome";
 
-    item.querySelector(".routine-list-frequency").textContent =
+    item.querySelector(
+      ".routine-list-frequency"
+    ).textContent =
       getRoutineFrequencyText(routine);
 
-    const toggle = item.querySelector(".routine-enabled-toggle");
-
-    toggle.addEventListener("click", (event) => {
-      event.stopPropagation();
-    });
-    
-    toggle.addEventListener("change", () => {
-      updateRoutineEnabled(
-        routineId,
-        toggle.checked
+    const toggle =
+      item.querySelector(
+        ".routine-enabled-toggle"
       );
-    });
+
+    toggle.addEventListener(
+      "click",
+      (event) => {
+        event.stopPropagation();
+      }
+    );
+
+    toggle.addEventListener(
+      "change",
+      () => {
+        updateRoutineEnabled(
+          routineId,
+          toggle.checked
+        );
+      }
+    );
 
     routinesList.appendChild(item);
   });
 }
-
 
 
 
