@@ -38,6 +38,8 @@ const closeRoutinesPanelButton = document.getElementById("close-routines-panel")
 const routinesList = document.getElementById("routines-list");
 const routinesPanelBackdrop = document.getElementById("routines-panel-backdrop");
 
+const routineCategory = document.getElementById("routine-category");
+
 let editingRoutineId = null;
 let routinesPanelTrigger = null;
 
@@ -71,16 +73,12 @@ function openRoutineEditModal(routineId, routine) {
   editingRoutineId = routineId;
   deleteRoutineButton.hidden = false;
 
-
   routineName.value = routine.name || "";
-
   routineInterval.value = routine.interval || 1;
-
   routineUnit.value = routine.unit || "days";
-
   routineStart.value = routine.startDate || "";
-
   monthlyDay.value = routine.monthlyDay || 1;
+  routineCategory.value = routine.category || "";
 
   weekdayButtons.forEach((button) => {
 
@@ -347,6 +345,8 @@ function getRoutineData() {
   return {
 
     name: routineName.value.trim(),
+
+    category: routineCategory.value,
 
     interval: Math.max(
       1,
