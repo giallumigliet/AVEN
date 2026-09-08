@@ -1514,7 +1514,55 @@ main {
 }
 
 
+.routine-category-picker {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 2px 2px 6px;
+  scrollbar-width: none;
+}
 
+.routine-category-picker::-webkit-scrollbar {
+  display: none;
+}
+
+.routine-category-option {
+  flex: 0 0 64px;
+  height: 64px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 6px;
+  border: 1px solid var(--color-card-border);
+  border-radius: 15px;
+  background: var(--color-card);
+  color: var(--color-muted);
+  cursor: pointer;
+  transition:
+    background .2s ease,
+    border-color .2s ease,
+    color .2s ease,
+    transform .2s ease;
+}
+
+.routine-category-option.active {
+  background: var(--color-accent-soft);
+  border-color: var(--color-accent);
+  color: var(--color-text);
+}
+
+.routine-category-option-icon {
+  font-size: 20px;
+  line-height: 1;
+}
+
+.routine-category-option-name {
+  font-size: 9px;
+  font-weight: 600;
+  line-height: 1;
+}
 
 
 
