@@ -1595,6 +1595,14 @@ main {
   line-height: 1;
 }
 
+.routine-list-category {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
 
 
 .todos-empty,
