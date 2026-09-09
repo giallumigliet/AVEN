@@ -34,6 +34,7 @@ let todosUnsubscribe = null;
 const TODO_CATEGORIES = [
   { id: "money", label: "Money", icon: "💰" },
   { id: "home", label: "Home", icon: "🏠" },
+  { id: "shopping", label: "Shopping", icon: "🛒" },
   { id: "car", label: "Car", icon: "🚗" },
   { id: "health", label: "Health", icon: "❤️" },
   { id: "training", label: "Training", icon: "🏋️" },
