@@ -49,15 +49,16 @@ let routinesPanelTrigger = null;
 const ROUTINE_CATEGORIES = [
   { id: "money", label: "Money", icon: "💰" },
   { id: "home", label: "Home", icon: "🏠" },
-  { id: "car", label: "Car", icon: "🚗" },
-  { id: "health", label: "Health", icon: "❤️" },
+  { id: "shopping", label: "Shopping", icon: "🛒" },
+  { id: "people", label: "People", icon: "👨‍👩‍👧" },
   { id: "training", label: "Training", icon: "🏋️" },
   { id: "work", label: "Work", icon: "💼" },
+  { id: "freeTime", label: "Free time", icon: "🎨" },
+  { id: "car", label: "Car", icon: "🚗" },
+  { id: "health", label: "Health", icon: "❤️" },
   { id: "study", label: "Study", icon: "📚" },
-  { id: "people", label: "People", icon: "👨‍👩‍👧" },
   { id: "pets", label: "Pets", icon: "🐾" },
-  { id: "tech", label: "Tech", icon: "💻" },
-  { id: "freeTime", label: "Free time", icon: "🎨" }
+  { id: "tech", label: "Tech", icon: "💻" }
 ];
 
 
