@@ -2287,6 +2287,7 @@ main {
 /* BACKDROP ----------------------------------------------------- */
 
 .health-panel-backdrop,
+.todos-panel-backdrop,
 .routines-panel-backdrop, 
 .birthdays-panel-backdrop {
   position: absolute;
