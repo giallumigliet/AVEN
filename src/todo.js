@@ -25,7 +25,9 @@ const deleteTodoButton = document.getElementById("delete-todo");
 const todoForm = document.getElementById("todo-form");
 const todoText = document.getElementById("todo-text");
 const todoCategoryPicker = document.getElementById("todo-category-picker");
+const todoCategoryFilter = document.getElementById("todo-category-filter");
 
+let selectedTodoCategory = "all";
 let editingTodoId = null;
 let todoFormCategory = "";
 let todosUnsubscribe = null;
@@ -35,15 +37,15 @@ const TODO_CATEGORIES = [
   { id: "money", label: "Money", icon: "💰" },
   { id: "home", label: "Home", icon: "🏠" },
   { id: "shopping", label: "Shopping", icon: "🛒" },
-  { id: "car", label: "Car", icon: "🚗" },
-  { id: "health", label: "Health", icon: "❤️" },
+  { id: "people", label: "People", icon: "👨‍👩‍👧" },
   { id: "training", label: "Training", icon: "🏋️" },
   { id: "work", label: "Work", icon: "💼" },
+  { id: "freeTime", label: "Free time", icon: "🎨" },
+  { id: "car", label: "Car", icon: "🚗" },
+  { id: "health", label: "Health", icon: "❤️" },
   { id: "study", label: "Study", icon: "📚" },
-  { id: "people", label: "People", icon: "👨‍👩‍👧" },
   { id: "pets", label: "Pets", icon: "🐾" },
-  { id: "tech", label: "Tech", icon: "💻" },
-  { id: "freeTime", label: "Free time", icon: "🎨" }
+  { id: "tech", label: "Tech", icon: "💻" }
 ];
 
 
@@ -167,6 +169,79 @@ function renderTodoCategoryPicker() {
 
 
 
+function renderTodoCategories(todos) {
+
+  const counts = {};
+
+  TODO_CATEGORIES.forEach((category) => {
+    counts[category.id] = 0;
+  });
+
+  todos.forEach((todo) => {
+
+    if (todo.category) {
+      counts[todo.category] =
+        (counts[todo.category] || 0) + 1;
+    }
+
+  });
+
+  const allCount = todos.length;
+
+  todoCategoryFilter.innerHTML = `
+    <button
+      type="button"
+      class="routine-category-item ${
+        selectedTodoCategory === "all" ? "active" : ""
+      }"
+      data-category="all"
+    >
+      <span class="routine-category-icon">✦</span>
+      <span class="routine-category-count">${allCount}</span>
+    </button>
+
+    ${TODO_CATEGORIES.map(
+      (category) => `
+        <button
+          type="button"
+          class="routine-category-item ${
+            selectedTodoCategory === category.id
+              ? "active"
+              : ""
+          }"
+          data-category="${category.id}"
+        >
+          <span class="routine-category-icon">
+            ${category.icon}
+          </span>
+
+          <span class="routine-category-count">
+            ${counts[category.id] || 0}
+          </span>
+        </button>
+      `
+    ).join("")}
+  `;
+
+  todoCategoryFilter
+    .querySelectorAll(".routine-category-item")
+    .forEach((button) => {
+
+      button.addEventListener("click", () => {
+
+        selectedTodoCategory =
+          button.dataset.category;
+
+        renderTodoCategories(todos);
+        renderTodosList(todos);
+
+      });
+
+    });
+}
+
+
+
 // FIRESTORE -------------------
 async function saveTodo() {
 
@@ -268,55 +343,10 @@ async function deleteTodo() {
 
 
 
-// SUBMIT -------------------------------
-async function handleTodoSubmit(event) {
-
-  event.preventDefault();
-
-  const text =
-    todoText.value.trim();
-
-  if (!text) {
-    todoText.focus();
-    return;
-  }
-
-  try {
-
-    await saveTodo();
-
-    editingTodoId = null;
-
-    closeTodoModal();
-
-  } catch (error) {
-
-    console.error(
-      "Error saving todo:",
-      error
-    );
-
-  }
-}
-
-
-
 
 function renderTodos(snapshot) {
 
   todosList.innerHTML = "";
-
-  if (snapshot.empty) {
-
-    todosList.innerHTML = `
-      <div class="todos-empty">
-        <span>Nessun to do</span>
-        <small>Aggiungine uno con il pulsante +</small>
-      </div>
-    `;
-
-    return;
-  }
 
   const todos = [];
 
@@ -329,13 +359,42 @@ function renderTodos(snapshot) {
 
   });
 
+
+  // Categorie
+  renderTodoCategories(todos);
+
+
+  // Filtra categoria
+  const filteredTodos =
+    selectedTodoCategory === "all"
+      ? todos
+      : todos.filter(
+          (todo) =>
+            todo.category === selectedTodoCategory
+        );
+
+
+  if (filteredTodos.length === 0) {
+
+    todosList.innerHTML = `
+      <div class="todos-empty">
+        <span>Nessun to do</span>
+        <small>Nessun to do in questa categoria</small>
+      </div>
+    `;
+
+    return;
+  }
+
+
   // Non completati prima
-  todos.sort((a, b) =>
+  filteredTodos.sort((a, b) =>
     Number(a.completed) -
     Number(b.completed)
   );
 
-  todos.forEach((todo) => {
+
+  filteredTodos.forEach((todo) => {
 
     const item =
       document.createElement("div");
@@ -421,8 +480,47 @@ function renderTodos(snapshot) {
     );
 
     todosList.appendChild(item);
+
   });
 }
+
+
+
+// SUBMIT -------------------------------
+async function handleTodoSubmit(event) {
+
+  event.preventDefault();
+
+  const text =
+    todoText.value.trim();
+
+  if (!text) {
+    todoText.focus();
+    return;
+  }
+
+  try {
+
+    await saveTodo();
+
+    editingTodoId = null;
+
+    closeTodoModal();
+
+  } catch (error) {
+
+    console.error(
+      "Error saving todo:",
+      error
+    );
+
+  }
+}
+
+
+
+
+
 
 
 
