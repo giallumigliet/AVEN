@@ -177,18 +177,32 @@ function renderTodoCategories(todos) {
     counts[category.id] = 0;
   });
 
+
   todos.forEach((todo) => {
 
     if (todo.category) {
+
       counts[todo.category] =
         (counts[todo.category] || 0) + 1;
+
     }
 
   });
 
+
   const allCount = todos.length;
 
+
+  const sortedCategories =
+    [...TODO_CATEGORIES].sort(
+      (a, b) =>
+        (counts[b.id] || 0) -
+        (counts[a.id] || 0)
+    );
+
+
   todoCategoryFilter.innerHTML = `
+
     <button
       type="button"
       class="routine-category-item ${
@@ -198,14 +212,19 @@ function renderTodoCategories(todos) {
       }"
       data-category="all"
     >
-      <span class="routine-category-icon">✦</span>
+      <span class="routine-category-icon">
+        ✦
+      </span>
+
       <span class="routine-category-count">
         ${allCount}
       </span>
     </button>
 
-    ${TODO_CATEGORIES.map(
+
+    ${sortedCategories.map(
       (category) => `
+
         <button
           type="button"
           class="routine-category-item ${
@@ -215,6 +234,7 @@ function renderTodoCategories(todos) {
           }"
           data-category="${category.id}"
         >
+
           <span class="routine-category-icon">
             ${category.icon}
           </span>
@@ -222,28 +242,38 @@ function renderTodoCategories(todos) {
           <span class="routine-category-count">
             ${counts[category.id] || 0}
           </span>
+
         </button>
+
       `
     ).join("")}
+
   `;
 
+
   todoCategoryFilter
-    .querySelectorAll(".routine-category-item")
+    .querySelectorAll(
+      ".routine-category-item"
+    )
     .forEach((button) => {
 
-      button.addEventListener("click", () => {
+      button.addEventListener(
+        "click",
+        () => {
 
-        selectedTodoCategory =
-          button.dataset.category;
+          selectedTodoCategory =
+            button.dataset.category;
 
-        renderTodoCategories(todos);
-        renderTodosList(todos);
+          renderTodoCategories(todos);
 
-      });
+          renderTodosList(todos);
+
+        }
+      );
 
     });
-}
 
+}
 
 // FIRESTORE -------------------
 async function saveTodo() {
