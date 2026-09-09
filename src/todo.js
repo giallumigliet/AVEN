@@ -192,12 +192,16 @@ function renderTodoCategories(todos) {
     <button
       type="button"
       class="routine-category-item ${
-        selectedTodoCategory === "all" ? "active" : ""
+        selectedTodoCategory === "all"
+          ? "active"
+          : ""
       }"
       data-category="all"
     >
       <span class="routine-category-icon">✦</span>
-      <span class="routine-category-count">${allCount}</span>
+      <span class="routine-category-count">
+        ${allCount}
+      </span>
     </button>
 
     ${TODO_CATEGORIES.map(
@@ -239,7 +243,6 @@ function renderTodoCategories(todos) {
 
     });
 }
-
 
 
 // FIRESTORE -------------------
@@ -346,8 +349,6 @@ async function deleteTodo() {
 
 function renderTodos(snapshot) {
 
-  todosList.innerHTML = "";
-
   const todos = [];
 
   snapshot.forEach((documentSnapshot) => {
@@ -359,12 +360,17 @@ function renderTodos(snapshot) {
 
   });
 
-
-  // Categorie
   renderTodoCategories(todos);
 
+  renderTodosList(todos);
+}
 
-  // Filtra categoria
+
+
+function renderTodosList(todos) {
+
+  todosList.innerHTML = "";
+
   const filteredTodos =
     selectedTodoCategory === "all"
       ? todos
@@ -372,7 +378,6 @@ function renderTodos(snapshot) {
           (todo) =>
             todo.category === selectedTodoCategory
         );
-
 
   if (filteredTodos.length === 0) {
 
@@ -386,13 +391,11 @@ function renderTodos(snapshot) {
     return;
   }
 
-
   // Non completati prima
   filteredTodos.sort((a, b) =>
     Number(a.completed) -
     Number(b.completed)
   );
-
 
   filteredTodos.forEach((todo) => {
 
@@ -483,7 +486,6 @@ function renderTodos(snapshot) {
 
   });
 }
-
 
 
 // SUBMIT -------------------------------
