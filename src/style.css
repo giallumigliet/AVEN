@@ -1537,6 +1537,17 @@ main {
   font-size: 14px;
 }
 
+.todo-text {
+  flex: 1;
+  min-width: 0;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  font-size: 14px;
+}
+
+
 .todo-check {
   flex: 0 0 auto;
   cursor: pointer;
