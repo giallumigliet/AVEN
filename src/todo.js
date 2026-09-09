@@ -457,7 +457,7 @@ function renderTodosList(todos) {
       <div class="todo-list-text"></div>
 
       ${
-        category
+        category && selectedTodoCategory === "all"
           ? `
             <div class="todo-list-category">
               ${category.icon}
