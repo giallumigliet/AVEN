@@ -1791,6 +1791,7 @@ main {
    ROUTINE CATEGORY FILTER
 ========================================================= */
 
+.todo-category-filter,
 .routine-category-filter {
   display: flex;
 
@@ -1804,6 +1805,7 @@ main {
   scrollbar-width: none;
 }
 
+.todo-category-filter::-webkit-scrollbar,
 .routine-category-filter::-webkit-scrollbar {
   display: none;
 }
