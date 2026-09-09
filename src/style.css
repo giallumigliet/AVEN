@@ -1186,6 +1186,7 @@ main {
   cursor: pointer;
 }
 
+.todo-preview,
 .routine-preview {
   margin-top: 3px;
   margin-bottom: 16px;
