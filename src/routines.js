@@ -841,12 +841,28 @@ function renderRoutinesList(routines) {
       );
     });
 
+    const category =
+      ROUTINE_CATEGORIES.find(
+        (category) =>
+          category.id === routine.category
+      );
+    
     item.innerHTML = `
       <div class="routine-list-info">
         <div class="routine-list-name"></div>
         <div class="routine-list-frequency"></div>
       </div>
-
+    
+      ${
+        category && selectedRoutineCategory === "all"
+          ? `
+            <div class="routine-list-category">
+              ${category.icon}
+            </div>
+          `
+          : ""
+      }
+    
       <label class="routine-switch">
         <input
           type="checkbox"
