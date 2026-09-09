@@ -1595,7 +1595,11 @@ main {
   line-height: 1;
 }
 
-.todos-empty {
+
+
+.todos-empty,
+.routines-empty,
+.birthdays-empty {
   padding: 32px 16px;
 
   display: flex;
@@ -1609,7 +1613,10 @@ main {
   color: var(--color-muted);
 }
 
-.todos-empty small {
+
+.todos-empty small,
+.routines-empty small,
+.birthdays-empty small {
   font-size: 11px;
 }
 
@@ -1943,12 +1950,7 @@ main {
   font-weight: 600;
 }
 
-.birthdays-empty {
-  padding: 32px 16px;
-  text-align: center;
-  color: var(--color-muted);
-  font-size: 13px;
-}
+
 
 .birthdays-panel-footer {
   display: flex;
