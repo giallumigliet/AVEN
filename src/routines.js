@@ -670,35 +670,61 @@ function RoutineCategoryPicker() {
 
 
 function renderRoutineCategories(routines) {
+
   const counts = {};
 
   ROUTINE_CATEGORIES.forEach((category) => {
     counts[category.id] = 0;
   });
 
+
   routines.forEach((routine) => {
+
     if (routine.category) {
+
       counts[routine.category] =
         (counts[routine.category] || 0) + 1;
+
     }
+
   });
+
 
   const allCount = routines.length;
 
+
+  const sortedCategories =
+    [...ROUTINE_CATEGORIES].sort(
+      (a, b) =>
+        (counts[b.id] || 0) -
+        (counts[a.id] || 0)
+    );
+
+
   routineCategoryFilter.innerHTML = `
+
     <button
       type="button"
       class="routine-category-item ${
-        selectedRoutineCategory === "all" ? "active" : ""
+        selectedRoutineCategory === "all"
+          ? "active"
+          : ""
       }"
       data-category="all"
     >
-      <span class="routine-category-icon">✦</span>
-      <span class="routine-category-count">${allCount}</span>
+      <span class="routine-category-icon">
+        ✦
+      </span>
+
+      <span class="routine-category-count">
+        ${allCount}
+      </span>
     </button>
 
-    ${ROUTINE_CATEGORIES.map(
+
+    ${sortedCategories.map(
       (category) => `
+
         <button
           type="button"
           class="routine-category-item ${
@@ -708,30 +734,46 @@ function renderRoutineCategories(routines) {
           }"
           data-category="${category.id}"
         >
+
           <span class="routine-category-icon">
             ${category.icon}
           </span>
+
           <span class="routine-category-count">
             ${counts[category.id] || 0}
           </span>
+
         </button>
+
       `
     ).join("")}
+
   `;
 
+
   routineCategoryFilter
-    .querySelectorAll(".routine-category-item")
+    .querySelectorAll(
+      ".routine-category-item"
+    )
     .forEach((button) => {
-      button.addEventListener("click", () => {
-        selectedRoutineCategory =
-          button.dataset.category;
 
-        renderRoutineCategories(routines);
-        renderRoutinesList(routines);
-      });
+      button.addEventListener(
+        "click",
+        () => {
+
+          selectedRoutineCategory =
+            button.dataset.category;
+
+          renderRoutineCategories(routines);
+
+          renderRoutinesList(routines);
+
+        }
+      );
+
     });
-}
 
+}
 
 
 
