@@ -977,14 +977,23 @@ main {
    MODAL HEADER
 ========================================================= */
 
-.routine-modal-header,
-.todo-modal-header {
+.routine-modal-header {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
 
   gap: 15px;
   margin-bottom: 20px;
+}
+
+
+.todo-modal-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+
+  gap: 15px;
+  margin-bottom: 10px;
 }
 
 .routine-modal-header h2,
