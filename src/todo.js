@@ -13,7 +13,7 @@ import {
 
 
 // ELEMENTS ------------------
-const todosSidebar = document.getElementById("todos-sidebar");
+const todosSidebar = document.getElementById("to-do-sidebar");
 const todosPanel = document.getElementById("todos-panel");
 const closeTodosPanelButton = document.getElementById("close-todos-panel");
 const todosPanelBackdrop = document.getElementById("todos-panel-backdrop");
