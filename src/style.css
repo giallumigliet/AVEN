@@ -1561,6 +1561,7 @@ main {
 #todo-text {
   resize: none;
   overflow: hidden;
+  padding: 3px 12px;
 }
 
 
