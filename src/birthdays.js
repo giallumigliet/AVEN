@@ -43,6 +43,8 @@ let birthdaysUnsubscribe = null;
 // MODAL =========================================================
 
 export function openBirthdayModal() {
+  closeBirthdaysPanel()
+  
   editingBirthdayId = null;
 
   deleteBirthdayButton.hidden = true;
@@ -65,10 +67,9 @@ export function openBirthdayModal() {
 }
 
 
-function openBirthdayEditModal(
-  birthdayId,
-  birthday
-) {
+function openBirthdayEditModal(birthdayId, birthday) {
+
+  closeBirthdaysPanel()
   editingBirthdayId = birthdayId;
 
   deleteBirthdayButton.hidden = false;
@@ -220,6 +221,7 @@ async function deleteBirthday() {
     editingBirthdayId = null;
 
     closeBirthdayModal();
+    openBirthdayPanel();
 
   } catch (error) {
 
@@ -491,6 +493,7 @@ async function handleBirthdaySubmit(
     birthdayForm.reset();
 
     closeBirthdayModal();
+    openBirthdayPanel();
 
   } catch (error) {
 
