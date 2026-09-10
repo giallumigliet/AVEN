@@ -709,7 +709,7 @@ function RoutineCategoryPicker() {
       }"
       data-category=""
     >
-      <span class="routine-category-option-icon">✦</span>
+      <span class="routine-category-option-icon">ANY</span>
       <span class="routine-category-option-name">None</span>
     </button>
 
@@ -795,7 +795,7 @@ function renderRoutineCategories(routines) {
       data-category="all"
     >
       <span class="routine-category-icon">
-        ✦
+        ALL
       </span>
 
       <span class="routine-category-count">
@@ -816,6 +816,10 @@ function renderRoutineCategories(routines) {
           }"
           data-category="${category.id}"
         >
+
+          <span class="routine-category-name">
+            ${category.label}
+          </span>
 
           <span class="routine-category-icon">
             ${category.icon}
