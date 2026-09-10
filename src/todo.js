@@ -129,7 +129,7 @@ function renderTodoCategoryPicker() {
       }"
       data-category=""
     >
-      <span class="routine-category-option-icon">✦</span>
+      <span class="routine-category-option-icon">ANY</span>
       <span class="routine-category-option-name">
         None
       </span>
@@ -219,7 +219,7 @@ function renderTodoCategories(todos) {
       data-category="all"
     >
       <span class="routine-category-icon">
-        ✦
+        ALL
       </span>
 
       <span class="routine-category-count">
@@ -241,6 +241,10 @@ function renderTodoCategories(todos) {
           data-category="${category.id}"
         >
 
+          <span class="routine-category-name">
+            ${category.label}
+          </span>
+          
           <span class="routine-category-icon">
             ${category.icon}
           </span>
