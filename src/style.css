@@ -1325,14 +1325,6 @@ main {
    MODAL ACTIONS
 ========================================================= */
 
-.routine-actions,
-.todo-actions {
-  display: flex;
-  justify-content: flex-end;
-
-  gap: 8px;
-  padding-top: 4px;
-}
 
 .secondary-button,
 .primary-button {
@@ -2215,15 +2207,20 @@ main {
 
 
 /* ACTIONS -------------------------------------------------------- */
-
+.todo-actions,
+.routine-actions,
 .birthday-actions {
   display: flex;
-
   justify-content: flex-end;
-
   gap: 8px;
-
   margin-top: 4px;
+  width: 100%;
+}
+
+.todo-actions button,
+.routine-actions button,
+.birthday-actions button {
+  flex: 1;
 }
 
 
@@ -3230,14 +3227,7 @@ button:active {
   }
 
 
-  .birthday-actions {
-    width: 100%;
-  }
 
-
-  .birthday-actions button {
-    flex: 1;
-  }
 
 
 
