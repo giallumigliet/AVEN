@@ -1525,7 +1525,7 @@ main {
   opacity: .55;
 }
 
-.todo-list-item.completed .todo-list-text {
+.todo-list-item.completed .todo- {
   text-decoration: line-through;
 }
 
@@ -1536,7 +1536,7 @@ main {
   overflow: hidden;
   display: -webkit-box;
   -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 3;
 
   font-size: 14px;
   font-weight: 600;
@@ -1722,7 +1722,7 @@ main {
   overflow: hidden;
   display: -webkit-box;
   -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 3;
 
   font-size: 14px;
   font-weight: 600;
