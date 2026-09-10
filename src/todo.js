@@ -419,39 +419,65 @@ function renderTodosList(todos) {
             todo.category === selectedTodoCategory
         );
 
-  if (filteredTodos.length === 0) {
-    todosList.innerHTML = `
-      <div class="todos-empty">
-        <span>Nessun to do</span>
-        <small>Nessun to do in questa categoria</small>
-      </div>
-    `;
-    return;
-  }
-
-  filteredTodos.sort((a, b) =>
-    Number(a.completed) - Number(b.completed)
+  filteredTodos.sort(
+    (a, b) =>
+      Number(a.completed) - Number(b.completed)
   );
 
-  const existingItems = new Map(
-    [...todosList.querySelectorAll(".todo-list-item")]
-      .map((item) => [
-        item.dataset.todoId,
-        item
-      ])
-  );
+  const currentIds = new Set();
 
   filteredTodos.forEach((todo) => {
-    let item = existingItems.get(todo.id);
+    currentIds.add(todo.id);
+
+    let item = todosList.querySelector(
+      `[data-todo-id="${todo.id}"]`
+    );
 
     if (!item) {
-      item = document.createElement("div");
+      item = createTodoItem(todo);
+    }
 
-      item.dataset.todoId = todo.id;
+    item.classList.toggle(
+      "completed",
+      !!todo.completed
+    );
 
-      item.className = "todo-list-item";
+    const checkbox =
+      item.querySelector(
+        ".todo-check input"
+      );
 
-      item.innerHTML = `
+    checkbox.checked = !!todo.completed;
+
+    item.querySelector(
+      ".todo-list-text"
+    ).textContent =
+      todo.text || "";
+
+    todosList.appendChild(item);
+  });
+
+  todosList
+    .querySelectorAll(".todo-list-item")
+    .forEach((item) => {
+      if (!currentIds.has(item.dataset.todoId)) {
+        item.remove();
+      }
+    });
+}
+
+
+function createTodoItem(todo) {
+  const item =
+    document.createElement("div");
+
+  item.dataset.todoId = todo.id;
+  item.className =
+    `todo-list-item ${
+      todo.completed ? "completed" : ""
+    }`;
+
+  item.innerHTML = `
         <label class="todo-check">
           <input type="checkbox">
           <span></span>
@@ -505,64 +531,10 @@ function renderTodosList(todos) {
       todosList.appendChild(item);
     }
 
-    // Aggiorna lo stato dell'elemento senza ricrearlo
-    item.classList.toggle(
-      "completed",
-      todo.completed
-    );
 
-    const checkbox =
-      item.querySelector(
-        ".todo-check input"
-      );
-
-    checkbox.checked = !!todo.completed;
-
-    item.querySelector(
-      ".todo-list-text"
-    ).textContent =
-      todo.text || "";
-
-    const category =
-      TODO_CATEGORIES.find(
-        (category) =>
-          category.id === todo.category
-      );
-
-    const categoryElement =
-      item.querySelector(
-        ".todo-list-category"
-      );
-
-    if (
-      category &&
-      selectedTodoCategory === "all"
-    ) {
-      categoryElement.textContent =
-        category.icon;
-      categoryElement.style.display = "";
-    } else {
-      categoryElement.textContent = "";
-      categoryElement.style.display = "none";
-    }
-
-    // QUI avviene il vero spostamento
-    todosList.appendChild(item);
-  });
-
-  // Rimuove eventuali elementi non più presenti
-  existingItems.forEach(
-    (item, id) => {
-      if (
-        !filteredTodos.some(
-          (todo) => todo.id === id
-        )
-      ) {
-        item.remove();
-      }
-    }
-  );
+  return item;
 }
+
 
 
 // SUBMIT -------------------------------
