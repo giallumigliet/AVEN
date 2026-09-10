@@ -1534,7 +1534,12 @@ main {
   min-width: 0;
 
   overflow: hidden;
-  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+
+  font-size: 14px;
+  font-weight: 600;
 
   font-size: 14px;
 }
@@ -1715,8 +1720,9 @@ main {
 
 .routine-list-name {
   overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
 
   font-size: 14px;
   font-weight: 600;
