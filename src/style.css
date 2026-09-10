@@ -1558,6 +1558,11 @@ main {
   font-size: 14px;
 }
 
+#todo-text {
+  resize: none;
+  overflow: hidden;
+}
+
 
 .todo-check {
   flex: 0 0 auto;
