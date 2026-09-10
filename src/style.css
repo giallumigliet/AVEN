@@ -1496,7 +1496,11 @@ main {
   gap: 8px;
 
   overflow-y: auto;
-  min-height: 0;
+  scrollbar-width: none;
+}
+
+.todos-list::-webkit-scrollbar {
+  display: none;
 }
 
 .todo-list-item {
@@ -1703,6 +1707,11 @@ main {
   gap: 8px;
 
   overflow-y: auto;
+  scrollbar-width: none;
+}
+
+.routines-list::-webkit-scrollbar {
+  display: none;
 }
 
 .routine-list-item {
@@ -1944,6 +1953,11 @@ main {
   gap: 8px;
   overflow-y: auto;
   min-height: 0;
+  scrollbar-width: none;
+}
+
+.birthdays-list::-webkit-scrollbar {
+  display: none;
 }
 
 .birthday-list-item {
