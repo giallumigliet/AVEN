@@ -1498,6 +1498,7 @@ main {
 
   overflow-y: auto;
   scrollbar-width: none;
+  overflow-anchor: none;
 }
 
 .todos-list::-webkit-scrollbar {
