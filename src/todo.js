@@ -65,6 +65,7 @@ export function openTodoModal() {
   todoSubmitButton.textContent = "Add";
 
   todoForm.reset();
+  todoText.style.height = "21px";
 
   renderTodoCategoryPicker();
 
