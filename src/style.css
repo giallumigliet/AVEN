@@ -1051,6 +1051,16 @@ main {
 .routine-input {
   width: 100%;
   padding: 0 12px;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.routine-start {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
 }
 
 .interval-input {
