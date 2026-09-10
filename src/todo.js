@@ -393,37 +393,22 @@ async function deleteTodo() {
 
 
 function renderTodos(snapshot) {
-
   const todos = [];
 
   snapshot.forEach((documentSnapshot) => {
-
     todos.push({
       id: documentSnapshot.id,
       ...documentSnapshot.data()
     });
-
   });
 
-  const scrollTop =
-    todosList.scrollTop;
-
   renderTodoCategories(todos);
-
-  renderTodosList(
-    todos,
-    null,
-    scrollTop
-  );
+  renderTodosList(todos);
 }
 
 
-function renderTodosList(
-  todos,
-  anchorTodoId = null,
-  anchorOffset = null
-) {
 
+function renderTodosList(todos) {
   todosList.innerHTML = "";
 
   const filteredTodos =
@@ -435,20 +420,17 @@ function renderTodosList(
         );
 
   if (filteredTodos.length === 0) {
-
     todosList.innerHTML = `
       <div class="todos-empty">
         <span>Nessun to do</span>
         <small>Nessun to do in questa categoria</small>
       </div>
     `;
-
     return;
   }
 
   filteredTodos.sort((a, b) =>
-    Number(a.completed) -
-    Number(b.completed)
+    Number(a.completed) - Number(b.completed)
   );
 
   filteredTodos.forEach((todo) => {
@@ -539,21 +521,6 @@ function renderTodosList(
         );
       }
     );
-
-    todosList.appendChild(item);
-
-  });
-
-  if (anchorOffset !== null) {
-
-    requestAnimationFrame(() => {
-  
-      todosList.scrollTop =
-        anchorOffset;
-  
-    });
-  
-  }
 }
 
 
