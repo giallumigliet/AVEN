@@ -1814,6 +1814,7 @@ main {
 
 .todo-category-filter,
 .routine-category-filter {
+  flex-shrink: 0;
   display: flex;
 
   gap: 8px;
