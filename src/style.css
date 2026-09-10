@@ -1793,14 +1793,14 @@ main {
 
   border-radius: 50%;
 
-  background: var(--color-text);
+  background: #f5f5f7;
 
   transition:
     transform var(--transition-fast);
 }
 
 .routine-switch input:checked + .routine-switch-track {
-  background: var(--color-accent);
+  background: #4ade80;
 }
 
 .routine-switch input:checked + .routine-switch-track::after {
