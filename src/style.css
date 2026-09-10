@@ -1864,8 +1864,8 @@ main {
 }
 
 .routine-category-item.active {
-  min-width: 82px;
-  height: 92px;
+  min-width: 65px;
+  height: 65px;
 
   background: var(--color-accent-soft);
   border-color: var(--color-accent);
@@ -1883,6 +1883,11 @@ main {
 }
 
 .routine-category-name {
+  display: none;
+}
+
+.routine-category-item.active .routine-category-name {
+  display: block;
   font-size: 9px;
   font-weight: 600;
   line-height: 1;
