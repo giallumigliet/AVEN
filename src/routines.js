@@ -67,6 +67,7 @@ const ROUTINE_CATEGORIES = [
 // MODAL =========================================================
 
 export function openRoutineModal() {
+  closeRoutinesPanel()
   editingRoutineId = null;
 
   deleteRoutineButton.hidden = true;
@@ -94,6 +95,7 @@ export function openRoutineModal() {
 
 
 function openRoutineEditModal(routineId, routine) {
+  closeRoutinesPanel()
 
   editingRoutineId = routineId;
   deleteRoutineButton.hidden = false;
@@ -523,6 +525,7 @@ async function deleteRoutine() {
     editingRoutineId = null;
 
     closeRoutineModal();
+    closeRoutinePanel();
 
   } catch (error) {
     console.error("Error deleting routine:", error);
@@ -565,6 +568,7 @@ async function handleRoutineSubmit(event) {
     updateRoutineFrequencyUI();
 
     closeRoutineModal();
+    openRoutinesPanel()
 
   } catch (error) {
 
