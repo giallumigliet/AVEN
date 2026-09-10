@@ -33,7 +33,6 @@ let selectedTodoCategory = "all";
 let editingTodoId = null;
 let todoFormCategory = "";
 let todosUnsubscribe = null;
-let changedTodoId = null;
 
 
 const TODO_CATEGORIES = [
@@ -384,10 +383,7 @@ async function deleteTodo() {
 
 
 
-function renderTodos(
-  snapshot,
-  changedTodoId = null
-) {
+function renderTodos(snapshot) {
 
   const todos = [];
 
@@ -400,56 +396,26 @@ function renderTodos(
 
   });
 
-  let anchorTodoId = null;
+  let anchorId = null;
   let anchorOffset = 0;
 
-  if (
-    changedTodoId &&
-    todosList.children.length
-  ) {
+  const currentItems =
+    [...todosList.children];
 
-    const items =
-      [...todosList.children];
+  const firstVisibleItem =
+    currentItems.find(
+      (item) =>
+        item.offsetTop >= todosList.scrollTop
+    );
 
-    const changedIndex =
-      items.findIndex(
-        (item) =>
-          item.dataset.todoId ===
-          changedTodoId
-      );
+  if (firstVisibleItem) {
 
-    /*
-     * Usiamo la prima Todo visibile
-     * diversa da quella modificata.
-     */
-    const visibleItem =
-      items.find(
-        (item, index) => {
+    anchorId =
+      firstVisibleItem.dataset.todoId;
 
-          if (
-            index === changedIndex
-          ) {
-            return false;
-          }
-
-          return (
-            item.offsetTop >=
-            todosList.scrollTop
-          );
-
-        }
-      );
-
-    if (visibleItem) {
-
-      anchorTodoId =
-        visibleItem.dataset.todoId;
-
-      anchorOffset =
-        visibleItem.offsetTop -
-        todosList.scrollTop;
-
-    }
+    anchorOffset =
+      firstVisibleItem.offsetTop -
+      todosList.scrollTop;
 
   }
 
@@ -457,11 +423,10 @@ function renderTodos(
 
   renderTodosList(
     todos,
-    anchorTodoId,
+    anchorId,
     anchorOffset
   );
 }
-
 
 
 function renderTodosList(
@@ -593,20 +558,20 @@ function renderTodosList(
   if (anchorTodoId) {
 
     requestAnimationFrame(() => {
-
+  
       const anchorItem =
         todosList.querySelector(
           `[data-todo-id="${anchorTodoId}"]`
         );
-
+  
       if (!anchorItem) return;
-
+  
       todosList.scrollTop =
         anchorItem.offsetTop -
         anchorOffset;
-
+  
     });
-
+  
   }
 }
 
@@ -655,8 +620,6 @@ async function updateTodoCompleted(
   todoId,
   completed
 ) {
-  changedTodoId = todoId;
-
   const user = auth.currentUser;
 
   if (!user) return;
@@ -716,20 +679,17 @@ function listenToTodos() {
     onSnapshot(
       todosRef,
       (snapshot) => {
-  
-        renderTodos(
-          snapshot,
-          changedTodoId
-        );
-  
-        changedTodoId = null;
-  
+
+        renderTodos(snapshot);
+
       },
       (error) => {
+
         console.error(
           "Error loading todos:",
           error
         );
+
       }
     );
 }
