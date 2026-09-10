@@ -86,6 +86,7 @@ function openTodoEditModal(todoId, todo) {
   editingTodoId = todoId;
 
   todoText.value = todo.text || "";
+  todoText.style.height = "21px";
   todoFormCategory = todo.category || "";
 
   deleteTodoButton.hidden = false;
