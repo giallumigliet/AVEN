@@ -22,8 +22,9 @@ const todoModal = document.getElementById("todo-modal");
 const todoModalBackdrop = document.getElementById("todo-modal-backdrop");
 const closeTodoModalButton = document.getElementById("close-todo-modal");
 const deleteTodoButton = document.getElementById("delete-todo");
-const todoSubmitButton = todoForm.querySelector('button[type="submit"]');
+
 const todoForm = document.getElementById("todo-form");
+const todoSubmitButton = todoForm.querySelector('button[type="submit"]');
 const todoText = document.getElementById("todo-text");
 const todoCategoryPicker = document.getElementById("todo-category-picker");
 const todoCategoryFilter = document.getElementById("todo-category-filter");
