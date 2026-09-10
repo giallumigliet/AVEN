@@ -736,6 +736,11 @@ export function initTodos() {
     handleTodoSubmit
   );
 
+  todoText.addEventListener("input", () => {
+    todoText.style.height = "auto";
+    todoText.style.height = `${todoText.scrollHeight}px`;
+  });
+
   renderTodoCategoryPicker();
 }
 
