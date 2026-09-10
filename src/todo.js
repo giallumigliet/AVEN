@@ -22,6 +22,7 @@ const todoModal = document.getElementById("todo-modal");
 const todoModalBackdrop = document.getElementById("todo-modal-backdrop");
 const closeTodoModalButton = document.getElementById("close-todo-modal");
 const deleteTodoButton = document.getElementById("delete-todo");
+const todoSubmitButton = todoForm.querySelector('button[type="submit"]');
 const todoForm = document.getElementById("todo-form");
 const todoText = document.getElementById("todo-text");
 const todoCategoryPicker = document.getElementById("todo-category-picker");
@@ -59,6 +60,7 @@ export function openTodoModal() {
   todoFormCategory = "";
 
   deleteTodoButton.hidden = true;
+  todoSubmitButton.textContent = "Add";
 
   todoForm.reset();
 
@@ -83,6 +85,7 @@ function openTodoEditModal(todoId, todo) {
   todoFormCategory = todo.category || "";
 
   deleteTodoButton.hidden = false;
+  todoSubmitButton.textContent = "Edit";
 
   renderTodoCategoryPicker();
 
