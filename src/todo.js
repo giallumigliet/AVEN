@@ -407,11 +407,10 @@ function renderTodos(snapshot) {
 }
 
 
+
+
+
 function renderTodosList(todos) {
-  const scrollTop = todosList.scrollTop;
-
-  todosList.innerHTML = "";
-
   const filteredTodos =
     selectedTodoCategory === "all"
       ? todos
@@ -434,18 +433,95 @@ function renderTodosList(todos) {
     Number(a.completed) - Number(b.completed)
   );
 
+  const existingItems = new Map(
+    [...todosList.querySelectorAll(".todo-list-item")]
+      .map((item) => [
+        item.dataset.todoId,
+        item
+      ])
+  );
+
   filteredTodos.forEach((todo) => {
-    const item =
-      document.createElement("div");
+    let item = existingItems.get(todo.id);
 
-    item.dataset.todoId = todo.id;
+    if (!item) {
+      item = document.createElement("div");
 
-    item.className =
-      `todo-list-item ${
-        todo.completed
-          ? "completed"
-          : ""
-      }`;
+      item.dataset.todoId = todo.id;
+
+      item.className = "todo-list-item";
+
+      item.innerHTML = `
+        <label class="todo-check">
+          <input type="checkbox">
+          <span></span>
+        </label>
+
+        <div class="todo-list-text"></div>
+
+        <div class="todo-list-category"></div>
+      `;
+
+      const checkbox =
+        item.querySelector(
+          ".todo-check input"
+        );
+
+      checkbox.addEventListener(
+        "click",
+        (event) => {
+          event.stopPropagation();
+        }
+      );
+
+      checkbox.addEventListener(
+        "change",
+        () => {
+          updateTodoCompleted(
+            todo.id,
+            checkbox.checked
+          );
+        }
+      );
+
+      item.addEventListener(
+        "click",
+        (event) => {
+          if (
+            event.target.closest(
+              ".todo-check"
+            )
+          ) {
+            return;
+          }
+
+          openTodoEditModal(
+            todo.id,
+            todo
+          );
+        }
+      );
+
+      todosList.appendChild(item);
+    }
+
+    // Aggiorna lo stato dell'elemento senza ricrearlo
+    item.classList.toggle(
+      "completed",
+      todo.completed
+    );
+
+    const checkbox =
+      item.querySelector(
+        ".todo-check input"
+      );
+
+    checkbox.checked = !!todo.completed;
+
+    item.querySelector(
+      ".todo-list-text"
+    ).textContent =
+      todo.text || "";
 
     const category =
       TODO_CATEGORIES.find(
@@ -453,77 +529,39 @@ function renderTodosList(todos) {
           category.id === todo.category
       );
 
-    item.innerHTML = `
-      <label class="todo-check">
-        <input
-          type="checkbox"
-          ${todo.completed ? "checked" : ""}
-        >
-        <span></span>
-      </label>
-
-      <div class="todo-list-text"></div>
-
-      ${
-        category &&
-        selectedTodoCategory === "all"
-          ? `
-            <div class="todo-list-category">
-              ${category.icon}
-            </div>
-          `
-          : ""
-      }
-    `;
-
-    item.querySelector(
-      ".todo-list-text"
-    ).textContent =
-      todo.text || "";
-
-    const checkbox =
+    const categoryElement =
       item.querySelector(
-        ".todo-check input"
+        ".todo-list-category"
       );
 
-    checkbox.addEventListener(
-      "click",
-      (event) => {
-        event.stopPropagation();
-      }
-    );
+    if (
+      category &&
+      selectedTodoCategory === "all"
+    ) {
+      categoryElement.textContent =
+        category.icon;
+      categoryElement.style.display = "";
+    } else {
+      categoryElement.textContent = "";
+      categoryElement.style.display = "none";
+    }
 
-    checkbox.addEventListener(
-      "change",
-      () => {
-        updateTodoCompleted(
-          todo.id,
-          checkbox.checked
-        );
-      }
-    );
-
-    item.addEventListener(
-      "click",
-      (event) => {
-
-        if (
-          event.target.closest(
-            ".todo-check"
-          )
-        ) {
-          return;
-        }
-
-        openTodoEditModal(
-          todo.id,
-          todo
-        );
-      }
-    );
-    
+    // QUI avviene il vero spostamento
     todosList.appendChild(item);
   });
+
+  // Rimuove eventuali elementi non più presenti
+  existingItems.forEach(
+    (item, id) => {
+      if (
+        !filteredTodos.some(
+          (todo) => todo.id === id
+        )
+      ) {
+        item.remove();
+      }
+    }
+  );
 }
 
 
