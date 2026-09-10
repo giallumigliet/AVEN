@@ -1720,9 +1720,8 @@ main {
 
 .routine-list-name {
   overflow: hidden;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 3;
+  white-space: normal;
+  overflow-wrap: anywhere;
 
   font-size: 14px;
   font-weight: 600;
