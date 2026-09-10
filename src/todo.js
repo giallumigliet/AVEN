@@ -33,6 +33,7 @@ let selectedTodoCategory = "all";
 let editingTodoId = null;
 let todoFormCategory = "";
 let todosUnsubscribe = null;
+let locallyUpdatingTodoId = null;
 
 
 const TODO_CATEGORIES = [
@@ -393,20 +394,16 @@ async function deleteTodo() {
 
 
 function renderTodos(snapshot) {
-
   const todos = [];
 
   snapshot.forEach((documentSnapshot) => {
-
     todos.push({
       id: documentSnapshot.id,
       ...documentSnapshot.data()
     });
-
   });
 
   renderTodoCategories(todos);
-
   renderTodosList(todos);
 }
 
@@ -496,55 +493,29 @@ function renderTodosList(todos) {
       }
     );
 
-    checkbox.addEventListener(
-      "change",
-      () => {
+    checkbox.addEventListener("change", () => {
+      const completed = checkbox.checked;
     
-        const completed =
-          checkbox.checked;
+      item.classList.toggle("completed", completed);
     
-        item.classList.toggle(
-          "completed",
-          completed
-        );
+      if (completed) {
+        todosList.appendChild(item);
+      } else {
+        const firstCompleted =
+          [...todosList.querySelectorAll(".todo-list-item")]
+            .find((element) =>
+              element.classList.contains("completed")
+            );
     
-        if (completed) {
-    
-          todosList.appendChild(item);
-    
+        if (firstCompleted) {
+          todosList.insertBefore(item, firstCompleted);
         } else {
-    
-          const firstCompleted =
-            [...todosList.querySelectorAll(
-              ".todo-list-item"
-            )].find(
-              (element) =>
-                element.classList.contains(
-                  "completed"
-                )
-            );
-    
-          if (firstCompleted) {
-    
-            todosList.insertBefore(
-              item,
-              firstCompleted
-            );
-    
-          } else {
-    
-            todosList.appendChild(item);
-    
-          }
-    
+          todosList.appendChild(item);
         }
-    
-        updateTodoCompleted(
-          todo.id,
-          completed
-        );
       }
-    );
+    
+      updateTodoCompleted(todo.id, completed);
+    });
 
     item.addEventListener(
       "click",
@@ -616,6 +587,7 @@ async function updateTodoCompleted(
   todoId,
   completed
 ) {
+  locallyUpdatingTodoId = todoId;
   const user = auth.currentUser;
 
   if (!user) return;
@@ -672,12 +644,23 @@ function listenToTodos() {
     );
 
   todosUnsubscribe =
-    onSnapshot(
-      todosRef,
-      (snapshot) => {
-
-        renderTodos(snapshot);
-
+    onSnapshot(todosRef, snapshot => {
+      const changes = snapshot.docChanges();
+    
+      if (
+        locallyUpdatingTodoId &&
+        changes.length === 1 &&
+        changes[0].type === "modified" &&
+        changes[0].doc.id === locallyUpdatingTodoId
+      ) {
+        if (!snapshot.metadata.hasPendingWrites) {
+          locallyUpdatingTodoId = null;
+        }
+    
+        return;
+      }
+    
+      renderTodos(snapshot);
       },
       (error) => {
 
