@@ -43,7 +43,7 @@ const TODO_CATEGORIES = [
   { id: "work", label: "Work", icon: "💼" },
   { id: "freeTime", label: "Free time", icon: "🎨" },
   { id: "car", label: "Car", icon: "🚗" },
-  { id: "travel", label: "Travel", icon: "🎁" },
+  { id: "travel", label: "Travel", icon: "✈️" },
   { id: "health", label: "Health", icon: "❤️" },
   { id: "study", label: "Study", icon: "📚" },
   { id: "pets", label: "Pets", icon: "🐾" },
