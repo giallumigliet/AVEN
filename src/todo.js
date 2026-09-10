@@ -65,7 +65,7 @@ export function openTodoModal() {
   todoSubmitButton.textContent = "Add";
 
   todoForm.reset();
-  todoText.style.height = "21px";
+  todoText.style.height = "23px";
 
   renderTodoCategoryPicker();
 
@@ -86,7 +86,7 @@ function openTodoEditModal(todoId, todo) {
   editingTodoId = todoId;
 
   todoText.value = todo.text || "";
-  todoText.style.height = "21px";
+  todoText.style.height = "23px";
   todoFormCategory = todo.category || "";
 
   deleteTodoButton.hidden = false;
