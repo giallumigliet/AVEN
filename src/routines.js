@@ -947,7 +947,10 @@ function renderRoutinesList(routines) {
         category && selectedRoutineCategory === "all"
           ? `
             <div class="routine-list-category">
-              ${category.icon}
+              <span class="routine-list-countdown">
+                ${getRoutineDaysUntilNext(routine)}d
+              </span>
+              <span>${category.icon}</span>
             </div>
           `
           : ""
