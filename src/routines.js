@@ -868,6 +868,300 @@ function renderRoutineCategories(routines) {
 
 
 
+function getRoutineDaysUntilNext(routine) {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  if (!routine.startDate) {
+    return "";
+  }
+
+  const startDate = new Date(`${routine.startDate}T00:00:00`);
+
+  if (isNaN(startDate.getTime())) {
+    return "";
+  }
+
+  startDate.setHours(0, 0, 0, 0);
+
+  const interval = Math.max(
+    1,
+    Number(routine.interval) || 1
+  );
+
+  const unit = routine.unit;
+
+  // Se la data di partenza è nel futuro
+  if (startDate > today) {
+    return Math.ceil(
+      (startDate - today) / 86400000
+    );
+  }
+
+  // DAYS
+  if (unit === "days") {
+    const diffDays = Math.floor(
+      (today - startDate) / 86400000
+    );
+
+    const remainder = diffDays % interval;
+
+    return remainder === 0
+      ? 0
+      : interval - remainder;
+  }
+
+  // WEEKS
+  if (unit === "weeks") {
+    const weekdays = (routine.weekdays || [])
+      .map(Number)
+      .filter(day => day >= 0 && day <= 6)
+      .sort((a, b) => a - b);
+
+    if (weekdays.length === 0) {
+      return 0;
+    }
+
+    const startWeekday = startDate.getDay();
+
+    const daysFromStart =
+      Math.floor(
+        (today - startDate) / 86400000
+      );
+
+    const weekIndex =
+      Math.floor(daysFromStart / 7);
+
+    const currentWeekStart = new Date(startDate);
+    currentWeekStart.setDate(
+      startDate.getDate() + weekIndex * 7
+    );
+
+    const activeWeek =
+      weekIndex % interval === 0;
+
+    if (activeWeek) {
+      for (const day of weekdays) {
+        const occurrence = new Date(currentWeekStart);
+
+        occurrence.setDate(
+          currentWeekStart.getDate() +
+          ((day - startWeekday + 7) % 7)
+        );
+
+        if (occurrence >= today) {
+          return Math.floor(
+            (occurrence - today) / 86400000
+          );
+        }
+      }
+    }
+
+    // Cerca la prossima settimana valida
+    let nextWeekIndex =
+      activeWeek
+        ? weekIndex + interval
+        : weekIndex + (
+            interval -
+            (weekIndex % interval)
+          );
+
+    while (true) {
+      const nextWeekStart = new Date(startDate);
+
+      nextWeekStart.setDate(
+        startDate.getDate() +
+        nextWeekIndex * 7
+      );
+
+      for (const day of weekdays) {
+        const occurrence = new Date(nextWeekStart);
+
+        occurrence.setDate(
+          nextWeekStart.getDate() +
+          ((day - startWeekday + 7) % 7)
+        );
+
+        if (occurrence >= today) {
+          return Math.floor(
+            (occurrence - today) / 86400000
+          );
+        }
+      }
+
+      nextWeekIndex += interval;
+    }
+  }
+
+  // MONTHS
+  if (unit === "months") {
+    const day = Math.min(
+      31,
+      Math.max(
+        1,
+        Number(routine.monthlyDay) || 1
+      )
+    );
+
+    let year = today.getFullYear();
+    let month = today.getMonth();
+
+    let occurrence = new Date(
+      year,
+      month,
+      day
+    );
+
+    occurrence.setHours(0, 0, 0, 0);
+
+    // Corregge mesi troppo corti
+    if (occurrence.getMonth() !== month) {
+      occurrence = new Date(
+        year,
+        month + 1,
+        0
+      );
+      occurrence.setHours(0, 0, 0, 0);
+    }
+
+    const monthsSinceStart =
+      (
+        year - startDate.getFullYear()
+      ) * 12 +
+      (
+        month - startDate.getMonth()
+      );
+
+    const remainder =
+      monthsSinceStart % interval;
+
+    if (
+      remainder !== 0 ||
+      occurrence < today
+    ) {
+      let monthsToAdd =
+        remainder === 0
+          ? interval
+          : interval - remainder;
+
+      month += monthsToAdd;
+
+      occurrence = new Date(
+        year,
+        month,
+        day
+      );
+
+      occurrence.setHours(0, 0, 0, 0);
+
+      if (
+        occurrence.getDate() !== day
+      ) {
+        occurrence = new Date(
+          year,
+          month + 1,
+          0
+        );
+        occurrence.setHours(0, 0, 0, 0);
+      }
+    }
+
+    return Math.floor(
+      (occurrence - today) / 86400000
+    );
+  }
+
+  // YEARS
+  if (unit === "years") {
+    const day = Math.min(
+      31,
+      Math.max(
+        1,
+        Number(routine.monthlyDay) || 1
+      )
+    );
+
+    const month = Math.min(
+      12,
+      Math.max(
+        1,
+        Number(routine.yearlyMonth) || 1
+      )
+    );
+
+    let year = today.getFullYear();
+
+    let occurrence = new Date(
+      year,
+      month - 1,
+      day
+    );
+
+    occurrence.setHours(0, 0, 0, 0);
+
+    // Corregge date tipo 31 febbraio
+    if (
+      occurrence.getMonth() !== month - 1
+    ) {
+      occurrence = new Date(
+        year,
+        month,
+        0
+      );
+      occurrence.setHours(0, 0, 0, 0);
+    }
+
+    const yearsSinceStart =
+      year -
+      startDate.getFullYear();
+
+    const remainder =
+      yearsSinceStart % interval;
+
+    if (
+      remainder !== 0 ||
+      occurrence < today
+    ) {
+      const yearsToAdd =
+        remainder === 0
+          ? interval
+          : interval - remainder;
+
+      year += yearsToAdd;
+
+      occurrence = new Date(
+        year,
+        month - 1,
+        day
+      );
+
+      occurrence.setHours(0, 0, 0, 0);
+
+      if (
+        occurrence.getMonth() !== month - 1
+      ) {
+        occurrence = new Date(
+          year,
+          month,
+          0
+        );
+        occurrence.setHours(0, 0, 0, 0);
+      }
+    }
+
+    return Math.floor(
+      (occurrence - today) / 86400000
+    );
+  }
+
+  return "";
+}
+
+
+
+
+
+
 function renderRoutines(snapshot) {
   const routines = [];
 
