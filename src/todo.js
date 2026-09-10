@@ -407,8 +407,9 @@ function renderTodos(snapshot) {
 }
 
 
-
 function renderTodosList(todos) {
+  const scrollTop = todosList.scrollTop;
+
   todosList.innerHTML = "";
 
   const filteredTodos =
@@ -434,7 +435,6 @@ function renderTodosList(todos) {
   );
 
   filteredTodos.forEach((todo) => {
-
     const item =
       document.createElement("div");
 
