@@ -27,9 +27,9 @@ const birthdayModal = document.getElementById("birthday-modal");
 const birthdayModalBackdrop = document.getElementById("birthday-modal-backdrop");
 const closeBirthdayModalButton = document.getElementById("close-birthday-modal");
 const deleteBirthdayButton = document.getElementById("delete-birthday");
+const birthdayForm = document.getElementById("birthday-form");
 const birthdaySubmitButton = birthdayForm.querySelector('button[type="submit"]');
 
-const birthdayForm = document.getElementById("birthday-form");
 const birthdayName = document.getElementById("birthday-name");
 const birthdayDay = document.getElementById("birthday-day");
 const birthdayMonth = document.getElementById("birthday-month");
