@@ -400,7 +400,8 @@ function renderTodos(snapshot) {
 
 
 function renderTodosList(todos) {
-
+  const scrollTop = todosList.scrollTop;
+  
   todosList.innerHTML = "";
 
   const filteredTodos =
@@ -516,6 +517,10 @@ function renderTodosList(todos) {
 
     todosList.appendChild(item);
 
+  });
+
+  requestAnimationFrame(() => {
+    todosList.scrollTop = scrollTop;
   });
 }
 
