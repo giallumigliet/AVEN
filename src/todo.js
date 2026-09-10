@@ -33,6 +33,7 @@ let selectedTodoCategory = "all";
 let editingTodoId = null;
 let todoFormCategory = "";
 let todosUnsubscribe = null;
+let changedTodoId = null;
 
 
 const TODO_CATEGORIES = [
@@ -383,7 +384,10 @@ async function deleteTodo() {
 
 
 
-function renderTodos(snapshot) {
+function renderTodos(
+  snapshot,
+  changedTodoId = null
+) {
 
   const todos = [];
 
@@ -396,16 +400,76 @@ function renderTodos(snapshot) {
 
   });
 
+  let anchorTodoId = null;
+  let anchorOffset = 0;
+
+  if (
+    changedTodoId &&
+    todosList.children.length
+  ) {
+
+    const items =
+      [...todosList.children];
+
+    const changedIndex =
+      items.findIndex(
+        (item) =>
+          item.dataset.todoId ===
+          changedTodoId
+      );
+
+    /*
+     * Usiamo la prima Todo visibile
+     * diversa da quella modificata.
+     */
+    const visibleItem =
+      items.find(
+        (item, index) => {
+
+          if (
+            index === changedIndex
+          ) {
+            return false;
+          }
+
+          return (
+            item.offsetTop >=
+            todosList.scrollTop
+          );
+
+        }
+      );
+
+    if (visibleItem) {
+
+      anchorTodoId =
+        visibleItem.dataset.todoId;
+
+      anchorOffset =
+        visibleItem.offsetTop -
+        todosList.scrollTop;
+
+    }
+
+  }
+
   renderTodoCategories(todos);
 
-  renderTodosList(todos);
+  renderTodosList(
+    todos,
+    anchorTodoId,
+    anchorOffset
+  );
 }
 
 
 
-function renderTodosList(todos) {
-  const scrollTop = todosList.scrollTop;
-  
+function renderTodosList(
+  todos,
+  anchorTodoId = null,
+  anchorOffset = 0
+) {
+
   todosList.innerHTML = "";
 
   const filteredTodos =
@@ -428,7 +492,6 @@ function renderTodosList(todos) {
     return;
   }
 
-  // Non completati prima
   filteredTodos.sort((a, b) =>
     Number(a.completed) -
     Number(b.completed)
@@ -438,6 +501,8 @@ function renderTodosList(todos) {
 
     const item =
       document.createElement("div");
+
+    item.dataset.todoId = todo.id;
 
     item.className =
       `todo-list-item ${
@@ -464,7 +529,8 @@ function renderTodosList(todos) {
       <div class="todo-list-text"></div>
 
       ${
-        category && selectedTodoCategory === "all"
+        category &&
+        selectedTodoCategory === "all"
           ? `
             <div class="todo-list-category">
               ${category.icon}
@@ -476,7 +542,8 @@ function renderTodosList(todos) {
 
     item.querySelector(
       ".todo-list-text"
-    ).textContent = todo.text || "";
+    ).textContent =
+      todo.text || "";
 
     const checkbox =
       item.querySelector(
@@ -523,9 +590,24 @@ function renderTodosList(todos) {
 
   });
 
-  requestAnimationFrame(() => {
-    todosList.scrollTop = scrollTop;
-  });
+  if (anchorTodoId) {
+
+    requestAnimationFrame(() => {
+
+      const anchorItem =
+        todosList.querySelector(
+          `[data-todo-id="${anchorTodoId}"]`
+        );
+
+      if (!anchorItem) return;
+
+      todosList.scrollTop =
+        anchorItem.offsetTop -
+        anchorOffset;
+
+    });
+
+  }
 }
 
 
@@ -573,6 +655,7 @@ async function updateTodoCompleted(
   todoId,
   completed
 ) {
+  changedTodoId = todoId;
 
   const user = auth.currentUser;
 
@@ -633,7 +716,14 @@ function listenToTodos() {
     onSnapshot(
       todosRef,
       (snapshot) => {
-        renderTodos(snapshot);
+  
+        renderTodos(
+          snapshot,
+          changedTodoId
+        );
+  
+        changedTodoId = null;
+  
       },
       (error) => {
         console.error(
