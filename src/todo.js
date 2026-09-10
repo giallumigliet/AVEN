@@ -396,35 +396,15 @@ function renderTodos(snapshot) {
 
   });
 
-  let anchorId = null;
-  let anchorOffset = 0;
-
-  const currentItems =
-    [...todosList.children];
-
-  const firstVisibleItem =
-    currentItems.find(
-      (item) =>
-        item.offsetTop >= todosList.scrollTop
-    );
-
-  if (firstVisibleItem) {
-
-    anchorId =
-      firstVisibleItem.dataset.todoId;
-
-    anchorOffset =
-      firstVisibleItem.offsetTop -
-      todosList.scrollTop;
-
-  }
+  const scrollTop =
+    todosList.scrollTop;
 
   renderTodoCategories(todos);
 
   renderTodosList(
     todos,
-    anchorId,
-    anchorOffset
+    null,
+    scrollTop
   );
 }
 
@@ -432,7 +412,7 @@ function renderTodos(snapshot) {
 function renderTodosList(
   todos,
   anchorTodoId = null,
-  anchorOffset = 0
+  anchorOffset = null
 ) {
 
   todosList.innerHTML = "";
@@ -555,19 +535,11 @@ function renderTodosList(
 
   });
 
-  if (anchorTodoId) {
+  if (anchorOffset !== null) {
 
     requestAnimationFrame(() => {
   
-      const anchorItem =
-        todosList.querySelector(
-          `[data-todo-id="${anchorTodoId}"]`
-        );
-  
-      if (!anchorItem) return;
-  
       todosList.scrollTop =
-        anchorItem.offsetTop -
         anchorOffset;
   
     });
