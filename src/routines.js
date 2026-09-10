@@ -4,34 +4,29 @@ import { collection, addDoc, serverTimestamp, onSnapshot, doc, updateDoc, delete
 
 
 // ELEMENTS =========================================================
-
 const routinesSidebar = document.getElementById("routines-sidebar");
 
 const routineModal = document.getElementById("routine-modal");
 const routineModalBackdrop = document.getElementById("routine-modal-backdrop");
-
 const closeRoutineModalButton = document.getElementById("close-routine-modal");
 
 const deleteRoutineButton = document.getElementById("delete-routine");
+const routineForm = document.getElementById("routine-form");
 const routineSubmitButton = routineForm.querySelector('button[type="submit"]');
 
-const routineForm = document.getElementById("routine-form");
-const routineName = document.getElementById("routine-name");
 
+const routineName = document.getElementById("routine-name");
 const routineInterval = document.getElementById("routine-interval");
 const routineUnit = document.getElementById("routine-unit");
 
 const weeklyDaysField = document.getElementById("weekly-days-field");
 const monthlyDayField = document.getElementById("monthly-day-field");
-
 const monthlyDay = document.getElementById("routine-month-day");
 const routineStart = document.getElementById("routine-start");
 
 const addRoutineTimeButton = document.getElementById("add-routine-time");
 const routineTimes = document.getElementById("routine-times");
-
 const routinePreview = document.getElementById("routine-preview");
-
 const weekdayButtons = document.querySelectorAll(".weekday-picker button");
 
 const routinesPanel = document.getElementById("routines-panel");
