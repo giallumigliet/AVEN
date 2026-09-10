@@ -57,6 +57,7 @@ const TODO_CATEGORIES = [
 
 // MODAL ------------------------------
 export function openTodoModal() {
+  closeTodosPanel();
   editingTodoId = null;
   todoFormCategory = "";
 
@@ -80,6 +81,7 @@ export function openTodoModal() {
 
 
 function openTodoEditModal(todoId, todo) {
+  closeTodosPanel();
   editingTodoId = todoId;
 
   todoText.value = todo.text || "";
@@ -373,6 +375,7 @@ async function deleteTodo() {
     editingTodoId = null;
 
     closeTodoModal();
+    openTodoPanel();
 
   } catch (error) {
 
@@ -572,6 +575,7 @@ async function handleTodoSubmit(event) {
     editingTodoId = null;
 
     closeTodoModal();
+    openTodosPanel();
 
   } catch (error) {
 
