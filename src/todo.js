@@ -419,24 +419,50 @@ function renderTodosList(todos) {
             todo.category === selectedTodoCategory
         );
 
+  if (filteredTodos.length === 0) {
+    todosList.innerHTML = `
+      <div class="todos-empty">
+        <span>Nessun to do</span>
+        <small>Nessun to do in questa categoria</small>
+      </div>
+    `;
+    return;
+  }
+
   filteredTodos.sort(
     (a, b) =>
       Number(a.completed) - Number(b.completed)
   );
 
-  const currentIds = new Set();
+  const currentItems = new Map(
+    [...todosList.querySelectorAll(".todo-list-item")]
+      .map((item) => [
+        item.dataset.todoId,
+        item
+      ])
+  );
 
-  filteredTodos.forEach((todo) => {
-    currentIds.add(todo.id);
+  const currentIds = new Set(
+    filteredTodos.map((todo) => todo.id)
+  );
 
-    let item = todosList.querySelector(
-      `[data-todo-id="${todo.id}"]`
-    );
+  // Rimuove solo i TODO che non esistono più
+  currentItems.forEach((item, id) => {
+    if (!currentIds.has(id)) {
+      item.remove();
+    }
+  });
 
+  filteredTodos.forEach((todo, index) => {
+    let item = currentItems.get(todo.id);
+
+    // Crea il nodo solo se non esiste
     if (!item) {
       item = createTodoItem(todo);
+      currentItems.set(todo.id, item);
     }
 
+    // Aggiorna solo lo stato
     item.classList.toggle(
       "completed",
       !!todo.completed
@@ -454,16 +480,17 @@ function renderTodosList(todos) {
     ).textContent =
       todo.text || "";
 
-    todosList.appendChild(item);
-  });
+    // Sposta il nodo SOLO se non è già nella posizione corretta
+    const currentItem =
+      todosList.children[index];
 
-  todosList
-    .querySelectorAll(".todo-list-item")
-    .forEach((item) => {
-      if (!currentIds.has(item.dataset.todoId)) {
-        item.remove();
-      }
-    });
+    if (currentItem !== item) {
+      todosList.insertBefore(
+        item,
+        currentItem || null
+      );
+    }
+  });
 }
 
 
@@ -472,65 +499,72 @@ function createTodoItem(todo) {
     document.createElement("div");
 
   item.dataset.todoId = todo.id;
+
   item.className =
     `todo-list-item ${
-      todo.completed ? "completed" : ""
+      todo.completed
+        ? "completed"
+        : ""
     }`;
 
   item.innerHTML = `
-        <label class="todo-check">
-          <input type="checkbox">
-          <span></span>
-        </label>
+    <label class="todo-check">
+      <input
+        type="checkbox"
+        ${todo.completed ? "checked" : ""}
+      >
+      <span></span>
+    </label>
 
-        <div class="todo-list-text"></div>
+    <div class="todo-list-text"></div>
 
-        <div class="todo-list-category"></div>
-      `;
+    <div class="todo-list-category"></div>
+  `;
 
-      const checkbox =
-        item.querySelector(
-          ".todo-check input"
-        );
+  item.querySelector(
+    ".todo-list-text"
+  ).textContent =
+    todo.text || "";
 
-      checkbox.addEventListener(
-        "click",
-        (event) => {
-          event.stopPropagation();
-        }
-      );
+  const checkbox =
+    item.querySelector(
+      ".todo-check input"
+    );
 
-      checkbox.addEventListener(
-        "change",
-        () => {
-          updateTodoCompleted(
-            todo.id,
-            checkbox.checked
-          );
-        }
-      );
-
-      item.addEventListener(
-        "click",
-        (event) => {
-          if (
-            event.target.closest(
-              ".todo-check"
-            )
-          ) {
-            return;
-          }
-
-          openTodoEditModal(
-            todo.id,
-            todo
-          );
-        }
-      );
-
-      todosList.appendChild(item);
+  checkbox.addEventListener(
+    "click",
+    (event) => {
+      event.stopPropagation();
     }
+  );
 
+  checkbox.addEventListener(
+    "change",
+    () => {
+      updateTodoCompleted(
+        todo.id,
+        checkbox.checked
+      );
+    }
+  );
+
+  item.addEventListener(
+    "click",
+    (event) => {
+      if (
+        event.target.closest(
+          ".todo-check"
+        )
+      ) {
+        return;
+      }
+
+      openTodoEditModal(
+        todo.id,
+        todo
+      );
+    }
+  );
 
   return item;
 }
