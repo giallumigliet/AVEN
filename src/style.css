@@ -1562,6 +1562,7 @@ main {
   resize: none;
   overflow: hidden;
   padding: 3px 12px;
+  min-height: 23px;
 }
 
 
