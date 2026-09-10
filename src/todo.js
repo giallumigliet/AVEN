@@ -33,7 +33,6 @@ let selectedTodoCategory = "all";
 let editingTodoId = null;
 let todoFormCategory = "";
 let todosUnsubscribe = null;
-let locallyUpdatingTodoId = null;
 
 
 const TODO_CATEGORIES = [
@@ -394,21 +393,36 @@ async function deleteTodo() {
 
 
 function renderTodos(snapshot) {
+
   const todos = [];
 
   snapshot.forEach((documentSnapshot) => {
+
     todos.push({
       id: documentSnapshot.id,
       ...documentSnapshot.data()
     });
+
   });
 
+  const scrollTop =
+    todosList.scrollTop;
+
   renderTodoCategories(todos);
-  renderTodosList(todos);
+
+  renderTodosList(
+    todos,
+    null,
+    scrollTop
+  );
 }
 
 
-function renderTodosList(todos) {
+function renderTodosList(
+  todos,
+  anchorTodoId = null,
+  anchorOffset = null
+) {
 
   todosList.innerHTML = "";
 
@@ -432,6 +446,10 @@ function renderTodosList(todos) {
     return;
   }
 
+  filteredTodos.sort((a, b) =>
+    Number(a.completed) -
+    Number(b.completed)
+  );
 
   filteredTodos.forEach((todo) => {
 
@@ -493,29 +511,15 @@ function renderTodosList(todos) {
       }
     );
 
-    checkbox.addEventListener("change", () => {
-      const completed = checkbox.checked;
-    
-      item.classList.toggle("completed", completed);
-    
-      if (completed) {
-        todosList.appendChild(item);
-      } else {
-        const firstCompleted =
-          [...todosList.querySelectorAll(".todo-list-item")]
-            .find((element) =>
-              element.classList.contains("completed")
-            );
-    
-        if (firstCompleted) {
-          todosList.insertBefore(item, firstCompleted);
-        } else {
-          todosList.appendChild(item);
-        }
+    checkbox.addEventListener(
+      "change",
+      () => {
+        updateTodoCompleted(
+          todo.id,
+          checkbox.checked
+        );
       }
-    
-      updateTodoCompleted(todo.id, completed);
-    });
+    );
 
     item.addEventListener(
       "click",
@@ -539,6 +543,17 @@ function renderTodosList(todos) {
     todosList.appendChild(item);
 
   });
+
+  if (anchorOffset !== null) {
+
+    requestAnimationFrame(() => {
+  
+      todosList.scrollTop =
+        anchorOffset;
+  
+    });
+  
+  }
 }
 
 
@@ -587,7 +602,6 @@ async function updateTodoCompleted(
   todoId,
   completed
 ) {
-  locallyUpdatingTodoId = todoId;
   const user = auth.currentUser;
 
   if (!user) return;
@@ -644,23 +658,12 @@ function listenToTodos() {
     );
 
   todosUnsubscribe =
-    onSnapshot(todosRef, snapshot => {
-      const changes = snapshot.docChanges();
-    
-      if (
-        locallyUpdatingTodoId &&
-        changes.length === 1 &&
-        changes[0].type === "modified" &&
-        changes[0].doc.id === locallyUpdatingTodoId
-      ) {
-        if (!snapshot.metadata.hasPendingWrites) {
-          locallyUpdatingTodoId = null;
-        }
-    
-        return;
-      }
-    
-      renderTodos(snapshot);
+    onSnapshot(
+      todosRef,
+      (snapshot) => {
+
+        renderTodos(snapshot);
+
       },
       (error) => {
 
@@ -746,6 +749,5 @@ export function initTodos() {
 
   renderTodoCategoryPicker();
 }
-
 
 
