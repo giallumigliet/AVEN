@@ -22,6 +22,9 @@ const routineUnit = document.getElementById("routine-unit");
 const weeklyDaysField = document.getElementById("weekly-days-field");
 const monthlyDayField = document.getElementById("monthly-day-field");
 const monthlyDay = document.getElementById("routine-month-day");
+const yearlyMonthField = document.getElementById("yearly-month-field");
+const yearlyMonth = document.getElementById("routine-year-month");
+
 const routineStart = document.getElementById("routine-start");
 
 const addRoutineTimeButton = document.getElementById("add-routine-time");
@@ -101,6 +104,7 @@ function openRoutineEditModal(routineId, routine) {
   routineUnit.value = routine.unit || "days";
   routineStart.value = routine.startDate || "";
   monthlyDay.value = routine.monthlyDay || 1;
+  yearlyMonth.value = routine.yearlyMonth || 1;
   routineFormCategory = routine.category || "";
   RoutineCategoryPicker();
 
@@ -151,13 +155,19 @@ function closeRoutineModal() {
 
 
 // FREQUENCY =========================================================
-
 function updateRoutineFrequencyUI() {
 
   const unit = routineUnit.value;
 
-  weeklyDaysField.hidden = unit !== "weeks";
-  monthlyDayField.hidden = unit !== "months";
+  weeklyDaysField.hidden =
+    unit !== "weeks";
+
+  monthlyDayField.hidden =
+    unit !== "months" &&
+    unit !== "years";
+
+  yearlyMonthField.hidden =
+    unit !== "years";
 
   updateRoutinePreview();
 
@@ -343,6 +353,40 @@ function updateRoutinePreview() {
 
   }
 
+  // YEARS ----------------------------------------------------------
+  if (unit === "years") {
+
+    const day = Math.min(
+      31,
+      Math.max(1, Number(monthlyDay.value) || 1)
+    );
+  
+    const month = Math.min(
+      12,
+      Math.max(1, Number(yearlyMonth.value) || 1)
+    );
+  
+    const monthNames = [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December"
+    ];
+  
+    text = interval === 1
+      ? `Every year on the ${day}${getOrdinal(day)} of ${monthNames[month - 1]}`
+      : `Every ${interval} years on the ${day}${getOrdinal(day)} of ${monthNames[month - 1]}`;
+  
+  }
+
 
   // TIMES -----------------------------------------------------------
 
@@ -382,8 +426,14 @@ function getRoutineData() {
     weekdays: getSelectedWeekdays(),
 
     monthlyDay:
-      routineUnit.value === "months"
+      routineUnit.value === "months" ||
+      routineUnit.value === "years"
         ? Number(monthlyDay.value)
+        : null,
+    
+    yearlyMonth:
+      routineUnit.value === "years"
+        ? Number(yearlyMonth.value)
         : null,
 
     startDate:
@@ -553,6 +603,8 @@ export function initRoutines() {
   routineInterval.addEventListener("input", updateRoutinePreview);
 
   monthlyDay.addEventListener("input", updateRoutinePreview);
+  
+  yearlyMonth.addEventListener("input", updateRoutinePreview);
 
   routineStart.addEventListener("change", updateRoutinePreview);
 
@@ -611,6 +663,36 @@ function getRoutineFrequencyText(routine) {
     return interval === 1
       ? `Ogni mese · giorno ${day}`
       : `Ogni ${interval} mesi · giorno ${day}`;
+  }
+
+
+  
+  if (routine.unit === "years") {
+  
+    const day =
+      routine.monthlyDay || 1;
+  
+    const month =
+      routine.yearlyMonth || 1;
+  
+    const monthNames = [
+      "gennaio",
+      "febbraio",
+      "marzo",
+      "aprile",
+      "maggio",
+      "giugno",
+      "luglio",
+      "agosto",
+      "settembre",
+      "ottobre",
+      "novembre",
+      "dicembre"
+    ];
+  
+    return interval === 1
+      ? `Ogni anno · ${day} ${monthNames[month - 1]}`
+      : `Ogni ${interval} anni · ${day} ${monthNames[month - 1]}`;
   }
 
   return "";
