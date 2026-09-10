@@ -13,6 +13,7 @@ const routineModalBackdrop = document.getElementById("routine-modal-backdrop");
 const closeRoutineModalButton = document.getElementById("close-routine-modal");
 
 const deleteRoutineButton = document.getElementById("delete-routine");
+const routineSubmitButton = routineForm.querySelector('button[type="submit"]');
 
 const routineForm = document.getElementById("routine-form");
 const routineName = document.getElementById("routine-name");
@@ -71,6 +72,7 @@ export function openRoutineModal() {
   editingRoutineId = null;
 
   deleteRoutineButton.hidden = true;
+  routineSubmitButton.textContent = "Add";
 
   routineForm.reset();
   routineTimes.innerHTML = "";
@@ -97,6 +99,7 @@ function openRoutineEditModal(routineId, routine) {
 
   editingRoutineId = routineId;
   deleteRoutineButton.hidden = false;
+  routineSubmitButton.textContent = "Edit";
 
   routineName.value = routine.name || "";
   routineInterval.value = routine.interval || 1;
