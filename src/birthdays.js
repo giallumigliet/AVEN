@@ -27,6 +27,7 @@ const birthdayModal = document.getElementById("birthday-modal");
 const birthdayModalBackdrop = document.getElementById("birthday-modal-backdrop");
 const closeBirthdayModalButton = document.getElementById("close-birthday-modal");
 const deleteBirthdayButton = document.getElementById("delete-birthday");
+const birthdaySubmitButton = birthdayForm.querySelector('button[type="submit"]');
 
 const birthdayForm = document.getElementById("birthday-form");
 const birthdayName = document.getElementById("birthday-name");
@@ -45,6 +46,7 @@ export function openBirthdayModal() {
   editingBirthdayId = null;
 
   deleteBirthdayButton.hidden = true;
+  birthdaySubmitButton.textContent = "Add";
 
   birthdayForm.reset();
 
@@ -70,6 +72,7 @@ function openBirthdayEditModal(
   editingBirthdayId = birthdayId;
 
   deleteBirthdayButton.hidden = false;
+  birthdaySubmitButton.textContent = "Edit";
 
   birthdayName.value = birthday.name || "";
   birthdayDay.value = birthday.day || "";
