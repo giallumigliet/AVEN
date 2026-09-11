@@ -521,6 +521,9 @@ function renderTodosList(todos) {
         );
       }
     );
+
+    todosList.appendChild(item);
+  });
 }
 
 
