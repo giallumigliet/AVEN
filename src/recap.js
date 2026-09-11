@@ -97,7 +97,7 @@ function updateRecap() {
   const parts = [];
 
 
-  // CALENDAR =====================================================
+  // CALENDARIO =====================================================
 
   if (calendarEvents.length > 0) {
 
@@ -116,7 +116,7 @@ function updateRecap() {
     if (eventNames.length > 0) {
 
       parts.push(
-        `You have ${joinNames(eventNames)} on your calendar.`
+        `Oggi hai ${joinNames(eventNames)} nel calendario.`
       );
 
     }
@@ -124,7 +124,7 @@ function updateRecap() {
   }
 
 
-  // ROUTINES =====================================================
+  // ROUTINE ========================================================
 
   const today =
     getTodayDate();
@@ -161,15 +161,15 @@ function updateRecap() {
     parts.push(
       `${routineText} ${
         todaysRoutines.length === 1
-          ? "routine is"
-          : "routines are"
-      } scheduled.`
+          ? "è in programma"
+          : "sono in programma"
+      } oggi.`
     );
 
   }
 
 
-  // BIRTHDAYS ====================================================
+  // COMPLEANNI ====================================================
 
   const todaysBirthdays =
     birthdays
@@ -194,17 +194,15 @@ function updateRecap() {
     if (todaysBirthdays.length === 1) {
 
       parts.push(
-        `It's also ${todaysBirthdays[0]}'s birthday.`
+        `Oggi è anche il compleanno di ${todaysBirthdays[0]}.`
       );
 
     } else {
 
       parts.push(
-        `It's also ${
+        `Oggi è anche il compleanno di ${joinNames(
           todaysBirthdays
-            .map(name => `${name}'s`)
-            .join(" and ")
-        } birthdays.`
+        )}.`
       );
 
     }
@@ -212,7 +210,7 @@ function updateRecap() {
   }
 
 
-  // TODOS ========================================================
+  // TODO ==========================================================
 
   const remainingTodos =
     todos.filter(todo =>
@@ -224,25 +222,24 @@ function updateRecap() {
   if (remainingTodos > 0) {
 
     parts.push(
-      `You still have ${remainingTodos} ${
+      `Ti ${
         remainingTodos === 1
-          ? "todo"
-          : "todos"
-      } left for today.`
+          ? "rimane ancora 1 todo"
+          : `rimangono ancora ${remainingTodos} todo`
+      } da completare oggi.`
     );
 
   }
 
 
-  // EMPTY ========================================================
+  // NIENTE ========================================================
 
   dailyRecap.textContent =
     parts.length > 0
       ? parts.join(" ")
-      : "Your day is clear.";
+      : "La tua giornata è libera.";
 
 }
-
 
 function listenToTodos(user) {
 
