@@ -889,6 +889,7 @@ async function toggleTodoPlanningMode() {
   renderTodosList(
     latestTodos
   );
+  closeTodosPanel();
 }
 
 
