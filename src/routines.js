@@ -1249,18 +1249,17 @@ function renderRoutinesList(routines) {
         <div class="routine-list-frequency"></div>
       </div>
     
-      ${
-        category && selectedRoutineCategory === "all"
-          ? `
-            <div class="routine-list-category">
-              <span class="routine-list-countdown">
-                ${getRoutineDaysUntilNext(routine)}d
-              </span>
-              <span>${category.icon}</span>
-            </div>
-          `
-          : ""
-      }
+      <div class="routine-list-category">
+        <span class="routine-list-countdown">
+          ${getRoutineDaysUntilNext(routine)}d
+        </span>
+      
+        ${
+          category && selectedRoutineCategory === "all"
+            ? `<span>${category.icon}</span>`
+            : ""
+        }
+      </div>
     
       <label class="routine-switch">
         <input
