@@ -8,11 +8,15 @@ import {
   onSnapshot,
   doc,
   updateDoc,
-  deleteDoc
+  deleteDoc,
+  setDoc,  
+  getDoc
 } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
 
 
+
 // ELEMENTS ------------------
+const todoPlannerButton = document.getElementById("todo-planner-button");
 const todosSidebar = document.getElementById("to-do-sidebar");
 const todosPanel = document.getElementById("todos-panel");
 const closeTodosPanelButton = document.getElementById("close-todos-panel");
@@ -33,6 +37,10 @@ let selectedTodoCategory = "all";
 let editingTodoId = null;
 let todoFormCategory = "";
 let todosUnsubscribe = null;
+
+let todoPlanningMode = false;
+let todoPlanningSelection = new Set();
+let latestTodos = [];
 
 
 const TODO_CATEGORIES = [
@@ -390,7 +398,6 @@ async function deleteTodo() {
 
 
 
-
 function renderTodos(snapshot) {
   const todos = [];
 
@@ -401,65 +408,105 @@ function renderTodos(snapshot) {
     });
   });
 
+  latestTodos = todos;
+
   renderTodoCategories(todos);
   renderTodosList(todos);
 }
 
 
 
+
+
 function renderTodosList(todos) {
+
   todosList.innerHTML = "";
 
   const filteredTodos =
     selectedTodoCategory === "all"
       ? todos
       : todos.filter(
-          (todo) =>
-            todo.category === selectedTodoCategory
+          todo =>
+            todo.category ===
+            selectedTodoCategory
         );
 
-  if (filteredTodos.length === 0) {
+  const visibleTodos =
+    todoPlanningMode
+      ? filteredTodos.filter(
+          todo => !todo.completed
+        )
+      : filteredTodos;
+
+  if (visibleTodos.length === 0) {
+
     todosList.innerHTML = `
       <div class="todos-empty">
         <span>Nessun to do</span>
-        <small>Nessun to do in questa categoria</small>
+
+        <small>
+          ${
+            todoPlanningMode
+              ? "Nessun to do da pianificare"
+              : "Nessun to do in questa categoria"
+          }
+        </small>
       </div>
     `;
+
     return;
   }
 
-  filteredTodos.sort((a, b) =>
-    Number(a.completed) - Number(b.completed)
-  );
+  if (!todoPlanningMode) {
 
-  filteredTodos.forEach((todo) => {
+    visibleTodos.sort(
+      (a, b) =>
+        Number(a.completed) -
+        Number(b.completed)
+    );
+
+  }
+
+  visibleTodos.forEach((todo) => {
 
     const item =
       document.createElement("div");
 
-    item.dataset.todoId = todo.id;
+    item.dataset.todoId =
+      todo.id;
 
     item.className =
       `todo-list-item ${
         todo.completed
           ? "completed"
           : ""
+      } ${
+        todoPlanningMode &&
+        todoPlanningSelection.has(todo.id)
+          ? "todo-planning-selected"
+          : ""
       }`;
 
     const category =
       TODO_CATEGORIES.find(
-        (category) =>
+        category =>
           category.id === todo.category
       );
 
     item.innerHTML = `
-      <label class="todo-check">
-        <input
-          type="checkbox"
-          ${todo.completed ? "checked" : ""}
-        >
-        <span></span>
-      </label>
+      ${
+        todoPlanningMode
+          ? ""
+          : `
+            <label class="todo-check">
+              <input
+                type="checkbox"
+                ${todo.completed ? "checked" : ""}
+              >
+              <span></span>
+            </label>
+          `
+      }
 
       <div class="todo-list-text"></div>
 
@@ -480,48 +527,145 @@ function renderTodosList(todos) {
     ).textContent =
       todo.text || "";
 
-    const checkbox =
-      item.querySelector(
-        ".todo-check input"
+    // -----------------------------------------------------
+    // NORMAL MODE
+    // -----------------------------------------------------
+
+    if (!todoPlanningMode) {
+
+      const checkbox =
+        item.querySelector(
+          ".todo-check input"
+        );
+
+      checkbox.addEventListener(
+        "click",
+        event => {
+          event.stopPropagation();
+        }
       );
 
-    checkbox.addEventListener(
-      "click",
-      (event) => {
-        event.stopPropagation();
-      }
-    );
+      checkbox.addEventListener(
+        "change",
+        () => {
 
-    checkbox.addEventListener(
-      "change",
-      () => {
-        updateTodoCompleted(
-          todo.id,
-          checkbox.checked
-        );
-      }
-    );
+          const completed =
+            checkbox.checked;
 
-    item.addEventListener(
-      "click",
-      (event) => {
+          item.classList.toggle(
+            "completed",
+            completed
+          );
 
-        if (
-          event.target.closest(
-            ".todo-check"
-          )
-        ) {
-          return;
+          if (completed) {
+
+            todosList.appendChild(
+              item
+            );
+
+          } else {
+
+            const firstCompleted =
+              [
+                ...todosList.querySelectorAll(
+                  ".todo-list-item"
+                )
+              ].find(
+                element =>
+                  element.classList.contains(
+                    "completed"
+                  )
+              );
+
+            if (firstCompleted) {
+
+              todosList.insertBefore(
+                item,
+                firstCompleted
+              );
+
+            } else {
+
+              todosList.appendChild(
+                item
+              );
+
+            }
+
+          }
+
+          updateTodoCompleted(
+            todo.id,
+            completed
+          );
+
         }
+      );
 
-        openTodoEditModal(
-          todo.id,
-          todo
-        );
-      }
-    );
+      item.addEventListener(
+        "click",
+        event => {
+
+          if (
+            event.target.closest(
+              ".todo-check"
+            )
+          ) {
+            return;
+          }
+
+          openTodoEditModal(
+            todo.id,
+            todo
+          );
+
+        }
+      );
+
+    }
+
+    // -----------------------------------------------------
+    // PLANNING MODE
+    // -----------------------------------------------------
+
+    else {
+
+      item.addEventListener(
+        "click",
+        () => {
+
+          if (
+            todoPlanningSelection.has(
+              todo.id
+            )
+          ) {
+
+            todoPlanningSelection.delete(
+              todo.id
+            );
+
+          } else {
+
+            todoPlanningSelection.add(
+              todo.id
+            );
+
+          }
+
+          item.classList.toggle(
+            "todo-planning-selected",
+            todoPlanningSelection.has(
+              todo.id
+            )
+          );
+
+        }
+      );
+
+    }
 
     todosList.appendChild(item);
+
   });
 }
 
@@ -608,6 +752,151 @@ async function updateTodoCompleted(
 
 
 
+
+
+function getTodayKey() {
+
+  const today = new Date();
+
+  const year =
+    today.getFullYear();
+
+  const month =
+    String(
+      today.getMonth() + 1
+    ).padStart(2, "0");
+
+  const day =
+    String(
+      today.getDate()
+    ).padStart(2, "0");
+
+  return `${year}-${month}-${day}`;
+}
+
+
+
+
+
+
+async function saveTodoPlanningSelection() {
+
+  const user = auth.currentUser;
+
+  if (!user) {
+    return;
+  }
+
+  const plannerRef = doc(
+    db,
+    "users",
+    user.uid,
+    "dailyPlanner",
+    getTodayKey()
+  );
+
+  await setDoc(
+    plannerRef,
+    {
+      todoIds: [
+        ...todoPlanningSelection
+      ]
+    },
+    {
+      merge: true
+    }
+  );
+}
+
+
+
+
+
+
+
+async function toggleTodoPlanningMode() {
+
+  if (!todoPlanningMode) {
+
+    todoPlanningSelection.clear();
+
+    try {
+
+      const user =
+        auth.currentUser;
+
+      if (user) {
+
+        const plannerRef =
+          doc(
+            db,
+            "users",
+            user.uid,
+            "dailyPlanner",
+            getTodayKey()
+          );
+
+        const snapshot =
+          await getDoc(
+            plannerRef
+          );
+
+        if (snapshot.exists()) {
+
+          todoPlanningSelection =
+            new Set(
+              snapshot.data().todoIds || []
+            );
+
+        }
+
+      }
+
+    } catch (error) {
+
+      console.error(
+        "Error loading today's plan:",
+        error
+      );
+
+    }
+
+    todoPlanningMode = true;
+
+    renderTodosList(
+      latestTodos
+    );
+
+    return;
+  }
+
+  try {
+
+    await saveTodoPlanningSelection();
+
+  } catch (error) {
+
+    console.error(
+      "Error saving today's plan:",
+      error
+    );
+
+  }
+
+  todoPlanningMode = false;
+  todoPlanningSelection.clear();
+
+  renderTodosList(
+    latestTodos
+  );
+}
+
+
+
+
+
+
+
 function listenToTodos() {
 
   const user = auth.currentUser;
@@ -655,10 +944,42 @@ function openTodosPanel() {
   todosSidebar.classList.add("active");
 }
 
-function closeTodosPanel() {
 
-  todosPanel.classList.remove("open");
-  todosSidebar.classList.remove("active");
+
+
+
+async function closeTodosPanel() {
+
+  if (todoPlanningMode) {
+
+    try {
+
+      await saveTodoPlanningSelection();
+
+    } catch (error) {
+
+      console.error(
+        "Error saving today's plan:",
+        error
+      );
+
+    }
+
+    todoPlanningMode = false;
+    todoPlanningSelection.clear();
+  }
+
+  todosPanel.classList.remove(
+    "open"
+  );
+
+  todosSidebar.classList.remove(
+    "active"
+  );
+
+  renderTodosList(
+    latestTodos
+  );
 }
 
 
@@ -704,6 +1025,11 @@ export function initTodos() {
   deleteTodoButton.addEventListener(
     "click",
     deleteTodo
+  );
+
+  todoPlannerButton.addEventListener(
+    "click",
+    toggleTodoPlanningMode
   );
 
   todoForm.addEventListener(
