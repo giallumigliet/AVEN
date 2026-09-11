@@ -868,7 +868,7 @@ function renderRoutineCategories(routines) {
 
 
 
-function getRoutineDaysUntilNext(routine) {
+export function getRoutineDaysUntilNext(routine) {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
@@ -1400,5 +1400,8 @@ function closeRoutinesPanel() {
   routinesPanel.classList.remove("open");
   routinesSidebar.classList.remove("active");
 }
+
+
+
 
 
