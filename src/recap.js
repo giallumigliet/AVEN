@@ -79,7 +79,7 @@ function joinNames(names) {
   }
 
   if (names.length === 2) {
-    return `${names[0]} and ${names[1]}`;
+    return `${names[0]} e ${names[1]}`;
   }
 
   const last =
@@ -87,7 +87,7 @@ function joinNames(names) {
 
   return `${names
     .slice(0, -1)
-    .join(", ")}, and ${last}`;
+    .join(", ")}, e ${last}`;
 
 }
 
@@ -116,7 +116,7 @@ function updateRecap() {
     if (eventNames.length > 0) {
 
       parts.push(
-        `Oggi hai ${joinNames(eventNames)} nel calendario.`
+        `Hai ${joinNames(eventNames)} nel calendario.`
       );
 
     }
@@ -161,9 +161,9 @@ function updateRecap() {
     parts.push(
       `${routineText} ${
         todaysRoutines.length === 1
-          ? "è in programma"
-          : "sono in programma"
-      } oggi.`
+          ? "è in programma."
+          : "sono in programma."
+      }`
     );
 
   }
@@ -194,15 +194,15 @@ function updateRecap() {
     if (todaysBirthdays.length === 1) {
 
       parts.push(
-        `Oggi è anche il compleanno di ${todaysBirthdays[0]}.`
+        `È il compleanno di ${todaysBirthdays[0]}!`
       );
 
     } else {
 
       parts.push(
-        `Oggi è anche il compleanno di ${joinNames(
+        `È il compleanno di ${joinNames(
           todaysBirthdays
-        )}.`
+        )}!`
       );
 
     }
