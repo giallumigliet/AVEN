@@ -124,6 +124,39 @@ async function saveTodayPlan() {
 }
 
 
+
+
+function getCategoryIcon(categoryId) {
+  const categories = {
+    money: "💰",
+    home: "🏠",
+    shopping: "🛒",
+    presents: "🎁",
+    people: "👨‍👩‍👧",
+    training: "🏋️",
+    work: "💼",
+    freeTime: "🎨",
+    car: "🚗",
+    travel: "✈️",
+    health: "❤️",
+    study: "📚",
+    pets: "🐾",
+    tech: "💻"
+  };
+
+  return categories[categoryId]
+    ? `
+      <div class="daily-planner-category">
+        ${categories[categoryId]}
+      </div>
+    `
+    : "";
+}
+
+
+
+
+
 function renderDailyPlanner() {
   const plannedTodos =
     todos.filter(todo =>
@@ -188,13 +221,7 @@ function renderDailyPlanner() {
       <div class="daily-planner-text"></div>
 
       ${
-        todo.categoryIcon
-          ? `
-            <div class="daily-planner-category">
-              ${todo.categoryIcon}
-            </div>
-          `
-          : ""
+        getCategoryIcon(todo.category)
       }
     `;
 
