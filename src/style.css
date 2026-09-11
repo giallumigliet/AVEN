@@ -2447,7 +2447,7 @@ main {
 .panel-label {
   color: var(--color-accent);
 
-  font-size: 10px;
+  font-size: 14px;
   font-weight: 600;
 
   letter-spacing: 1.5px;
