@@ -178,9 +178,6 @@ function updateRecap() {
 
   // CALENDARIO ===================================================
 
-  const calendarParts = [];
-
-
   if (calendarEvents.length > 0) {
 
     const eventNames =
@@ -198,7 +195,7 @@ function updateRecap() {
 
     if (eventNames.length > 0) {
 
-      calendarParts.push(
+      sections.push(
         `Oggi hai ${joinNames(eventNames)} in calendario.`
       );
 
@@ -233,24 +230,16 @@ function updateRecap() {
 
   if (todaysRoutines.length > 0) {
 
-    calendarParts.push(
-      `Sono previste ${
+    sections.push(
+      `${
         todaysRoutines.length === 1
-          ? "la routine"
-          : "le routine"
+          ? "È prevista la routine"
+          : "Sono previste le routine"
       } ${joinNames(todaysRoutines)}.`
     );
 
   }
 
-
-  if (calendarParts.length > 0) {
-
-    sections.push(
-      calendarParts.join(" ")
-    );
-
-  }
 
 
   // TODO =========================================================
