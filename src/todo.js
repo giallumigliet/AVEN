@@ -415,6 +415,9 @@ function renderTodos(snapshot) {
 
 
 function renderTodosList(todos) {
+  // 1. Salva la posizione di scroll attuale (del contenitore o del pannello)
+  const scrollContainer = todosList.closest('.todos-panel-content') || todosList; // Adatta se il contenitore scrollabile è un altro
+  const currentScroll = scrollContainer.scrollTop;
 
   todosList.innerHTML = "";
 
@@ -422,24 +425,18 @@ function renderTodosList(todos) {
     selectedTodoCategory === "all"
       ? todos
       : todos.filter(
-          todo =>
-            todo.category ===
-            selectedTodoCategory
+          todo => todo.category === selectedTodoCategory
         );
 
   const visibleTodos =
     todoPlanningMode
-      ? filteredTodos.filter(
-          todo => !todo.completed
-        )
+      ? filteredTodos.filter(todo => !todo.completed)
       : filteredTodos;
 
   if (visibleTodos.length === 0) {
-
     todosList.innerHTML = `
       <div class="todos-empty">
         <span>Nessun to do</span>
-
         <small>
           ${
             todoPlanningMode
@@ -449,21 +446,26 @@ function renderTodosList(todos) {
         </small>
       </div>
     `;
-
     return;
   }
 
   if (!todoPlanningMode) {
-
-    visibleTodos.sort(
-      (a, b) =>
-        Number(a.completed) -
-        Number(b.completed)
-    );
-
+    // 2. Aggiungi un ordinamento secondario (es. per data di creazione)
+    visibleTodos.sort((a, b) => {
+      // Prima ordina per stato (completati in basso)
+      if (a.completed !== b.completed) {
+        return Number(a.completed) - Number(b.completed);
+      }
+      
+      // Poi ordina per data di creazione (i più recenti in alto)
+      const timeA = a.createdAt?.seconds || 0;
+      const timeB = b.createdAt?.seconds || 0;
+      return timeB - timeA; 
+    });
   }
 
   visibleTodos.forEach((todo) => {
+      // ... resto del codice identico (creazione dell'elemento 'item', ecc.)  
 
     const item =
       document.createElement("div");
@@ -663,6 +665,11 @@ function renderTodosList(todos) {
     todosList.appendChild(item);
 
   });
+
+  requestAnimationFrame(() => {
+    scrollContainer.scrollTop = currentScroll;
+  });
+}
 }
 
 
