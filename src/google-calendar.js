@@ -2,11 +2,6 @@
 
 import { auth } from "./firebase.js";
 
-import {
-  GoogleAuthProvider,
-  reauthenticateWithPopup
-} from "https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js";
-
 
 const CALENDAR_SCOPE =
   "https://www.googleapis.com/auth/calendar.events.readonly";
@@ -14,7 +9,8 @@ const CALENDAR_SCOPE =
 
 function getTodayRange() {
 
-  const now = new Date();
+  const now =
+    new Date();
 
   const start =
     new Date(
@@ -39,8 +35,11 @@ function getTodayRange() {
     );
 
   return {
-    timeMin: start.toISOString(),
-    timeMax: end.toISOString()
+    timeMin:
+      start.toISOString(),
+
+    timeMax:
+      end.toISOString()
   };
 
 }
@@ -56,60 +55,42 @@ export async function getTodayCalendarEvents() {
   }
 
 
-  const provider =
-    new GoogleAuthProvider();
+  const accessToken =
+    sessionStorage.getItem(
+      "aven-google-access-token"
+    );
 
-  provider.addScope(
-    CALENDAR_SCOPE
-  );
+
+  if (!accessToken) {
+
+    console.warn(
+      "Google Calendar is not authorized."
+    );
+
+    return [];
+
+  }
+
+
+  const {
+    timeMin,
+    timeMax
+  } =
+    getTodayRange();
+
+
+  const params =
+    new URLSearchParams({
+      calendarId: "primary",
+      timeMin,
+      timeMax,
+      singleEvents: "true",
+      orderBy: "startTime",
+      showDeleted: "false"
+    });
 
 
   try {
-
-    const result =
-      await reauthenticateWithPopup(
-        user,
-        provider
-      );
-
-
-    const credential =
-      GoogleAuthProvider
-        .credentialFromResult(
-          result
-        );
-
-
-    const accessToken =
-      credential?.accessToken;
-
-
-    if (!accessToken) {
-
-      throw new Error(
-        "Google Calendar authorization failed."
-      );
-
-    }
-
-
-    const {
-      timeMin,
-      timeMax
-    } =
-      getTodayRange();
-
-
-    const params =
-      new URLSearchParams({
-        calendarId: "primary",
-        timeMin,
-        timeMax,
-        singleEvents: "true",
-        orderBy: "startTime",
-        showDeleted: "false"
-      });
-
 
     const response =
       await fetch(
@@ -121,6 +102,21 @@ export async function getTodayCalendarEvents() {
           }
         }
       );
+
+
+    if (response.status === 401) {
+
+      sessionStorage.removeItem(
+        "aven-google-access-token"
+      );
+
+      console.warn(
+        "Google Calendar access token expired."
+      );
+
+      return [];
+
+    }
 
 
     if (!response.ok) {
@@ -159,8 +155,9 @@ export async function getTodayCalendarEvents() {
           null,
 
         allDay:
-          Boolean(event.start?.date)
-
+          Boolean(
+            event.start?.date
+          )
       }));
 
 
@@ -171,7 +168,7 @@ export async function getTodayCalendarEvents() {
       error
     );
 
-    throw error;
+    return [];
 
   }
 
