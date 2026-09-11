@@ -24,6 +24,7 @@ import { initDailyPlanner } from "./daily-planner.js";
 import { initRoutines, openRoutineModal } from "./routines.js";
 import { initBirthdays, openBirthdayModal } from "./birthdays.js";
 import { isHealthKitAvailable, requestHealthPermission, getTodayHealth } from "./health.js";
+import { initRecap } from "./recap.js";
 
 // ELEMENTS =========================================================
 
@@ -407,6 +408,11 @@ initTodos();
 
 // DAILY PLANNER =================================================
 initDailyPlanner();
+
+// DAILY RECAP ===================================================
+initRecap();
+
+
 
 // WEATHER =========================================================
 const weatherButton = document.getElementById("weather-button");
