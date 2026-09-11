@@ -120,11 +120,22 @@ export async function getTodayCalendarEvents() {
 
 
     if (!response.ok) {
-
-      throw new Error(
-        `Google Calendar error: ${response.status}`
+      const errorData =
+        await response.json().catch(
+          () => null
+        );
+    
+      console.error(
+        "Google Calendar API error:",
+        errorData
       );
-
+    
+      throw new Error(
+        `Google Calendar error: ${response.status} ${
+          errorData?.error?.message || ""
+        }`
+      );
+    
     }
 
 
