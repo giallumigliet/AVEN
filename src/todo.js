@@ -86,6 +86,7 @@ function openTodoEditModal(todoId, todo) {
   editingTodoId = todoId;
 
   todoText.value = todo.text || "";
+  todoText.style.height = "23px";
   todoFormCategory = todo.category || "";
 
   deleteTodoButton.hidden = false;
@@ -407,9 +408,9 @@ function renderTodos(snapshot) {
 
 
 
-
-
 function renderTodosList(todos) {
+  todosList.innerHTML = "";
+
   const filteredTodos =
     selectedTodoCategory === "all"
       ? todos
@@ -428,146 +429,99 @@ function renderTodosList(todos) {
     return;
   }
 
-  filteredTodos.sort(
-    (a, b) =>
-      Number(a.completed) - Number(b.completed)
+  filteredTodos.sort((a, b) =>
+    Number(a.completed) - Number(b.completed)
   );
 
-  const currentItems = new Map(
-    [...todosList.querySelectorAll(".todo-list-item")]
-      .map((item) => [
-        item.dataset.todoId,
-        item
-      ])
-  );
+  filteredTodos.forEach((todo) => {
 
-  const currentIds = new Set(
-    filteredTodos.map((todo) => todo.id)
-  );
+    const item =
+      document.createElement("div");
 
-  // Rimuove solo i TODO che non esistono più
-  currentItems.forEach((item, id) => {
-    if (!currentIds.has(id)) {
-      item.remove();
-    }
-  });
+    item.dataset.todoId = todo.id;
 
-  filteredTodos.forEach((todo, index) => {
-    let item = currentItems.get(todo.id);
+    item.className =
+      `todo-list-item ${
+        todo.completed
+          ? "completed"
+          : ""
+      }`;
 
-    // Crea il nodo solo se non esiste
-    if (!item) {
-      item = createTodoItem(todo);
-      currentItems.set(todo.id, item);
-    }
-
-    // Aggiorna solo lo stato
-    item.classList.toggle(
-      "completed",
-      !!todo.completed
-    );
-
-    const checkbox =
-      item.querySelector(
-        ".todo-check input"
+    const category =
+      TODO_CATEGORIES.find(
+        (category) =>
+          category.id === todo.category
       );
 
-    checkbox.checked = !!todo.completed;
+    item.innerHTML = `
+      <label class="todo-check">
+        <input
+          type="checkbox"
+          ${todo.completed ? "checked" : ""}
+        >
+        <span></span>
+      </label>
+
+      <div class="todo-list-text"></div>
+
+      ${
+        category &&
+        selectedTodoCategory === "all"
+          ? `
+            <div class="todo-list-category">
+              ${category.icon}
+            </div>
+          `
+          : ""
+      }
+    `;
 
     item.querySelector(
       ".todo-list-text"
     ).textContent =
       todo.text || "";
 
-    // Sposta il nodo SOLO se non è già nella posizione corretta
-    const currentItem =
-      todosList.children[index];
-
-    if (currentItem !== item) {
-      todosList.insertBefore(
-        item,
-        currentItem || null
+    const checkbox =
+      item.querySelector(
+        ".todo-check input"
       );
-    }
-  });
-}
 
-
-function createTodoItem(todo) {
-  const item =
-    document.createElement("div");
-
-  item.dataset.todoId = todo.id;
-
-  item.className =
-    `todo-list-item ${
-      todo.completed
-        ? "completed"
-        : ""
-    }`;
-
-  item.innerHTML = `
-    <label class="todo-check">
-      <input
-        type="checkbox"
-        ${todo.completed ? "checked" : ""}
-      >
-      <span></span>
-    </label>
-
-    <div class="todo-list-text"></div>
-
-    <div class="todo-list-category"></div>
-  `;
-
-  item.querySelector(
-    ".todo-list-text"
-  ).textContent =
-    todo.text || "";
-
-  const checkbox =
-    item.querySelector(
-      ".todo-check input"
+    checkbox.addEventListener(
+      "click",
+      (event) => {
+        event.stopPropagation();
+      }
     );
 
-  checkbox.addEventListener(
-    "click",
-    (event) => {
-      event.stopPropagation();
-    }
-  );
-
-  checkbox.addEventListener(
-    "change",
-    () => {
-      updateTodoCompleted(
-        todo.id,
-        checkbox.checked
-      );
-    }
-  );
-
-  item.addEventListener(
-    "click",
-    (event) => {
-      if (
-        event.target.closest(
-          ".todo-check"
-        )
-      ) {
-        return;
+    checkbox.addEventListener(
+      "change",
+      () => {
+        updateTodoCompleted(
+          todo.id,
+          checkbox.checked
+        );
       }
+    );
 
-      openTodoEditModal(
-        todo.id,
-        todo
-      );
-    }
-  );
+    item.addEventListener(
+      "click",
+      (event) => {
 
-  return item;
+        if (
+          event.target.closest(
+            ".todo-check"
+          )
+        ) {
+          return;
+        }
+
+        openTodoEditModal(
+          todo.id,
+          todo
+        );
+      }
+    );
 }
-
 
 
 // SUBMIT -------------------------------
@@ -762,5 +716,4 @@ export function initTodos() {
 
   renderTodoCategoryPicker();
 }
-
 
