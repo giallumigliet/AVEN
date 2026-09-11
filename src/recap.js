@@ -288,7 +288,7 @@ function updateRecap() {
 
 
   dailyRecap.textContent =
-    sections.join("\n\n");
+    sections.join("\n");
 
 }
 
