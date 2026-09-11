@@ -16,6 +16,10 @@ import {
   getRoutineDaysUntilNext
 } from "./routines.js";
 
+import {
+  getTodayCalendarEvents
+} from "./google-calendar.js";
+
 
 const dailyRecap =
   document.getElementById("daily-recap");
@@ -32,6 +36,29 @@ let todosUnsubscribe = null;
 let plannerUnsubscribe = null;
 let routinesUnsubscribe = null;
 let birthdaysUnsubscribe = null;
+
+
+
+
+
+async function loadCalendarEvents() {
+
+  try {
+    const events =
+      await getTodayCalendarEvents();
+
+    setRecapEvents(events);
+
+  } catch (error) {
+
+    console.error(
+      "Error loading calendar events:",
+      error
+    );
+  }
+}
+
+
 
 
 function getTodayKey() {
@@ -482,6 +509,7 @@ export function initRecap() {
       listenToPlanner(user);
       listenToRoutines(user);
       listenToBirthdays(user);
+      loadCalendarEvents();
 
     }
   );
