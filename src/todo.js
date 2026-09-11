@@ -196,18 +196,14 @@ function renderTodoCategories(todos) {
 
 
   todos.forEach((todo) => {
-
-    if (todo.category) {
-
+    // Conta solo i todo NON completati
+    if (todo.category && !todo.completed) {
+  
       counts[todo.category] =
         (counts[todo.category] || 0) + 1;
-
     }
-
   });
-
-
-  const allCount = todos.length;
+  const allCount = todos.filter(todo => !todo.completed).length;
 
 
   const sortedCategories =
