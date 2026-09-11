@@ -1,12 +1,20 @@
 // recap.js
+
 import { auth, db } from "./firebase.js";
 
 import {
   collection,
   doc,
-  onSnapshot,
-  getDoc
+  onSnapshot
 } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
+
+import {
+  onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js";
+
+import {
+  getRoutineDaysUntilNext
+} from "./routines.js";
 
 
 const dailyRecap =
@@ -15,9 +23,15 @@ const dailyRecap =
 
 let todos = [];
 let plannedTodoIds = new Set();
+let routines = [];
+let birthdays = [];
+let calendarEvents = [];
+
 
 let todosUnsubscribe = null;
 let plannerUnsubscribe = null;
+let routinesUnsubscribe = null;
+let birthdaysUnsubscribe = null;
 
 
 function getTodayKey() {
@@ -38,54 +52,194 @@ function getTodayKey() {
     ).padStart(2, "0");
 
   return `${year}-${month}-${day}`;
+
+}
+
+
+function getTodayDate() {
+
+  const today = new Date();
+
+  today.setHours(
+    0,
+    0,
+    0,
+    0
+  );
+
+  return today;
+
+}
+
+
+function joinNames(names) {
+
+  if (names.length === 1) {
+    return names[0];
+  }
+
+  if (names.length === 2) {
+    return `${names[0]} and ${names[1]}`;
+  }
+
+  const last =
+    names[names.length - 1];
+
+  return `${names
+    .slice(0, -1)
+    .join(", ")}, and ${last}`;
+
 }
 
 
 function updateRecap() {
 
-  const plannedTodos =
-    todos.filter(todo =>
-      plannedTodoIds.has(todo.id)
+  const parts = [];
+
+
+  // CALENDAR =====================================================
+
+  if (calendarEvents.length > 0) {
+
+    const eventNames =
+      calendarEvents
+        .map(event =>
+          event.summary ||
+          event.title ||
+          event.name
+        )
+        .filter(Boolean)
+        .map(name =>
+          `"${name}"`
+        );
+
+    if (eventNames.length > 0) {
+
+      parts.push(
+        `You have ${joinNames(eventNames)} on your calendar.`
+      );
+
+    }
+
+  }
+
+
+  // ROUTINES =====================================================
+
+  const today =
+    getTodayDate();
+
+  const todaysRoutines =
+    routines
+      .filter(routine => {
+
+        if (routine.enabled === false) {
+          return false;
+        }
+
+        const days =
+          getRoutineDaysUntilNext(
+            routine
+          );
+
+        return days === 0;
+
+      })
+      .map(routine =>
+        routine.name
+      )
+      .filter(Boolean);
+
+
+  if (todaysRoutines.length > 0) {
+
+    const routineText =
+      joinNames(
+        todaysRoutines
+      );
+
+    parts.push(
+      `${routineText} ${
+        todaysRoutines.length === 1
+          ? "routine is"
+          : "routines are"
+      } scheduled.`
     );
 
-  const total =
-    plannedTodos.length;
+  }
 
-  const remaining =
-    plannedTodos.filter(
-      todo => !todo.completed
+
+  // BIRTHDAYS ====================================================
+
+  const todaysBirthdays =
+    birthdays
+      .filter(birthday => {
+
+        return (
+          Number(birthday.day) ===
+            today.getDate() &&
+          Number(birthday.month) ===
+            today.getMonth() + 1
+        );
+
+      })
+      .map(birthday =>
+        birthday.name
+      )
+      .filter(Boolean);
+
+
+  if (todaysBirthdays.length > 0) {
+
+    if (todaysBirthdays.length === 1) {
+
+      parts.push(
+        `It's also ${todaysBirthdays[0]}'s birthday.`
+      );
+
+    } else {
+
+      parts.push(
+        `It's also ${
+          todaysBirthdays
+            .map(name => `${name}'s`)
+            .join(" and ")
+        } birthdays.`
+      );
+
+    }
+
+  }
+
+
+  // TODOS ========================================================
+
+  const remainingTodos =
+    todos.filter(todo =>
+      plannedTodoIds.has(todo.id) &&
+      !todo.completed
     ).length;
 
 
-  if (total === 0) {
+  if (remainingTodos > 0) {
 
-    dailyRecap.textContent =
-      "Your day is clear.";
+    parts.push(
+      `You still have ${remainingTodos} ${
+        remainingTodos === 1
+          ? "todo"
+          : "todos"
+      } left for today.`
+    );
 
-    return;
   }
 
 
-  if (remaining === 0) {
-
-    dailyRecap.textContent =
-      "Everything planned for today is done.";
-
-    return;
-  }
-
-
-  if (total === 1) {
-
-    dailyRecap.textContent =
-      "You have 1 task planned for today.";
-
-    return;
-  }
-
+  // EMPTY ========================================================
 
   dailyRecap.textContent =
-    `You have ${total} tasks planned for today, ${remaining} still to complete.`;
+    parts.length > 0
+      ? parts.join(" ")
+      : "Your day is clear.";
 
 }
 
@@ -95,6 +249,7 @@ function listenToTodos(user) {
   if (todosUnsubscribe) {
     todosUnsubscribe();
   }
+
 
   const todosRef =
     collection(
@@ -116,7 +271,8 @@ function listenToTodos(user) {
           documentSnapshot => {
 
             todos.push({
-              id: documentSnapshot.id,
+              id:
+                documentSnapshot.id,
               ...documentSnapshot.data()
             });
 
@@ -145,6 +301,7 @@ function listenToPlanner(user) {
     plannerUnsubscribe();
   }
 
+
   const plannerRef =
     doc(
       db,
@@ -160,19 +317,12 @@ function listenToPlanner(user) {
       plannerRef,
       snapshot => {
 
-        if (!snapshot.exists()) {
-
-          plannedTodoIds =
-            new Set();
-
-        } else {
-
-          plannedTodoIds =
-            new Set(
-              snapshot.data().todoIds || []
-            );
-
-        }
+        plannedTodoIds =
+          snapshot.exists()
+            ? new Set(
+                snapshot.data().todoIds || []
+              )
+            : new Set();
 
         updateRecap();
 
@@ -190,6 +340,120 @@ function listenToPlanner(user) {
 }
 
 
+function listenToRoutines(user) {
+
+  if (routinesUnsubscribe) {
+    routinesUnsubscribe();
+  }
+
+
+  const routinesRef =
+    collection(
+      db,
+      "users",
+      user.uid,
+      "routines"
+    );
+
+
+  routinesUnsubscribe =
+    onSnapshot(
+      routinesRef,
+      snapshot => {
+
+        routines = [];
+
+        snapshot.forEach(
+          documentSnapshot => {
+
+            routines.push({
+              id:
+                documentSnapshot.id,
+              ...documentSnapshot.data()
+            });
+
+          }
+        );
+
+        updateRecap();
+
+      },
+      error => {
+
+        console.error(
+          "Error loading recap routines:",
+          error
+        );
+
+      }
+    );
+
+}
+
+
+function listenToBirthdays(user) {
+
+  if (birthdaysUnsubscribe) {
+    birthdaysUnsubscribe();
+  }
+
+
+  const birthdaysRef =
+    collection(
+      db,
+      "users",
+      user.uid,
+      "birthdays"
+    );
+
+
+  birthdaysUnsubscribe =
+    onSnapshot(
+      birthdaysRef,
+      snapshot => {
+
+        birthdays = [];
+
+        snapshot.forEach(
+          documentSnapshot => {
+
+            birthdays.push({
+              id:
+                documentSnapshot.id,
+              ...documentSnapshot.data()
+            });
+
+          }
+        );
+
+        updateRecap();
+
+      },
+      error => {
+
+        console.error(
+          "Error loading recap birthdays:",
+          error
+        );
+
+      }
+    );
+
+}
+
+
+export function setRecapEvents(events) {
+
+  calendarEvents =
+    Array.isArray(events)
+      ? events
+      : [];
+
+  updateRecap();
+
+}
+
+
 export function initRecap() {
 
   if (!dailyRecap) {
@@ -197,24 +461,32 @@ export function initRecap() {
   }
 
 
-  auth.onAuthStateChanged?.(() => {});
-
-
-  const start =
-    setInterval(() => {
-
-      const user =
-        auth.currentUser;
+  onAuthStateChanged(
+    auth,
+    user => {
 
       if (!user) {
+
+        todos = [];
+        plannedTodoIds = new Set();
+        routines = [];
+        birthdays = [];
+        calendarEvents = [];
+
+        dailyRecap.textContent =
+          "Your day is clear.";
+
         return;
+
       }
 
-      clearInterval(start);
 
       listenToTodos(user);
       listenToPlanner(user);
+      listenToRoutines(user);
+      listenToBirthdays(user);
 
-    }, 300);
+    }
+  );
 
 }
