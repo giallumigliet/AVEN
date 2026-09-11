@@ -670,7 +670,7 @@ function renderTodosList(todos) {
     scrollContainer.scrollTop = currentScroll;
   });
 }
-}
+
 
 
 // SUBMIT -------------------------------
