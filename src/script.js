@@ -54,6 +54,10 @@ const navItems = document.querySelectorAll(".nav-item");
 
 const provider = new GoogleAuthProvider();
 
+provider.addScope(
+  "https://www.googleapis.com/auth/calendar.events.readonly"
+);
+
 setPersistence(auth, browserLocalPersistence).catch((err) => {
   console.error("Persistence error:", err);
 });
@@ -96,7 +100,25 @@ loginButton.addEventListener("click", async () => {
 
   try {
 
-    await signInWithPopup(auth, provider);
+    const result =
+      await signInWithPopup(
+        auth,
+        provider
+      );
+    
+    const credential =
+      GoogleAuthProvider.credentialFromResult(
+        result
+      );
+    
+    if (credential?.accessToken) {
+    
+      sessionStorage.setItem(
+        "aven-google-access-token",
+        credential.accessToken
+      );
+    
+    }
 
   } catch (err) {
 
@@ -227,7 +249,30 @@ changeAccountButton.addEventListener("click", async () => {
     closeAccountMenu();
 
     await signOut(auth);
-    await signInWithPopup(auth, provider);
+    
+    sessionStorage.removeItem(
+      "aven-google-access-token"
+    );
+    
+    const result =
+      await signInWithPopup(
+        auth,
+        provider
+      );
+    
+    const credential =
+      GoogleAuthProvider.credentialFromResult(
+        result
+      );
+    
+    if (credential?.accessToken) {
+    
+      sessionStorage.setItem(
+        "aven-google-access-token",
+        credential.accessToken
+      );
+    
+    }
 
   } catch (err) {
 
