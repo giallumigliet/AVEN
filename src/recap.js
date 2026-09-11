@@ -38,12 +38,12 @@ let routinesUnsubscribe = null;
 let birthdaysUnsubscribe = null;
 
 
-
-
+// CALENDARIO GOOGLE ==============================================
 
 async function loadCalendarEvents() {
 
   try {
+
     const events =
       await getTodayCalendarEvents();
 
@@ -55,15 +55,18 @@ async function loadCalendarEvents() {
       "Error loading calendar events:",
       error
     );
+
   }
+
 }
 
 
-
+// DATA ===========================================================
 
 function getTodayKey() {
 
-  const today = new Date();
+  const today =
+    new Date();
 
   const year =
     today.getFullYear();
@@ -85,7 +88,8 @@ function getTodayKey() {
 
 function getTodayDate() {
 
-  const today = new Date();
+  const today =
+    new Date();
 
   today.setHours(
     0,
@@ -98,6 +102,8 @@ function getTodayDate() {
 
 }
 
+
+// TESTO ==========================================================
 
 function joinNames(names) {
 
@@ -119,12 +125,61 @@ function joinNames(names) {
 }
 
 
+// RECAP ==========================================================
+
 function updateRecap() {
 
-  const parts = [];
+  const sections = [];
+
+  const today =
+    getTodayDate();
 
 
-  // CALENDARIO =====================================================
+  // COMPLEANNI ===================================================
+
+  const todaysBirthdays =
+    birthdays
+      .filter(birthday => {
+
+        return (
+          Number(birthday.day) ===
+            today.getDate() &&
+          Number(birthday.month) ===
+            today.getMonth() + 1
+        );
+
+      })
+      .map(birthday =>
+        birthday.name
+      )
+      .filter(Boolean);
+
+
+  if (todaysBirthdays.length > 0) {
+
+    if (todaysBirthdays.length === 1) {
+
+      sections.push(
+        `È il compleanno di ${todaysBirthdays[0]}!`
+      );
+
+    } else {
+
+      sections.push(
+        `È il compleanno di ${joinNames(
+          todaysBirthdays
+        )}!`
+      );
+
+    }
+
+  }
+
+
+  // CALENDARIO ===================================================
+
+  const calendarParts = [];
+
 
   if (calendarEvents.length > 0) {
 
@@ -137,13 +192,14 @@ function updateRecap() {
         )
         .filter(Boolean)
         .map(name =>
-          `"${name}"`
+          `“${name}”`
         );
+
 
     if (eventNames.length > 0) {
 
-      parts.push(
-        `Hai ${joinNames(eventNames)} nel calendario.`
+      calendarParts.push(
+        `Oggi hai ${joinNames(eventNames)} in calendario.`
       );
 
     }
@@ -151,10 +207,7 @@ function updateRecap() {
   }
 
 
-  // ROUTINE ========================================================
-
-  const today =
-    getTodayDate();
+  // ROUTINE ======================================================
 
   const todaysRoutines =
     routines
@@ -180,64 +233,27 @@ function updateRecap() {
 
   if (todaysRoutines.length > 0) {
 
-    const routineText =
-      joinNames(
-        todaysRoutines
-      );
-
-    parts.push(
-      `${routineText} ${
+    calendarParts.push(
+      `Sono previste ${
         todaysRoutines.length === 1
-          ? "è in programma."
-          : "sono in programma."
-      }`
+          ? "la routine"
+          : "le routine"
+      } ${joinNames(todaysRoutines)}.`
     );
 
   }
 
 
-  // COMPLEANNI ====================================================
+  if (calendarParts.length > 0) {
 
-  const todaysBirthdays =
-    birthdays
-      .filter(birthday => {
-
-        return (
-          Number(birthday.day) ===
-            today.getDate() &&
-          Number(birthday.month) ===
-            today.getMonth() + 1
-        );
-
-      })
-      .map(birthday =>
-        birthday.name
-      )
-      .filter(Boolean);
-
-
-  if (todaysBirthdays.length > 0) {
-
-    if (todaysBirthdays.length === 1) {
-
-      parts.push(
-        `È il compleanno di ${todaysBirthdays[0]}!`
-      );
-
-    } else {
-
-      parts.push(
-        `È il compleanno di ${joinNames(
-          todaysBirthdays
-        )}!`
-      );
-
-    }
+    sections.push(
+      calendarParts.join(" ")
+    );
 
   }
 
 
-  // TODO ==========================================================
+  // TODO =========================================================
 
   const remainingTodos =
     todos.filter(todo =>
@@ -248,25 +264,36 @@ function updateRecap() {
 
   if (remainingTodos > 0) {
 
-    parts.push(
-      `Ti ${
+    sections.push(
+      `Restano ${remainingTodos} ${
         remainingTodos === 1
-          ? "rimane ancora 1 todo"
-          : `rimangono ancora ${remainingTodos} todo`
-      } da completare oggi.`
+          ? "todo"
+          : "todo"
+      } da completare.`
     );
 
   }
 
 
-  // NIENTE ========================================================
+  // NIENTE =======================================================
+
+  if (sections.length === 0) {
+
+    dailyRecap.textContent =
+      "La tua giornata è libera.";
+
+    return;
+
+  }
+
 
   dailyRecap.textContent =
-    parts.length > 0
-      ? parts.join(" ")
-      : "La tua giornata è libera.";
+    sections.join("\n\n");
 
 }
+
+
+// TODO ============================================================
 
 function listenToTodos(user) {
 
@@ -319,6 +346,8 @@ function listenToTodos(user) {
 }
 
 
+// DAILY PLANNER ==================================================
+
 function listenToPlanner(user) {
 
   if (plannerUnsubscribe) {
@@ -363,6 +392,8 @@ function listenToPlanner(user) {
 
 }
 
+
+// ROUTINE ========================================================
 
 function listenToRoutines(user) {
 
@@ -415,6 +446,8 @@ function listenToRoutines(user) {
 }
 
 
+// COMPLEANNI ====================================================
+
 function listenToBirthdays(user) {
 
   if (birthdaysUnsubscribe) {
@@ -466,6 +499,8 @@ function listenToBirthdays(user) {
 }
 
 
+// GOOGLE CALENDAR ================================================
+
 export function setRecapEvents(events) {
 
   calendarEvents =
@@ -477,6 +512,8 @@ export function setRecapEvents(events) {
 
 }
 
+
+// INIT ===========================================================
 
 export function initRecap() {
 
@@ -492,13 +529,15 @@ export function initRecap() {
       if (!user) {
 
         todos = [];
-        plannedTodoIds = new Set();
+        plannedTodoIds =
+          new Set();
+
         routines = [];
         birthdays = [];
         calendarEvents = [];
 
         dailyRecap.textContent =
-          "Your day is clear.";
+          "La tua giornata è libera.";
 
         return;
 
@@ -509,6 +548,7 @@ export function initRecap() {
       listenToPlanner(user);
       listenToRoutines(user);
       listenToBirthdays(user);
+
       loadCalendarEvents();
 
     }
