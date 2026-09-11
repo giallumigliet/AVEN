@@ -1183,13 +1183,25 @@ function renderRoutinesList(routines) {
 
   routinesList.innerHTML = "";
 
-  const filteredRoutines =
+  const filteredRoutines = (
     selectedRoutineCategory === "all"
       ? routines
       : routines.filter(
           (routine) =>
             routine.category === selectedRoutineCategory
-        );
+        )
+  ).sort((a, b) => {
+  
+    const daysA = getRoutineDaysUntilNext(a);
+    const daysB = getRoutineDaysUntilNext(b);
+  
+    // Routine senza data valida → in fondo
+    if (daysA === "" && daysB === "") return 0;
+    if (daysA === "") return 1;
+    if (daysB === "") return -1;
+  
+    return daysA - daysB;
+  });
 
   if (filteredRoutines.length === 0) {
 
