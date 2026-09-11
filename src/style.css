@@ -1546,6 +1546,7 @@ main {
 }
 
 .todo-planner-button:hover {
+  background: rgba(100, 216, 255, 0.22);
   transform: translateY(-1px);
 }
 
