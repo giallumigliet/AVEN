@@ -20,6 +20,7 @@ import {
 } from "./weather.js";
 
 import { initTodos, openTodoModal } from "./todo.js";
+import { initDailyPlanner } from "./daily-planner.js";
 import { initRoutines, openRoutineModal } from "./routines.js";
 import { initBirthdays, openBirthdayModal } from "./birthdays.js";
 import { isHealthKitAvailable, requestHealthPermission, getTodayHealth } from "./health.js";
@@ -395,14 +396,17 @@ addTodoButton.addEventListener("click", () => {
 });
 
 
-// ROUTINES =========================================================
+// ROUTINES ======================================================
 initRoutines();
 
-// BIRTHDAYS =========================================================
+// BIRTHDAYS =====================================================
 initBirthdays();
 
 // TODOS =========================================================
 initTodos();
+
+// DAILY PLANNER =================================================
+initDailyPlanner();
 
 // WEATHER =========================================================
 const weatherButton = document.getElementById("weather-button");
