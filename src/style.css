@@ -1624,6 +1624,7 @@ main {
 
 
 .todo-check {
+  position: relative;
   flex: 0 0 auto;
   cursor: pointer;
 }
@@ -1814,6 +1815,7 @@ main {
 }
 
 .daily-planner-check {
+  position: relative;
   flex: 0 0 auto;
   cursor: pointer;
 }
