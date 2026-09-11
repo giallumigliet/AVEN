@@ -1546,8 +1546,6 @@ main {
 }
 
 .todo-planner-button:hover {
-  background: var(--color-accent);
-  color: var(--color-card);
   transform: translateY(-1px);
 }
 
