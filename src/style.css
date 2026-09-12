@@ -1274,11 +1274,13 @@ main {
 
 
 .todo-category-archived .routine-category-icon {
-  background: var(--color-danger-soft) !important;
   color: var(--color-danger) !important; 
 }
+
 .todo-category-archived.active {
   color: var(--color-danger) !important;
+  background: var(--color-danger-soft) !important;
+  border-color: var(--color-danger) !important;
 }
 
 
