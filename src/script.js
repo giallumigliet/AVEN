@@ -53,7 +53,6 @@ const resetDataButton = document.getElementById("reset-data-button");
 
 const navItems = document.querySelectorAll(".nav-item");
 
-const monitoredCalendarsButton = document.getElementById("monitored-calendars-button");
 const monitoredCalendarsPanel = document.getElementById("monitored-calendars-panel");
 const monitoredCalendarsPanelBackdrop = document.getElementById("monitored-calendars-panel-backdrop");
 const monitoredCalendarsClose = document.getElementById("monitored-calendars-close");
@@ -62,8 +61,7 @@ const monitoredCalendarsList = document.getElementById("monitored-calendars-list
 
 
 // AUTH =========================================================
-const provider =
-  new GoogleAuthProvider();
+const provider = new GoogleAuthProvider();
 
 provider.addScope(
   "https://www.googleapis.com/auth/calendar.events.readonly"
