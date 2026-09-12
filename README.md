@@ -11,6 +11,11 @@ Hosting: *GitHub Pages*.
 Backend: *Firebase*.  
 Login: *Google Auth*.
 
+
+
+
+AVEN utilizza l'accesso Google Calendar per leggere i tuoi eventi e crearne di nuovi. AVEN non modifica né elimina gli eventi esistenti
+
 ---
 
 ## 🚀 Features
