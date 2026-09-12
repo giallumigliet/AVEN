@@ -47,6 +47,45 @@ function getTodayRange() {
 }
 
 
+
+export async function getGoogleCalendarSettings() {
+  const user = auth.currentUser;
+
+  if (!user) {
+    return {
+      configured: false,
+      calendarIds: []
+    };
+  }
+
+  const ref = doc(
+    db,
+    "users",
+    user.uid,
+    "settings",
+    "googleCalendar"
+  );
+
+  const snapshot = await getDoc(ref);
+
+  if (!snapshot.exists()) {
+    return {
+      configured: false,
+      calendarIds: []
+    };
+  }
+
+  const data = snapshot.data();
+
+  return {
+    configured: Boolean(data.configured),
+    calendarIds: data.calendarIds || []
+  };
+}
+
+
+
+
 export async function getGoogleCalendarList() {
   const accessToken =
     sessionStorage.getItem("aven-google-access-token");
@@ -119,7 +158,7 @@ export async function getGoogleCalendarList() {
 }
 
 
-export async function getTodayCalendarEvents() {
+export async function getTodayCalendarEvents(calendarId) {
 
   const user =
     auth.currentUser;
@@ -153,29 +192,25 @@ export async function getTodayCalendarEvents() {
     getTodayRange();
 
 
-  const params =
-    new URLSearchParams({
-      calendarId: "primary",
-      timeMin,
-      timeMax,
-      singleEvents: "true",
-      orderBy: "startTime",
-      showDeleted: "false"
-    });
+  const params = new URLSearchParams({
+    timeMin,
+    timeMax,
+    singleEvents: "true",
+    orderBy: "startTime",
+    showDeleted: "false"
+  });
 
 
   try {
 
-    const response =
-      await fetch(
-        `https://www.googleapis.com/calendar/v3/calendars/primary/events?${params}`,
-        {
-          headers: {
-            Authorization:
-              `Bearer ${accessToken}`
-          }
+    const response = await fetch(
+      `https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(calendarId)}/events?${params}`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`
         }
-      );
+      }
+    );
 
 
     if (response.status === 401) {
