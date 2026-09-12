@@ -228,7 +228,7 @@ function renderTodoCategories(todos) {
 
     <button
       type="button"
-      class="routine-category-item ${
+      class="routine-category-item todo-category-archived ${
         selectedTodoCategory === "archived"
           ? "active"
           : ""
