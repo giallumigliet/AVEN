@@ -357,10 +357,6 @@ async function saveTodo() {
       {
         text: todoData.text,
         category: todoData.category,
-        completed,
-        completedAt: completed
-          ? serverTimestamp()
-          : null,
         updatedAt: serverTimestamp()
       }
     );
@@ -377,7 +373,6 @@ async function saveTodo() {
     }
   );
 }
-
 
 
 
@@ -413,7 +408,7 @@ async function deleteTodo() {
     editingTodoId = null;
 
     closeTodoModal();
-    openTodoPanel();
+    openTodosPanel();
 
   } catch (error) {
 
