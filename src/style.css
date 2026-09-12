@@ -1272,7 +1272,7 @@ main {
 
 
 .todo-category-archived.active {
-  color: var(--danger);
+  color: var(--color-danger);
 }
 
 
