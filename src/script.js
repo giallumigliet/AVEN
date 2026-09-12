@@ -1,6 +1,6 @@
 // script.js
 
-import { auth } from "./firebase.js";
+import { auth, db } from "./firebase.js";
 import {
   GoogleAuthProvider,
   signInWithPopup,
@@ -10,6 +10,13 @@ import {
   signOut,
   deleteUser
 } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js";
+
+import {
+  doc,
+  getDoc,
+  setDoc
+} from "https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
+
 
 import {
     getWeather,
@@ -25,6 +32,12 @@ import { initRoutines, openRoutineModal } from "./routines.js";
 import { initBirthdays, openBirthdayModal } from "./birthdays.js";
 import { isHealthKitAvailable, requestHealthPermission, getTodayHealth } from "./health.js";
 import { initRecap } from "./recap.js";
+import {
+  getGoogleCalendarList,
+  getMonitoredCalendarIds,
+  saveMonitoredCalendarIds,
+  getTodayCalendarEvents
+} from "./google-calendar.js";
 
 // ELEMENTS =========================================================
 
@@ -47,6 +60,12 @@ const logoutButton = document.getElementById("logout-button");
 const resetDataButton = document.getElementById("reset-data-button");
 
 const navItems = document.querySelectorAll(".nav-item");
+
+const monitoredCalendarsButton = document.getElementById("monitored-calendars-button");
+const monitoredCalendarsPanel = document.getElementById("monitored-calendars-panel");
+const monitoredCalendarsPanelBackdrop = document.getElementById("monitored-calendars-panel-backdrop");
+const monitoredCalendarsClose = document.getElementById("monitored-calendars-close");
+const monitoredCalendarsList = document.getElementById("monitored-calendars-list");
 
 
 
@@ -238,6 +257,96 @@ document.addEventListener("click", (event) => {
   }
 
 });
+
+
+
+
+
+// MONITOR CALENDAR =========================================================
+
+async function openMonitoredCalendarsPanel() {
+  const calendars = await getGoogleCalendarList();
+  const selectedIds = await getMonitoredCalendarIds();
+
+  monitoredCalendarsList.innerHTML = "";
+
+  if (!calendars.length) {
+    monitoredCalendarsList.innerHTML = `
+      <p class="monitored-calendars-empty">
+        No calendars available.
+      </p>
+    `;
+  } else {
+    calendars.forEach((calendar) => {
+      const label = document.createElement("label");
+      label.className = "monitored-calendar-item";
+
+      const checkbox = document.createElement("input");
+      checkbox.type = "checkbox";
+      checkbox.value = calendar.id;
+      checkbox.checked = selectedIds.includes(calendar.id);
+
+      const text = document.createElement("span");
+      text.textContent = calendar.summary;
+
+      label.appendChild(checkbox);
+      label.appendChild(text);
+
+      monitoredCalendarsList.appendChild(label);
+    });
+  }
+
+  monitoredCalendarsPanel.classList.add("open");
+  monitoredCalendarsPanel.setAttribute("aria-hidden", "false");
+}
+
+
+let monitoredCalendarsClosing = false;
+
+async function closeMonitoredCalendarsPanel() {
+  if (monitoredCalendarsClosing) return;
+
+  monitoredCalendarsClosing = true;
+
+  try {
+    const checkboxes = monitoredCalendarsList.querySelectorAll(
+      'input[type="checkbox"]'
+    );
+
+    const selectedIds = [...checkboxes]
+      .filter((checkbox) => checkbox.checked)
+      .map((checkbox) => checkbox.value);
+
+    await saveMonitoredCalendarIds(selectedIds);
+
+    monitoredCalendarsPanel.classList.remove("open");
+    monitoredCalendarsPanel.setAttribute("aria-hidden", "true");
+  } catch (error) {
+    console.error(
+      "Error saving monitored calendars:",
+      error
+    );
+  } finally {
+    monitoredCalendarsClosing = false;
+  }
+}
+
+
+
+monitoredCalendarsButton.addEventListener("click", async () => {
+  closeAccountMenu();
+  await openMonitoredCalendarsPanel();
+});
+
+monitoredCalendarsClose.addEventListener(
+  "click",
+  closeMonitoredCalendarsPanel
+);
+
+monitoredCalendarsPanelBackdrop.addEventListener(
+  "click",
+  closeMonitoredCalendarsPanel
+);
 
 
 // CHANGE ACCOUNT =========================================================
