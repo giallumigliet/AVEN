@@ -5,6 +5,8 @@ import { auth } from "./firebase.js";
 
 const CALENDAR_SCOPE =
   "https://www.googleapis.com/auth/calendar.events.readonly";
+const CALENDAR_LIST_SCOPE =
+  "https://www.googleapis.com/auth/calendar.calendarlist.readonly";
 
 
 function getTodayRange() {
