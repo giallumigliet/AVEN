@@ -644,7 +644,7 @@ main {
 
 
 .greeting-title {
-  font-size: clamp(25px, 4.5vw, 45px);
+  font-size: clamp(25px, 4.2vw, 45px);
   font-weight: 200;
   letter-spacing: -2px;
   white-space: pre-line;
@@ -652,7 +652,7 @@ main {
 
 .greeting-title strong {
   font-weight: 550;
-  font-size: 1.06em;
+  font-size: 1.2em;
 }
 
 
@@ -3317,7 +3317,7 @@ button:active {
 
 
   .greeting-title {
-    font-size: clamp(30px, 6vw, 40px);
+    font-size: clamp(30px, 5.5vw, 40px);
     letter-spacing: -1.5px;
   }
 
