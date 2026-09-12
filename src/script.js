@@ -76,6 +76,9 @@ const provider = new GoogleAuthProvider();
 provider.addScope(
   "https://www.googleapis.com/auth/calendar.events.readonly"
 );
+provider.addScope(
+  "https://www.googleapis.com/auth/calendar.calendarlist.readonly"
+);
 
 setPersistence(auth, browserLocalPersistence).catch((err) => {
   console.error("Persistence error:", err);
