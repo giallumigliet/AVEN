@@ -407,8 +407,8 @@ body.light-mode .auth-gate {
 }
 
 
-.account-menu-item.danger {
-  color: var(--color-danger);
+.account-menu-item. {
+  color: var(--color-);
 }
 
 
@@ -1272,6 +1272,9 @@ main {
 }
 
 
+.todo-category-archived .routine-category-icon {
+  color: var(--color-danger);
+}
 .todo-category-archived.active {
   color: var(--color-danger);
 }
