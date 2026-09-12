@@ -47,6 +47,78 @@ function getTodayRange() {
 }
 
 
+export async function getGoogleCalendarList() {
+  const accessToken =
+    sessionStorage.getItem("aven-google-access-token");
+
+  if (!accessToken) {
+    return [];
+  }
+
+  try {
+    const params = new URLSearchParams({
+      minAccessRole: "reader",
+      showDeleted: "false",
+      maxResults: "250"
+    });
+
+    const response = await fetch(
+      `https://www.googleapis.com/calendar/v3/users/me/calendarList?${params}`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        }
+      }
+    );
+
+    if (response.status === 401) {
+      sessionStorage.removeItem(
+        "aven-google-access-token"
+      );
+      return [];
+    }
+
+    if (!response.ok) {
+      const errorData =
+        await response.json().catch(() => null);
+
+      throw new Error(
+        `Google Calendar list error: ${response.status} ${
+          errorData?.error?.message || ""
+        }`
+      );
+    }
+
+    const data = await response.json();
+
+    return (data.items || [])
+      .filter((calendar) => {
+        return [
+          "reader",
+          "writer",
+          "owner"
+        ].includes(calendar.accessRole);
+      })
+      .map((calendar) => ({
+        id: calendar.id,
+        summary:
+          calendar.summary ||
+          calendar.summaryOverride ||
+          "Untitled calendar",
+        primary: Boolean(calendar.primary)
+      }));
+
+  } catch (error) {
+    console.error(
+      "Google Calendar list:",
+      error
+    );
+
+    return [];
+  }
+}
+
+
 export async function getTodayCalendarEvents() {
 
   const user =
@@ -185,4 +257,49 @@ export async function getTodayCalendarEvents() {
 
   }
 
+}
+
+
+
+export async function getMonitoredCalendarIds() {
+  const user = auth.currentUser;
+
+  if (!user) return [];
+
+  const ref = doc(
+    db,
+    "users",
+    user.uid,
+    "settings",
+    "googleCalendar"
+  );
+
+  const snapshot = await getDoc(ref);
+
+  if (!snapshot.exists()) {
+    return [];
+  }
+
+  return snapshot.data().calendarIds || [];
+}
+
+
+
+export async function saveMonitoredCalendarIds(calendarIds) {
+  const user = auth.currentUser;
+
+  if (!user) return;
+
+  const ref = doc(
+    db,
+    "users",
+    user.uid,
+    "settings",
+    "googleCalendar"
+  );
+
+  await setDoc(ref, {
+    configured: true,
+    calendarIds
+  });
 }
