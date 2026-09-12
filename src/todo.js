@@ -235,12 +235,8 @@ function renderTodoCategories(todos) {
       }"
       data-category="archived"
     >
-      <span class="routine-category-name">
-        Archived
-      </span>
-
       <span class="routine-category-icon">
-        🗑
+        ARCHIVED 🗑
       </span>
     </button>
 
