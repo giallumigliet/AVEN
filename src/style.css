@@ -1273,10 +1273,10 @@ main {
 
 
 .todo-category-archived .routine-category-icon {
-  color: var(--color-danger);
+  color: var(--color-danger) !important; 
 }
 .todo-category-archived.active {
-  color: var(--color-danger);
+  color: var(--color-danger) !important;
 }
 
 
