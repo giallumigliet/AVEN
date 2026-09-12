@@ -68,6 +68,7 @@
           
           <div class="account-menu" id="account-menu">
             <button class="account-menu-item" id="light-dark-button" type="button"> Light/Dark mode </button>
+            <button class="account-menu-item" id="monitored-calendars-button" type="button"> Monitored calendars </button>
             <button class="account-menu-item" id="change-account-button" type="button"> Change account </button>
             <button class="account-menu-item" id="logout-button" type="button"> Logout </button>
             <button class="account-menu-item danger" id="reset-data-button" type="button"> Reset data </button>
@@ -139,6 +140,42 @@
         </section>
 
       </main>
+
+
+      <!-- MONITORED CALENDARS PANEL -->
+      <div class="monitored-calendars-panel-backdrop" id="monitored-calendars-panel-backdrop"></div>
+      
+      <div class="monitored-calendars-panel" id="monitored-calendars-panel" aria-hidden="true">
+        <div class="monitored-calendars-panel-content">
+          <div class="monitored-calendars-panel-header">
+            <div>
+              <span class="panel-label">GOOGLE CALENDAR</span>
+              <h2>Monitored calendars</h2>
+              <p>
+                Choose the calendars AVEN should monitor.
+              </p>
+            </div>
+      
+            <button
+              type="button"
+              class="monitored-calendars-close"
+              id="monitored-calendars-close"
+              aria-label="Close"
+            >
+              ×
+            </button>
+          </div>
+      
+          <div
+            class="monitored-calendars-list"
+            id="monitored-calendars-list"
+          ></div>
+        </div>
+      </div>
+
+
+
+      
 
 
       <!-- TODO MODAL ================================================ -->
