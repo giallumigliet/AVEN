@@ -164,7 +164,7 @@ function updateRecap() {
     if (todaysBirthdays.length === 1) {
 
       sections.push(
-        `🎉 È il compleanno di <strong>${todaysBirthdays[0]}</strong>! 🎉`
+        `🎉È il compleanno di <strong>${todaysBirthdays[0]}</strong>!🎉`
       );
 
     } else {
