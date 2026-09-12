@@ -17,7 +17,7 @@ import {
 } from "./routines.js";
 
 import {
-  getTodayCalendarEvents
+  getTodayMonitoredCalendarEvents
 } from "./google-calendar.js";
 
 
@@ -39,13 +39,12 @@ let birthdaysUnsubscribe = null;
 
 
 // CALENDARIO GOOGLE ==============================================
-
 async function loadCalendarEvents() {
 
   try {
 
     const events =
-      await getTodayCalendarEvents();
+      await getTodayMonitoredCalendarEvents();
 
     setRecapEvents(events);
 
@@ -55,6 +54,8 @@ async function loadCalendarEvents() {
       "Error loading calendar events:",
       error
     );
+
+    setRecapEvents([]);
 
   }
 
