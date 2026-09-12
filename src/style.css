@@ -666,7 +666,7 @@ main {
   width: 700px;
   max-width: 90vw;
   height: 270px;
-  display: flex;
+  display: none;
   align-items: center;
   justify-content: center;
   z-index: 1;
