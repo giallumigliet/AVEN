@@ -62,18 +62,28 @@ const monitoredCalendarsList = document.getElementById("monitored-calendars-list
 
 
 // AUTH =========================================================
-
-const provider = new GoogleAuthProvider();
+const provider =
+  new GoogleAuthProvider();
 
 provider.addScope(
   "https://www.googleapis.com/auth/calendar.events.readonly"
 );
+
 provider.addScope(
   "https://www.googleapis.com/auth/calendar.calendarlist.readonly"
 );
 
-setPersistence(auth, browserLocalPersistence).catch((err) => {
-  console.error("Persistence error:", err);
+
+setPersistence(
+  auth,
+  browserLocalPersistence
+).catch((err) => {
+
+  console.error(
+    "Persistence error:",
+    err
+  );
+
 });
 
 
@@ -107,49 +117,57 @@ onAuthStateChanged(auth, (user) => {
 
 // LOGIN =========================================================
 
-loginButton.addEventListener("click", async () => {
+loginButton.addEventListener(
+  "click",
+  async () => {
 
-  loginButton.disabled = true;
-  loginButton.textContent = "Signing in...";
+    loginButton.disabled = true;
+    loginButton.textContent = "Signing in...";
 
-  try {
+    try {
 
-    const result =
-      await signInWithPopup(
-        auth,
-        provider
-      );
-    
-    const credential =
-      GoogleAuthProvider.credentialFromResult(
-        result
-      );
-    
-    if (credential?.accessToken) {
-      sessionStorage.setItem(
-        "aven-google-access-token",
-        credential.accessToken
-      );
-    
+      const result =
+        await signInWithPopup(
+          auth,
+          provider
+        );
 
-      const settings = await getGoogleCalendarSettings();
-      
-      if (!settings.configured) {
-        await openMonitoredCalendarsPanel();
+
+      const credential =
+        GoogleAuthProvider
+          .credentialFromResult(
+            result
+          );
+
+
+      if (
+        credential?.accessToken
+      ) {
+
+        sessionStorage.setItem(
+          "aven-google-access-token",
+          credential.accessToken
+        );
+
+        const settings = await getGoogleCalendarSettings();
+
+        if (!settings.configured) {
+          await openMonitoredCalendarsPanel();
+        }
       }
-     
+
+    } catch (err) {
+
+      console.error(
+        "Login error:",
+        err
+      );
+
+      loginButton.disabled = false;
+      loginButton.innerHTML = '<span class="google-icon">G</span> Continue with Google';
     }
-
-  } catch (err) {
-
-    console.error("Login error:", err);
-
-    loginButton.disabled = false;
-    loginButton.innerHTML = '<span class="google-icon">G</span> Continue with Google';
-
   }
-
-});
+);
 
 
 // RESPONSIVE SIDEBAR =========================================================
@@ -261,9 +279,37 @@ document.addEventListener("click", (event) => {
 
 
 
+// MONITORED CALENDARS =========================================================
+
+const monitoredCalendarsButton =
+  document.getElementById(
+    "monitored-calendars-button"
+  );
+
+const monitoredCalendarsPanel =
+  document.getElementById(
+    "monitored-calendars-panel"
+  );
+
+const monitoredCalendarsPanelBackdrop =
+  document.getElementById(
+    "monitored-calendars-panel-backdrop"
+  );
+
+const monitoredCalendarsClose =
+  document.getElementById(
+    "monitored-calendars-close"
+  );
+
+const monitoredCalendarsList =
+  document.getElementById(
+    "monitored-calendars-list"
+  );
 
 
-// MONITOR CALENDAR =========================================================
+// ---------------------------------------------------------
+// OPEN
+// ---------------------------------------------------------
 
 async function openMonitoredCalendarsPanel() {
 
@@ -271,17 +317,23 @@ async function openMonitoredCalendarsPanel() {
     return;
   }
 
+
   monitoredCalendarsList.innerHTML = `
     <p class="monitored-calendars-empty">
       Loading calendars...
     </p>
   `;
 
-  monitoredCalendarsPanel.classList.add("open");
+
+  monitoredCalendarsPanel.classList.add(
+    "open"
+  );
+
   monitoredCalendarsPanel.setAttribute(
     "aria-hidden",
     "false"
   );
+
 
   try {
 
@@ -289,14 +341,21 @@ async function openMonitoredCalendarsPanel() {
       calendars,
       settings
     ] = await Promise.all([
+
       getGoogleCalendarList(),
+
       getGoogleCalendarSettings()
+
     ]);
+
 
     const selectedIds =
       settings.calendarIds || [];
 
-    monitoredCalendarsList.innerHTML = "";
+
+    monitoredCalendarsList.innerHTML =
+      "";
+
 
     if (!calendars.length) {
 
@@ -307,36 +366,67 @@ async function openMonitoredCalendarsPanel() {
       `;
 
       return;
+
     }
 
-    calendars.forEach((calendar) => {
 
-      const label =
-        document.createElement("label");
+    calendars.forEach(
+      (calendar) => {
 
-      label.className =
-        "monitored-calendar-item";
+        const label =
+          document.createElement(
+            "label"
+          );
 
-      const checkbox =
-        document.createElement("input");
 
-      checkbox.type = "checkbox";
-      checkbox.value = calendar.id;
-      checkbox.checked =
-        selectedIds.includes(calendar.id);
+        label.className =
+          "monitored-calendar-item";
 
-      const text =
-        document.createElement("span");
 
-      text.textContent =
-        calendar.summary;
+        const checkbox =
+          document.createElement(
+            "input"
+          );
 
-      label.appendChild(checkbox);
-      label.appendChild(text);
 
-      monitoredCalendarsList.appendChild(label);
+        checkbox.type =
+          "checkbox";
 
-    });
+        checkbox.value =
+          calendar.id;
+
+        checkbox.checked =
+          selectedIds.includes(
+            calendar.id
+          );
+
+
+        const text =
+          document.createElement(
+            "span"
+          );
+
+
+        text.textContent =
+          calendar.summary;
+
+
+        label.appendChild(
+          checkbox
+        );
+
+        label.appendChild(
+          text
+        );
+
+
+        monitoredCalendarsList.appendChild(
+          label
+        );
+
+      }
+    );
+
 
   } catch (error) {
 
@@ -344,6 +434,7 @@ async function openMonitoredCalendarsPanel() {
       "Error opening monitored calendars:",
       error
     );
+
 
     monitoredCalendarsList.innerHTML = `
       <p class="monitored-calendars-empty">
@@ -356,16 +447,26 @@ async function openMonitoredCalendarsPanel() {
 }
 
 
+// ---------------------------------------------------------
+// CLOSE + SAVE
+// ---------------------------------------------------------
 
-let monitoredCalendarsClosing = false;
+let monitoredCalendarsClosing =
+  false;
+
 
 async function closeMonitoredCalendarsPanel() {
 
-  if (monitoredCalendarsClosing) {
+  if (
+    monitoredCalendarsClosing
+  ) {
     return;
   }
 
-  monitoredCalendarsClosing = true;
+
+  monitoredCalendarsClosing =
+    true;
+
 
   try {
 
@@ -374,42 +475,50 @@ async function closeMonitoredCalendarsPanel() {
         'input[type="checkbox"]'
       );
 
-    const selectedIds = [
-      ...checkboxes
-    ]
-      .filter(
-        (checkbox) => checkbox.checked
-      )
-      .map(
-        (checkbox) => checkbox.value
-      );
+
+    const selectedIds =
+      [...checkboxes]
+
+        .filter(
+          (checkbox) =>
+            checkbox.checked
+        )
+
+        .map(
+          (checkbox) =>
+            checkbox.value
+        );
+
 
     await saveMonitoredCalendarIds(
       selectedIds
     );
 
-    monitoredCalendarsPanel.classList.remove("open");
+
+    monitoredCalendarsPanel.classList.remove(
+      "open"
+    );
 
     monitoredCalendarsPanel.setAttribute(
       "aria-hidden",
       "true"
     );
 
-  } catch (error) {
 
+  } catch (error) {
     console.error(
       "Error saving monitored calendars:",
       error
     );
 
-  } finally {
 
-    monitoredCalendarsClosing = false;
+  } finally {
+    monitoredCalendarsClosing =
+      false;
 
   }
 
 }
-
 
 
 monitoredCalendarsButton.addEventListener(
@@ -434,54 +543,71 @@ monitoredCalendarsPanelBackdrop.addEventListener(
 );
 
 
+
 // CHANGE ACCOUNT =========================================================
+changeAccountButton.addEventListener(
+  "click",
+  async () => {
 
-changeAccountButton.addEventListener("click", async () => {
+    try {
 
-  try {
+      closeAccountMenu();
 
-    closeAccountMenu();
 
-    await signOut(auth);
-    
-    sessionStorage.removeItem(
-      "aven-google-access-token"
-    );
-    
-    const result =
-      await signInWithPopup(
-        auth,
-        provider
+      await signOut(auth);
+
+
+      sessionStorage.removeItem(
+        "aven-google-access-token"
       );
-    
-    const credential =
-      GoogleAuthProvider.credentialFromResult(
-        result
-      );
-    
-    if (credential?.accessToken) {
-    
-      sessionStorage.setItem(
-        "aven-google-access-token",
-        credential.accessToken
-      );
-    
-      const settings =
-        await getGoogleCalendarSettings();
-    
-      if (!settings.configured) {
-        await openMonitoredCalendarsPanel();
+
+
+      const result =
+        await signInWithPopup(
+          auth,
+          provider
+        );
+
+
+      const credential =
+        GoogleAuthProvider
+          .credentialFromResult(
+            result
+          );
+
+
+      if (
+        credential?.accessToken
+      ) {
+
+        sessionStorage.setItem(
+          "aven-google-access-token",
+          credential.accessToken
+        );
+
+
+        const settings = await getGoogleCalendarSettings();
+
+
+        if (
+          !settings.configured
+        ) {
+
+          await openMonitoredCalendarsPanel();
+        }
       }
-    
+
+
+    } catch (err) {
+
+      console.error(
+        "Change account error:",
+        err
+      );
     }
-
-  } catch (err) {
-
-    console.error("Change account error:", err);
-
   }
+);
 
-});
 
 
 // LOGOUT =========================================================
