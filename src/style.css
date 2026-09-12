@@ -13,6 +13,7 @@
   --color-card: rgba(255, 255, 255, 0.045);
   --color-card-border: rgba(255, 255, 255, 0.055);
   --color-danger: #ff7f7f;
+  --color-danger-soft: rgba(255, 127, 127, 0.12);
 
   --radius-small: 12px;
   --radius-medium: 18px;
@@ -42,6 +43,7 @@ body.light-mode {
   --color-card: rgba(30, 45, 60, 0.055);
   --color-card-border: rgba(20, 30, 40, 0.09);
   --color-danger: #d95757;
+  --color-danger-soft: rgba(217, 87, 87, 0.12);
 }
 
 
@@ -1273,6 +1275,7 @@ main {
 
 
 .todo-category-archived .routine-category-icon {
+  background: var(--color-danger-soft) !important;
   color: var(--color-danger) !important; 
 }
 .todo-category-archived.active {
