@@ -160,15 +160,15 @@ function updateRecap() {
     if (todaysBirthdays.length === 1) {
 
       sections.push(
-        `È il compleanno di ${todaysBirthdays[0]}!`
+        `🎉 È il compleanno di ${todaysBirthdays[0]}! 🎉`
       );
 
     } else {
 
       sections.push(
-        `È il compleanno di ${joinNames(
+        `🎉 È il compleanno di ${joinNames(
           todaysBirthdays
-        )}!`
+        )}! 🎉`
       );
 
     }
