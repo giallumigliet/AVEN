@@ -236,9 +236,13 @@ function updateRecap() {
     calendarParts.push(
       `${
         todaysRoutines.length === 1
-          ? "È prevista la routine"
-          : "Sono previste le routines"
-      } ${joinNames(todaysRoutines)}.`
+          ? "La routine"
+          : "Le routines"
+      } ${joinNames(todaysRoutines)} ${
+        todaysRoutines.length === 1
+          ? "è prevista per oggi"
+          : "sono previste per oggi"
+      }.`
     );
 
   }
