@@ -104,21 +104,25 @@ function getTodayDate() {
 
 
 // TESTO ==========================================================
-
 function joinNames(names) {
 
-  if (names.length === 1) {
-    return names[0];
+  const formattedNames =
+    names.map(name =>
+      `<strong>${name}</strong>`
+    );
+
+  if (formattedNames.length === 1) {
+    return formattedNames[0];
   }
 
-  if (names.length === 2) {
-    return `${names[0]} e ${names[1]}`;
+  if (formattedNames.length === 2) {
+    return `${formattedNames[0]} e ${formattedNames[1]}`;
   }
 
   const last =
-    names[names.length - 1];
+    formattedNames[formattedNames.length - 1];
 
-  return `${names
+  return `${formattedNames
     .slice(0, -1)
     .join(", ")}, e ${last}`;
 
@@ -160,7 +164,7 @@ function updateRecap() {
     if (todaysBirthdays.length === 1) {
 
       sections.push(
-        `🎉 È il compleanno di ${todaysBirthdays[0]}! 🎉`
+        `🎉 È il compleanno di <strong>${todaysBirthdays[0]}</strong>! 🎉`
       );
 
     } else {
@@ -254,11 +258,11 @@ function updateRecap() {
   if (remainingTodos > 0) {
 
     sections.push(
-      `Restano ${remainingTodos} ${
+      `Restano <strong>${remainingTodos} ${
         remainingTodos === 1
           ? "todo"
           : "todo"
-      } da completare.`
+      }</strong> da completare.`
     );
 
   }
@@ -268,7 +272,7 @@ function updateRecap() {
 
   if (sections.length === 0) {
 
-    dailyRecap.textContent =
+    dailyRecap.innerHTML =
       "La tua giornata è libera.";
 
     return;
@@ -276,7 +280,7 @@ function updateRecap() {
   }
 
 
-  dailyRecap.textContent =
+  dailyRecap.innerHTML =
     sections.join("\n");
 
 }
@@ -525,7 +529,7 @@ export function initRecap() {
         birthdays = [];
         calendarEvents = [];
 
-        dailyRecap.textContent =
+        dailyRecap.innerHTML =
           "La tua giornata è libera.";
 
         return;
