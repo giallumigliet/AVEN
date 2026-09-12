@@ -290,14 +290,48 @@ export async function saveMonitoredCalendarIds(
 }
 
 
+
+
+export async function getTodayMonitoredCalendarEvents() {
+  const settings = await getGoogleCalendarSettings();
+
+  if (!settings.configured) {
+    return [];
+  }
+
+  if (!settings.calendarIds.length) {
+    return [];
+  }
+
+  const eventsByCalendar = await Promise.all(
+    settings.calendarIds.map((calendarId) =>
+      getTodayCalendarEvents(calendarId)
+    )
+  );
+
+  return eventsByCalendar
+    .flat()
+    .sort((a, b) => {
+      const aStart =
+        a.start?.dateTime ||
+        a.start?.date ||
+        "";
+
+      const bStart =
+        b.start?.dateTime ||
+        b.start?.date ||
+        "";
+
+      return aStart.localeCompare(bStart);
+    });
+}
+
+
 // =========================================================
 // TODAY'S EVENTS
 // =========================================================
 
-export async function getTodayCalendarEvents(
-  calendarId
-) {
-
+export async function getTodayCalendarEvents(calendarId) {
   const user =
     auth.currentUser;
 
