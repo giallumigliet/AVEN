@@ -201,7 +201,7 @@ function updateRecap() {
     if (eventNames.length > 0) {
 
       calendarParts.push(
-        `Oggi hai ${joinNames(eventNames)} in calendario.`
+        `Hai ${joinNames(eventNames)} in calendario.`
       );
 
     }
