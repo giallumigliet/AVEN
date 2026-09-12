@@ -180,7 +180,9 @@ function updateRecap() {
   }
 
 
-  // CALENDARIO ===================================================
+    // CALENDARIO + ROUTINE =========================================
+
+  const calendarParts = [];
 
   if (calendarEvents.length > 0) {
 
@@ -196,10 +198,9 @@ function updateRecap() {
           `“${name}”`
         );
 
-
     if (eventNames.length > 0) {
 
-      sections.push(
+      calendarParts.push(
         `Oggi hai ${joinNames(eventNames)} in calendario.`
       );
 
@@ -207,8 +208,6 @@ function updateRecap() {
 
   }
 
-
-  // ROUTINE ======================================================
 
   const todaysRoutines =
     routines
@@ -234,12 +233,21 @@ function updateRecap() {
 
   if (todaysRoutines.length > 0) {
 
-    sections.push(
+    calendarParts.push(
       `${
         todaysRoutines.length === 1
           ? "È prevista la routine"
-          : "Sono previste le routine"
+          : "Sono previste le routines"
       } ${joinNames(todaysRoutines)}.`
+    );
+
+  }
+
+
+  if (calendarParts.length > 0) {
+
+    sections.push(
+      calendarParts.join(" ")
     );
 
   }
@@ -281,7 +289,7 @@ function updateRecap() {
 
 
   dailyRecap.innerHTML =
-    sections.join("\n");
+    sections.join("\n\n");
 
 }
 
