@@ -1,6 +1,6 @@
 // script.js
 
-import { auth, db } from "./firebase.js";
+import { auth } from "./firebase.js";
 import {
   GoogleAuthProvider,
   signInWithPopup,
@@ -10,13 +10,6 @@ import {
   signOut,
   deleteUser
 } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js";
-
-import {
-  doc,
-  getDoc,
-  setDoc
-} from "https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
-
 
 import {
     getWeather,
@@ -34,9 +27,8 @@ import { isHealthKitAvailable, requestHealthPermission, getTodayHealth } from ".
 import { initRecap } from "./recap.js";
 import {
   getGoogleCalendarList,
-  getMonitoredCalendarIds,
-  saveMonitoredCalendarIds,
-  getTodayCalendarEvents
+  getGoogleCalendarSettings,
+  saveMonitoredCalendarIds
 } from "./google-calendar.js";
 
 // ELEMENTS =========================================================
@@ -134,12 +126,18 @@ loginButton.addEventListener("click", async () => {
       );
     
     if (credential?.accessToken) {
-    
       sessionStorage.setItem(
         "aven-google-access-token",
         credential.accessToken
       );
     
+
+      const settings = await getGoogleCalendarSettings();
+      
+      if (!settings.configured) {
+        await openMonitoredCalendarsPanel();
+      }
+     
     }
 
   } catch (err) {
@@ -268,78 +266,162 @@ document.addEventListener("click", (event) => {
 // MONITOR CALENDAR =========================================================
 
 async function openMonitoredCalendarsPanel() {
-  const calendars = await getGoogleCalendarList();
-  const selectedIds = await getMonitoredCalendarIds();
 
-  monitoredCalendarsList.innerHTML = "";
+  if (!auth.currentUser) {
+    return;
+  }
 
-  if (!calendars.length) {
-    monitoredCalendarsList.innerHTML = `
-      <p class="monitored-calendars-empty">
-        No calendars available.
-      </p>
-    `;
-  } else {
+  monitoredCalendarsList.innerHTML = `
+    <p class="monitored-calendars-empty">
+      Loading calendars...
+    </p>
+  `;
+
+  monitoredCalendarsPanel.classList.add("open");
+  monitoredCalendarsPanel.setAttribute(
+    "aria-hidden",
+    "false"
+  );
+
+  try {
+
+    const [
+      calendars,
+      settings
+    ] = await Promise.all([
+      getGoogleCalendarList(),
+      getGoogleCalendarSettings()
+    ]);
+
+    const selectedIds =
+      settings.calendarIds || [];
+
+    monitoredCalendarsList.innerHTML = "";
+
+    if (!calendars.length) {
+
+      monitoredCalendarsList.innerHTML = `
+        <p class="monitored-calendars-empty">
+          No calendars available.
+        </p>
+      `;
+
+      return;
+    }
+
     calendars.forEach((calendar) => {
-      const label = document.createElement("label");
-      label.className = "monitored-calendar-item";
 
-      const checkbox = document.createElement("input");
+      const label =
+        document.createElement("label");
+
+      label.className =
+        "monitored-calendar-item";
+
+      const checkbox =
+        document.createElement("input");
+
       checkbox.type = "checkbox";
       checkbox.value = calendar.id;
-      checkbox.checked = selectedIds.includes(calendar.id);
+      checkbox.checked =
+        selectedIds.includes(calendar.id);
 
-      const text = document.createElement("span");
-      text.textContent = calendar.summary;
+      const text =
+        document.createElement("span");
+
+      text.textContent =
+        calendar.summary;
 
       label.appendChild(checkbox);
       label.appendChild(text);
 
       monitoredCalendarsList.appendChild(label);
+
     });
+
+  } catch (error) {
+
+    console.error(
+      "Error opening monitored calendars:",
+      error
+    );
+
+    monitoredCalendarsList.innerHTML = `
+      <p class="monitored-calendars-empty">
+        Unable to load calendars.
+      </p>
+    `;
+
   }
 
-  monitoredCalendarsPanel.classList.add("open");
-  monitoredCalendarsPanel.setAttribute("aria-hidden", "false");
 }
+
 
 
 let monitoredCalendarsClosing = false;
 
 async function closeMonitoredCalendarsPanel() {
-  if (monitoredCalendarsClosing) return;
+
+  if (monitoredCalendarsClosing) {
+    return;
+  }
 
   monitoredCalendarsClosing = true;
 
   try {
-    const checkboxes = monitoredCalendarsList.querySelectorAll(
-      'input[type="checkbox"]'
+
+    const checkboxes =
+      monitoredCalendarsList.querySelectorAll(
+        'input[type="checkbox"]'
+      );
+
+    const selectedIds = [
+      ...checkboxes
+    ]
+      .filter(
+        (checkbox) => checkbox.checked
+      )
+      .map(
+        (checkbox) => checkbox.value
+      );
+
+    await saveMonitoredCalendarIds(
+      selectedIds
     );
 
-    const selectedIds = [...checkboxes]
-      .filter((checkbox) => checkbox.checked)
-      .map((checkbox) => checkbox.value);
-
-    await saveMonitoredCalendarIds(selectedIds);
-
     monitoredCalendarsPanel.classList.remove("open");
-    monitoredCalendarsPanel.setAttribute("aria-hidden", "true");
+
+    monitoredCalendarsPanel.setAttribute(
+      "aria-hidden",
+      "true"
+    );
+
   } catch (error) {
+
     console.error(
       "Error saving monitored calendars:",
       error
     );
+
   } finally {
+
     monitoredCalendarsClosing = false;
+
   }
+
 }
 
 
 
-monitoredCalendarsButton.addEventListener("click", async () => {
-  closeAccountMenu();
-  await openMonitoredCalendarsPanel();
-});
+monitoredCalendarsButton.addEventListener(
+  "click",
+  async () => {
+
+    closeAccountMenu();
+
+    await openMonitoredCalendarsPanel();
+
+  }
+);
 
 monitoredCalendarsClose.addEventListener(
   "click",
@@ -383,6 +465,13 @@ changeAccountButton.addEventListener("click", async () => {
         "aven-google-access-token",
         credential.accessToken
       );
+    
+      const settings =
+        await getGoogleCalendarSettings();
+    
+      if (!settings.configured) {
+        await openMonitoredCalendarsPanel();
+      }
     
     }
 
