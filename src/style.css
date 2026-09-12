@@ -628,6 +628,8 @@ main {
 
 
 .greeting {
+  position: relative;
+  z-index: 2;
   text-align: center;
   margin-bottom: 40px;
   animation: appear 0.8s ease both;
@@ -660,14 +662,15 @@ main {
 ========================================================= */
 
 .assistant-area {
-  position: relative;
+  position: absolute;
   width: 700px;
   max-width: 90vw;
   height: 270px;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 35px;
+  z-index: 1;
+  pointer-events: none;
 }
 
 
