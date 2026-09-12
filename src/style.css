@@ -1278,7 +1278,6 @@ main {
 }
 
 .todo-category-archived.active {
-  color: var(--color-danger) !important;
   background: var(--color-danger-soft) !important;
   border-color: var(--color-danger) !important;
 }
