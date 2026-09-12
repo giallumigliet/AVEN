@@ -53,10 +53,6 @@ const resetDataButton = document.getElementById("reset-data-button");
 
 const navItems = document.querySelectorAll(".nav-item");
 
-const monitoredCalendarsPanel = document.getElementById("monitored-calendars-panel");
-const monitoredCalendarsPanelBackdrop = document.getElementById("monitored-calendars-panel-backdrop");
-const monitoredCalendarsClose = document.getElementById("monitored-calendars-close");
-const monitoredCalendarsList = document.getElementById("monitored-calendars-list");
 
 
 
@@ -279,35 +275,12 @@ document.addEventListener("click", (event) => {
 
 // MONITORED CALENDARS =========================================================
 
-const monitoredCalendarsButton =
-  document.getElementById(
-    "monitored-calendars-button"
-  );
+const monitoredCalendarsButton = document.getElementById("monitored-calendars-button");
+const monitoredCalendarsPanel = document.getElementById("monitored-calendars-panel");
+const monitoredCalendarsPanelBackdrop = document.getElementById("monitored-calendars-panel-backdrop");
+const monitoredCalendarsClose = document.getElementById("monitored-calendars-close");
+const monitoredCalendarsList = document.getElementById("monitored-calendars-list");
 
-const monitoredCalendarsPanel =
-  document.getElementById(
-    "monitored-calendars-panel"
-  );
-
-const monitoredCalendarsPanelBackdrop =
-  document.getElementById(
-    "monitored-calendars-panel-backdrop"
-  );
-
-const monitoredCalendarsClose =
-  document.getElementById(
-    "monitored-calendars-close"
-  );
-
-const monitoredCalendarsList =
-  document.getElementById(
-    "monitored-calendars-list"
-  );
-
-
-// ---------------------------------------------------------
-// OPEN
-// ---------------------------------------------------------
 
 async function openMonitoredCalendarsPanel() {
 
@@ -445,9 +418,6 @@ async function openMonitoredCalendarsPanel() {
 }
 
 
-// ---------------------------------------------------------
-// CLOSE + SAVE
-// ---------------------------------------------------------
 
 let monitoredCalendarsClosing =
   false;
