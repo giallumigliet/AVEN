@@ -1,62 +1,214 @@
 // google-calendar.js
 
-import { auth } from "./firebase.js";
+import { auth, db } from "./firebase.js";
+
+import {
+  doc,
+  getDoc,
+  setDoc
+} from "https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
 
 
-const CALENDAR_SCOPE =
-  "https://www.googleapis.com/auth/calendar.events.readonly";
-const CALENDAR_LIST_SCOPE =
-  "https://www.googleapis.com/auth/calendar.calendarlist.readonly";
-
+// =========================================================
+// DATE RANGE
+// =========================================================
 
 function getTodayRange() {
 
-  const now =
-    new Date();
+  const now = new Date();
 
-  const start =
-    new Date(
-      now.getFullYear(),
-      now.getMonth(),
-      now.getDate(),
-      0,
-      0,
-      0,
-      0
-    );
+  const start = new Date(
+    now.getFullYear(),
+    now.getMonth(),
+    now.getDate(),
+    0,
+    0,
+    0,
+    0
+  );
 
-  const end =
-    new Date(
-      now.getFullYear(),
-      now.getMonth(),
-      now.getDate() + 1,
-      0,
-      0,
-      0,
-      0
-    );
+  const end = new Date(
+    now.getFullYear(),
+    now.getMonth(),
+    now.getDate() + 1,
+    0,
+    0,
+    0,
+    0
+  );
 
   return {
-    timeMin:
-      start.toISOString(),
-
-    timeMax:
-      end.toISOString()
+    timeMin: start.toISOString(),
+    timeMax: end.toISOString()
   };
 
 }
 
 
+// =========================================================
+// ACCESS TOKEN
+// =========================================================
+
+function getGoogleAccessToken() {
+
+  return sessionStorage.getItem(
+    "aven-google-access-token"
+  );
+
+}
+
+
+// =========================================================
+// GOOGLE CALENDAR LIST
+// =========================================================
+
+export async function getGoogleCalendarList() {
+
+  const accessToken =
+    getGoogleAccessToken();
+
+  if (!accessToken) {
+    return [];
+  }
+
+  try {
+
+    const calendars = [];
+
+    let pageToken = null;
+
+    do {
+
+      const params = new URLSearchParams({
+        minAccessRole: "reader",
+        showDeleted: "false",
+        maxResults: "250"
+      });
+
+      if (pageToken) {
+        params.set(
+          "pageToken",
+          pageToken
+        );
+      }
+
+      const response = await fetch(
+        `https://www.googleapis.com/calendar/v3/users/me/calendarList?${params}`,
+        {
+          headers: {
+            Authorization:
+              `Bearer ${accessToken}`
+          }
+        }
+      );
+
+      if (response.status === 401) {
+
+        sessionStorage.removeItem(
+          "aven-google-access-token"
+        );
+
+        throw new Error(
+          "Google Calendar authorization expired."
+        );
+
+      }
+
+      if (!response.ok) {
+
+        const errorData =
+          await response.json().catch(
+            () => null
+          );
+
+        throw new Error(
+          `Google Calendar list error: ${response.status} ${
+            errorData?.error?.message || ""
+          }`
+        );
+
+      }
+
+      const data =
+        await response.json();
+
+      calendars.push(
+        ...(data.items || [])
+      );
+
+      pageToken =
+        data.nextPageToken || null;
+
+    } while (pageToken);
+
+
+    return calendars
+
+      // AVEN needs event details, so freeBusyReader
+      // calendars are not useful here.
+      .filter((calendar) => {
+
+        return [
+          "reader",
+          "writerWithoutPrivateAccess",
+          "writer",
+          "owner"
+        ].includes(
+          calendar.accessRole
+        );
+
+      })
+
+      .map((calendar) => ({
+
+        id: calendar.id,
+
+        summary:
+          calendar.summary ||
+          calendar.summaryOverride ||
+          "Untitled calendar",
+
+        primary:
+          Boolean(calendar.primary),
+
+        backgroundColor:
+          calendar.backgroundColor ||
+          null
+
+      }));
+
+  } catch (error) {
+
+    console.error(
+      "Google Calendar list:",
+      error
+    );
+
+    throw error;
+
+  }
+
+}
+
+
+// =========================================================
+// GOOGLE CALENDAR SETTINGS
+// =========================================================
 
 export async function getGoogleCalendarSettings() {
-  const user = auth.currentUser;
+
+  const user =
+    auth.currentUser;
 
   if (!user) {
+
     return {
       configured: false,
       calendarIds: []
     };
+
   }
+
 
   const ref = doc(
     db,
@@ -66,99 +218,85 @@ export async function getGoogleCalendarSettings() {
     "googleCalendar"
   );
 
-  const snapshot = await getDoc(ref);
+
+  const snapshot =
+    await getDoc(ref);
+
 
   if (!snapshot.exists()) {
+
     return {
       configured: false,
       calendarIds: []
     };
+
   }
 
-  const data = snapshot.data();
+
+  const data =
+    snapshot.data();
+
 
   return {
-    configured: Boolean(data.configured),
-    calendarIds: data.calendarIds || []
+
+    configured:
+      Boolean(data.configured),
+
+    calendarIds:
+      Array.isArray(data.calendarIds)
+        ? data.calendarIds
+        : []
+
   };
+
 }
 
 
+// =========================================================
+// SAVE MONITORED CALENDARS
+// =========================================================
 
+export async function saveMonitoredCalendarIds(
+  calendarIds
+) {
 
-export async function getGoogleCalendarList() {
-  const accessToken =
-    sessionStorage.getItem("aven-google-access-token");
+  const user =
+    auth.currentUser;
 
-  if (!accessToken) {
-    return [];
+  if (!user) {
+    return;
   }
 
-  try {
-    const params = new URLSearchParams({
-      minAccessRole: "reader",
-      showDeleted: "false",
-      maxResults: "250"
-    });
 
-    const response = await fetch(
-      `https://www.googleapis.com/calendar/v3/users/me/calendarList?${params}`,
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        }
-      }
-    );
+  const ref = doc(
+    db,
+    "users",
+    user.uid,
+    "settings",
+    "googleCalendar"
+  );
 
-    if (response.status === 401) {
-      sessionStorage.removeItem(
-        "aven-google-access-token"
-      );
-      return [];
+
+  await setDoc(
+    ref,
+    {
+      configured: true,
+      calendarIds: Array.isArray(calendarIds)
+        ? calendarIds
+        : []
     }
+  );
 
-    if (!response.ok) {
-      const errorData =
-        await response.json().catch(() => null);
-
-      throw new Error(
-        `Google Calendar list error: ${response.status} ${
-          errorData?.error?.message || ""
-        }`
-      );
-    }
-
-    const data = await response.json();
-
-    return (data.items || [])
-      .filter((calendar) => {
-        return [
-          "reader",
-          "writer",
-          "owner"
-        ].includes(calendar.accessRole);
-      })
-      .map((calendar) => ({
-        id: calendar.id,
-        summary:
-          calendar.summary ||
-          calendar.summaryOverride ||
-          "Untitled calendar",
-        primary: Boolean(calendar.primary)
-      }));
-
-  } catch (error) {
-    console.error(
-      "Google Calendar list:",
-      error
-    );
-
-    return [];
-  }
 }
 
 
-export async function getTodayCalendarEvents(calendarId) {
+// =========================================================
+// TODAY'S EVENTS
+// =========================================================
+
+export async function getTodayCalendarEvents(
+  calendarId
+) {
 
   const user =
     auth.currentUser;
@@ -168,10 +306,13 @@ export async function getTodayCalendarEvents(calendarId) {
   }
 
 
+  if (!calendarId) {
+    return [];
+  }
+
+
   const accessToken =
-    sessionStorage.getItem(
-      "aven-google-access-token"
-    );
+    getGoogleAccessToken();
 
 
   if (!accessToken) {
@@ -188,29 +329,40 @@ export async function getTodayCalendarEvents(calendarId) {
   const {
     timeMin,
     timeMax
-  } =
-    getTodayRange();
+  } = getTodayRange();
 
 
-  const params = new URLSearchParams({
-    timeMin,
-    timeMax,
-    singleEvents: "true",
-    orderBy: "startTime",
-    showDeleted: "false"
-  });
+  const params =
+    new URLSearchParams({
+
+      timeMin,
+
+      timeMax,
+
+      singleEvents:
+        "true",
+
+      orderBy:
+        "startTime",
+
+      showDeleted:
+        "false"
+
+    });
 
 
   try {
 
-    const response = await fetch(
-      `https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(calendarId)}/events?${params}`,
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`
+    const response =
+      await fetch(
+        `https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(calendarId)}/events?${params}`,
+        {
+          headers: {
+            Authorization:
+              `Bearer ${accessToken}`
+          }
         }
-      }
-    );
+      );
 
 
     if (response.status === 401) {
@@ -229,22 +381,25 @@ export async function getTodayCalendarEvents(calendarId) {
 
 
     if (!response.ok) {
+
       const errorData =
         await response.json().catch(
           () => null
         );
-    
+
+
       console.error(
         "Google Calendar API error:",
         errorData
       );
-    
+
+
       throw new Error(
         `Google Calendar error: ${response.status} ${
           errorData?.error?.message || ""
         }`
       );
-    
+
     }
 
 
@@ -253,12 +408,19 @@ export async function getTodayCalendarEvents(calendarId) {
 
 
     return (data.items || [])
-      .filter(event =>
-        event.status !== "cancelled"
+
+      .filter(
+        (event) =>
+          event.status !== "cancelled"
       )
-      .map(event => ({
+
+      .map((event) => ({
+
         id:
           event.id,
+
+        calendarId:
+          calendarId,
 
         summary:
           event.summary ||
@@ -278,6 +440,7 @@ export async function getTodayCalendarEvents(calendarId) {
           Boolean(
             event.start?.date
           )
+
       }));
 
 
@@ -292,49 +455,4 @@ export async function getTodayCalendarEvents(calendarId) {
 
   }
 
-}
-
-
-
-export async function getMonitoredCalendarIds() {
-  const user = auth.currentUser;
-
-  if (!user) return [];
-
-  const ref = doc(
-    db,
-    "users",
-    user.uid,
-    "settings",
-    "googleCalendar"
-  );
-
-  const snapshot = await getDoc(ref);
-
-  if (!snapshot.exists()) {
-    return [];
-  }
-
-  return snapshot.data().calendarIds || [];
-}
-
-
-
-export async function saveMonitoredCalendarIds(calendarIds) {
-  const user = auth.currentUser;
-
-  if (!user) return;
-
-  const ref = doc(
-    db,
-    "users",
-    user.uid,
-    "settings",
-    "googleCalendar"
-  );
-
-  await setDoc(ref, {
-    configured: true,
-    calendarIds
-  });
 }
