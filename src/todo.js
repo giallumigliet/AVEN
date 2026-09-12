@@ -196,14 +196,24 @@ function renderTodoCategories(todos) {
 
 
   todos.forEach((todo) => {
-    // Conta solo i todo NON completati
-    if (todo.category && !todo.completed) {
-  
+
+    if (
+      todo.category &&
+      !todo.completed
+    ) {
+
       counts[todo.category] =
         (counts[todo.category] || 0) + 1;
+
     }
+
   });
-  const allCount = todos.filter(todo => !todo.completed).length;
+
+
+  const allCount =
+    todos.filter(
+      todo => !todo.completed
+    ).length;
 
 
   const sortedCategories =
@@ -215,6 +225,25 @@ function renderTodoCategories(todos) {
 
 
   todoCategoryFilter.innerHTML = `
+
+    <button
+      type="button"
+      class="routine-category-item ${
+        selectedTodoCategory === "archived"
+          ? "active"
+          : ""
+      }"
+      data-category="archived"
+    >
+      <span class="routine-category-name">
+        Archived
+      </span>
+
+      <span class="routine-category-icon">
+        🗑
+      </span>
+    </button>
+
 
     <button
       type="button"
@@ -251,7 +280,7 @@ function renderTodoCategories(todos) {
           <span class="routine-category-name">
             ${category.label}
           </span>
-          
+
           <span class="routine-category-icon">
             ${category.icon}
           </span>
@@ -282,7 +311,6 @@ function renderTodoCategories(todos) {
             button.dataset.category;
 
           renderTodoCategories(todos);
-
           renderTodosList(todos);
 
         }
@@ -328,6 +356,10 @@ async function saveTodo() {
       {
         text: todoData.text,
         category: todoData.category,
+        completed,
+        completedAt: completed
+          ? serverTimestamp()
+          : null,
         updatedAt: serverTimestamp()
       }
     );
@@ -413,262 +445,481 @@ function renderTodos(snapshot) {
 
 
 
+function getTodoTimestamp(todo, field) {
+
+  return todo[field]?.seconds
+    ? todo[field].seconds * 1000
+    : 0;
+
+}
+
+
+function isTodoArchived(todo) {
+
+  if (!todo.completed) {
+    return false;
+  }
+
+  const completedAt =
+    getTodoTimestamp(
+      todo,
+      "completedAt"
+    );
+
+  if (!completedAt) {
+    return false;
+  }
+
+  return (
+    Date.now() - completedAt >=
+    24 * 60 * 60 * 1000
+  );
+
+}
+
+
+
+
 
 function renderTodosList(todos) {
-  // 1. Salva la posizione di scroll attuale (del contenitore o del pannello)
-  const scrollContainer = todosList.closest('.todos-panel-content') || todosList; // Adatta se il contenitore scrollabile è un altro
-  const currentScroll = scrollContainer.scrollTop;
+
+  const scrollContainer =
+    todosList.closest(".todos-panel-content") ||
+    todosList;
+
+  const currentScroll =
+    scrollContainer.scrollTop;
+
 
   todosList.innerHTML = "";
 
-  const filteredTodos =
-    selectedTodoCategory === "all"
-      ? todos
-      : todos.filter(
-          todo => todo.category === selectedTodoCategory
-        );
+
+  // -----------------------------------------------------
+  // FILTRO
+  // -----------------------------------------------------
+
+  let filteredTodos;
+
+
+  if (selectedTodoCategory === "archived") {
+
+    filteredTodos =
+      todos.filter(
+        todo =>
+          isTodoArchived(todo)
+      );
+
+  } else {
+
+    filteredTodos =
+      selectedTodoCategory === "all"
+        ? todos
+        : todos.filter(
+            todo =>
+              todo.category ===
+              selectedTodoCategory
+          );
+
+  }
+
+
+  // -----------------------------------------------------
+  // PLANNING MODE
+  // -----------------------------------------------------
 
   const visibleTodos =
     todoPlanningMode
-      ? filteredTodos.filter(todo => !todo.completed)
+
+      ? filteredTodos.filter(
+          todo =>
+            !todo.completed
+        )
+
       : filteredTodos;
 
+
+  // -----------------------------------------------------
+  // ORDINAMENTO
+  // -----------------------------------------------------
+
+  if (!todoPlanningMode) {
+
+    visibleTodos.sort(
+      (a, b) => {
+
+        // ARCHIVED:
+        // più recentemente completati sopra
+
+        if (
+          selectedTodoCategory ===
+          "archived"
+        ) {
+
+          const timeA =
+            getTodoTimestamp(
+              a,
+              "completedAt"
+            );
+
+          const timeB =
+            getTodoTimestamp(
+              b,
+              "completedAt"
+            );
+
+          return timeB - timeA;
+
+        }
+
+
+        // LISTA NORMALE:
+        // prima i non completati
+
+        if (
+          a.completed !==
+          b.completed
+        ) {
+
+          return (
+            Number(a.completed) -
+            Number(b.completed)
+          );
+
+        }
+
+
+        // TODO ATTIVI:
+        // modificati più recentemente sopra
+
+        if (!a.completed) {
+
+          const timeA =
+            getTodoTimestamp(
+              a,
+              "updatedAt"
+            );
+
+          const timeB =
+            getTodoTimestamp(
+              b,
+              "updatedAt"
+            );
+
+          return timeB - timeA;
+
+        }
+
+
+        // COMPLETATI RECENTI:
+        // completati più recentemente sopra
+
+        const timeA =
+          getTodoTimestamp(
+            a,
+            "completedAt"
+          );
+
+        const timeB =
+          getTodoTimestamp(
+            b,
+            "completedAt"
+          );
+
+        return timeB - timeA;
+
+      }
+    );
+
+  }
+
+
+  // -----------------------------------------------------
+  // EMPTY
+  // -----------------------------------------------------
+
   if (visibleTodos.length === 0) {
+
     todosList.innerHTML = `
       <div class="todos-empty">
-        <span>Nessun to do</span>
+
+        <span>
+          ${
+            selectedTodoCategory ===
+            "archived"
+              ? "No archived todos"
+              : "Nessun to do"
+          }
+        </span>
+
         <small>
           ${
             todoPlanningMode
               ? "Nessun to do da pianificare"
-              : "Nessun to do in questa categoria"
+              : selectedTodoCategory ===
+                "archived"
+                  ? "I to do completati da più di 24 ore appariranno qui"
+                  : "Nessun to do in questa categoria"
           }
         </small>
+
       </div>
     `;
+
     return;
+
   }
 
-  if (!todoPlanningMode) {
-    // 2. Aggiungi un ordinamento secondario (es. per data di creazione)
-    visibleTodos.sort((a, b) => {
-      // Prima ordina per stato (completati in basso)
-      if (a.completed !== b.completed) {
-        return Number(a.completed) - Number(b.completed);
-      }
-      
-      // Poi ordina per data di creazione (i più recenti in alto)
-      const timeA = a.createdAt?.seconds || 0;
-      const timeB = b.createdAt?.seconds || 0;
-      return timeB - timeA; 
-    });
-  }
 
-  visibleTodos.forEach((todo) => {
-      // ... resto del codice identico (creazione dell'elemento 'item', ecc.)  
+  // -----------------------------------------------------
+  // RENDER
+  // -----------------------------------------------------
 
-    const item =
-      document.createElement("div");
+  visibleTodos.forEach(
+    (todo) => {
 
-    item.dataset.todoId =
-      todo.id;
-
-    item.className =
-      `todo-list-item ${
-        todo.completed
-          ? "completed"
-          : ""
-      } ${
-        todoPlanningMode &&
-        todoPlanningSelection.has(todo.id)
-          ? "todo-planning-selected"
-          : ""
-      }`;
-
-    const category =
-      TODO_CATEGORIES.find(
-        category =>
-          category.id === todo.category
-      );
-
-    item.innerHTML = `
-      ${
-        todoPlanningMode
-          ? ""
-          : `
-            <label class="todo-check">
-              <input
-                type="checkbox"
-                ${todo.completed ? "checked" : ""}
-              >
-              <span></span>
-            </label>
-          `
-      }
-
-      <div class="todo-list-text"></div>
-
-      ${
-        category &&
-        selectedTodoCategory === "all"
-          ? `
-            <div class="todo-list-category">
-              ${category.icon}
-            </div>
-          `
-          : ""
-      }
-    `;
-
-    item.querySelector(
-      ".todo-list-text"
-    ).textContent =
-      todo.text || "";
-
-    // -----------------------------------------------------
-    // NORMAL MODE
-    // -----------------------------------------------------
-
-    if (!todoPlanningMode) {
-
-      const checkbox =
-        item.querySelector(
-          ".todo-check input"
+      const item =
+        document.createElement(
+          "div"
         );
 
-      checkbox.addEventListener(
-        "click",
-        event => {
-          event.stopPropagation();
+
+      item.dataset.todoId =
+        todo.id;
+
+
+      item.className =
+        `todo-list-item ${
+          todo.completed
+            ? "completed"
+            : ""
+        } ${
+          todoPlanningMode &&
+          todoPlanningSelection.has(
+            todo.id
+          )
+            ? "todo-planning-selected"
+            : ""
+        }`;
+
+
+      const category =
+        TODO_CATEGORIES.find(
+          category =>
+            category.id ===
+            todo.category
+        );
+
+
+      item.innerHTML = `
+
+        ${
+          todoPlanningMode
+            ? ""
+            : `
+              <label class="todo-check">
+
+                <input
+                  type="checkbox"
+                  ${todo.completed
+                    ? "checked"
+                    : ""}
+                >
+
+                <span></span>
+
+              </label>
+            `
         }
-      );
 
-      checkbox.addEventListener(
-        "change",
-        () => {
 
-          const completed =
-            checkbox.checked;
+        <div class="todo-list-text"></div>
 
-          item.classList.toggle(
-            "completed",
-            completed
+
+        ${
+          category &&
+          selectedTodoCategory === "all"
+            ? `
+              <div class="todo-list-category">
+                ${category.icon}
+              </div>
+            `
+            : ""
+        }
+
+      `;
+
+
+      item.querySelector(
+        ".todo-list-text"
+      ).textContent =
+        todo.text || "";
+
+
+      // ---------------------------------------------------
+      // NORMAL MODE
+      // ---------------------------------------------------
+
+      if (!todoPlanningMode) {
+
+        const checkbox =
+          item.querySelector(
+            ".todo-check input"
           );
 
-          if (completed) {
 
-            todosList.appendChild(
-              item
+        checkbox.addEventListener(
+          "click",
+          event => {
+            event.stopPropagation();
+          }
+        );
+
+
+        checkbox.addEventListener(
+          "change",
+          () => {
+
+            const completed =
+              checkbox.checked;
+
+
+            item.classList.toggle(
+              "completed",
+              completed
             );
 
-          } else {
 
-            const firstCompleted =
-              [
-                ...todosList.querySelectorAll(
-                  ".todo-list-item"
-                )
-              ].find(
-                element =>
-                  element.classList.contains(
-                    "completed"
-                  )
-              );
-
-            if (firstCompleted) {
-
-              todosList.insertBefore(
-                item,
-                firstCompleted
-              );
-
-            } else {
+            if (completed) {
 
               todosList.appendChild(
                 item
               );
 
+            } else {
+
+              const firstCompleted =
+                [
+                  ...todosList.querySelectorAll(
+                    ".todo-list-item"
+                  )
+                ].find(
+                  element =>
+                    element.classList.contains(
+                      "completed"
+                    )
+                );
+
+
+              if (firstCompleted) {
+
+                todosList.insertBefore(
+                  item,
+                  firstCompleted
+                );
+
+              } else {
+
+                todosList.appendChild(
+                  item
+                );
+
+              }
+
             }
 
-          }
 
-          updateTodoCompleted(
-            todo.id,
-            completed
-          );
-
-        }
-      );
-
-      item.addEventListener(
-        "click",
-        event => {
-
-          if (
-            event.target.closest(
-              ".todo-check"
-            )
-          ) {
-            return;
-          }
-
-          openTodoEditModal(
-            todo.id,
-            todo
-          );
-
-        }
-      );
-
-    }
-
-    // -----------------------------------------------------
-    // PLANNING MODE
-    // -----------------------------------------------------
-
-    else {
-
-      item.addEventListener(
-        "click",
-        () => {
-
-          if (
-            todoPlanningSelection.has(
-              todo.id
-            )
-          ) {
-
-            todoPlanningSelection.delete(
-              todo.id
-            );
-
-          } else {
-
-            todoPlanningSelection.add(
-              todo.id
+            updateTodoCompleted(
+              todo.id,
+              completed
             );
 
           }
+        );
 
-          item.classList.toggle(
-            "todo-planning-selected",
-            todoPlanningSelection.has(
-              todo.id
-            )
-          );
 
-        }
+        item.addEventListener(
+          "click",
+          event => {
+
+            if (
+              event.target.closest(
+                ".todo-check"
+              )
+            ) {
+              return;
+            }
+
+
+            openTodoEditModal(
+              todo.id,
+              todo
+            );
+
+          }
+        );
+
+      }
+
+
+      // ---------------------------------------------------
+      // PLANNING MODE
+      // ---------------------------------------------------
+
+      else {
+
+        item.addEventListener(
+          "click",
+          () => {
+
+            if (
+              todoPlanningSelection.has(
+                todo.id
+              )
+            ) {
+
+              todoPlanningSelection.delete(
+                todo.id
+              );
+
+            } else {
+
+              todoPlanningSelection.add(
+                todo.id
+              );
+
+            }
+
+
+            item.classList.toggle(
+              "todo-planning-selected",
+              todoPlanningSelection.has(
+                todo.id
+              )
+            );
+
+          }
+        );
+
+      }
+
+
+      todosList.appendChild(
+        item
       );
 
     }
+  );
 
-    todosList.appendChild(item);
 
-  });
+  requestAnimationFrame(
+    () => {
 
-  requestAnimationFrame(() => {
-    scrollContainer.scrollTop = currentScroll;
-  });
+      scrollContainer.scrollTop =
+        currentScroll;
+
+    }
+  );
+
 }
 
 
@@ -737,7 +988,14 @@ async function updateTodoCompleted(
       todoRef,
       {
         completed,
-        updatedAt: serverTimestamp()
+    
+        completedAt:
+          completed
+            ? serverTimestamp()
+            : null,
+    
+        updatedAt:
+          serverTimestamp()
       }
     );
 
