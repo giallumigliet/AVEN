@@ -14,6 +14,7 @@ import { getTodayMonitoredCalendarEvents } from "./google-calendar.js";
 
 
 const dailyRecap = document.getElementById("daily-recap");
+const connectCalendarButton = document.getElementById("connect-calendar-button");
 
 let todos = [];
 let plannedTodoIds = new Set();
@@ -30,6 +31,34 @@ let birthdaysUnsubscribe = null;
 let calendarRefreshInterval = null;
 
 
+
+
+// CONNECT CALENDAR BUTTON ===================================
+function showConnectCalendarButton() {
+
+  if (!connectCalendarButton) {
+    return;
+  }
+
+  connectCalendarButton.hidden = false;
+
+}
+
+
+function hideConnectCalendarButton() {
+
+  if (!connectCalendarButton) {
+    return;
+  }
+
+  connectCalendarButton.hidden = true;
+
+}
+
+
+
+
+
 // CALENDARIO GOOGLE ==============================================
 async function loadCalendarEvents() {
 
@@ -39,6 +68,7 @@ async function loadCalendarEvents() {
       await getTodayMonitoredCalendarEvents();
 
     setRecapEvents(events);
+    hideConnectCalendarButton();
 
   } catch (error) {
 
@@ -48,6 +78,7 @@ async function loadCalendarEvents() {
     );
 
     setRecapEvents([]);
+    showConnectCalendarButton();
 
   }
 
@@ -518,6 +549,8 @@ export async function refreshCalendarEvents() {
       await getTodayMonitoredCalendarEvents();
 
     setRecapEvents(events);
+    hideConnectCalendarButton();
+
 
   } catch (error) {
 
@@ -525,6 +558,8 @@ export async function refreshCalendarEvents() {
       "Error refreshing calendar events:",
       error
     );
+
+    showConnectCalendarButton();
 
   }
 
