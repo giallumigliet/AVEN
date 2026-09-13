@@ -297,15 +297,14 @@ export async function getGoogleCalendarList() {
       );
 
       if (response.status === 401) {
-
-        sessionStorage.removeItem(
-          "aven-google-access-token"
-        );
-
+      
+        googleAccessToken = null;
+        googleAccessTokenExpiresAt = 0;
+      
         throw new Error(
           "Google Calendar authorization expired."
         );
-
+      
       }
 
       if (!response.ok) {
