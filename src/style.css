@@ -2750,6 +2750,12 @@ select option {
 
 @media (max-width: 700px) {
 
+  input,
+  textarea,
+  select {
+    font-size: 16px !important;
+  }
+
   .monitored-calendars-panel {
     padding: 16px;
   }
