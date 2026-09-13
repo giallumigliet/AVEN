@@ -1,5 +1,4 @@
 // google-calendar.js
-
 import { auth, db } from "./firebase.js";
 
 import {
