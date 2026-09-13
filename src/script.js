@@ -28,7 +28,8 @@ import { initRecap, refreshCalendarEvents } from "./recap.js";
 import {
   getGoogleCalendarList,
   getGoogleCalendarSettings,
-  saveMonitoredCalendarIds
+  saveMonitoredCalendarIds,
+  ensureGoogleCalendarAccess
 } from "./google-calendar.js";
 
 // ELEMENTS =========================================================
@@ -126,12 +127,30 @@ loginButton.addEventListener(
           auth,
           provider
         );
-
-
-      const settings = await getGoogleCalendarSettings();
-
+      
+      
+      // AUTORIZZA GOOGLE CALENDAR
+      const calendarAuthorized =
+        await ensureGoogleCalendarAccess();
+      
+      if (!calendarAuthorized) {
+      
+        console.warn(
+          "Google Calendar authorization was not completed."
+        );
+      
+        return;
+      }
+      
+      
+      const settings =
+        await getGoogleCalendarSettings();
+      
+      
       if (!settings.configured) {
+      
         await openMonitoredCalendarsPanel();
+      
       }
       
 
@@ -513,18 +532,27 @@ changeAccountButton.addEventListener(
           auth,
           provider
         );
-
-
-      const settings = await getGoogleCalendarSettings();
-
-
-      if (
-        !settings.configured
-      ) {
-
-        await openMonitoredCalendarsPanel();
+      
+      
+      const calendarAuthorized =
+        await ensureGoogleCalendarAccess();
+      
+      
+      if (!calendarAuthorized) {
+      
+        console.warn(
+          "Google Calendar authorization was not completed."
+        );
+        return;
+      
       }
       
+      const settings = await getGoogleCalendarSettings();
+      if (!settings.configured) {
+
+        await openMonitoredCalendarsPanel();
+
+      }
 
 
     } catch (err) {
