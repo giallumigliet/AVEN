@@ -890,10 +890,86 @@ main {
 
 
 
+/* ==================================================
+   CONNECT CALENDAR
+   ================================================== */
+
+.connect-calendar-button {
+  display: block;
+  width: fit-content;
+  margin: 14px auto 0;
+
+  padding: 10px 18px;
+
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-pill);
+
+  background: var(--color-accent-soft);
+  color: var(--color-accent);
+
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1;
+
+  cursor: pointer;
+
+  transition:
+    background var(--transition-fast),
+    border-color var(--transition-fast),
+    color var(--transition-fast),
+    transform var(--transition-fast),
+    opacity var(--transition-fast);
+}
 
 
+.connect-calendar-button[hidden] {
+  display: none;
+}
 
 
+.connect-calendar-button:hover {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  color: var(--color-bg);
+
+  transform: translateY(-1px);
+}
+
+
+.connect-calendar-button:active {
+  transform: translateY(0);
+}
+
+
+.connect-calendar-button:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+}
+
+
+.connect-calendar-button:disabled {
+  opacity: 0.55;
+  cursor: wait;
+  transform: none;
+}
+
+
+/* ==================================================
+   LIGHT MODE
+   ================================================== */
+
+body.light-mode .connect-calendar-button {
+  border-color: var(--color-border);
+  background: var(--color-accent-soft);
+  color: var(--color-accent);
+}
+
+body.light-mode .connect-calendar-button:hover {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  color: #ffffff;
+}
 
 
 
