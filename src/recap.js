@@ -8,22 +8,12 @@ import {
   onSnapshot
 } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
 
-import {
-  onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js";
-
-import {
-  getRoutineDaysUntilNext
-} from "./routines.js";
-
-import {
-  getTodayMonitoredCalendarEvents
-} from "./google-calendar.js";
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js";
+import { getRoutineDaysUntilNext } from "./routines.js";
+import { getTodayMonitoredCalendarEvents } from "./google-calendar.js";
 
 
-const dailyRecap =
-  document.getElementById("daily-recap");
-
+const dailyRecap = document.getElementById("daily-recap");
 
 let todos = [];
 let plannedTodoIds = new Set();
@@ -36,6 +26,8 @@ let todosUnsubscribe = null;
 let plannerUnsubscribe = null;
 let routinesUnsubscribe = null;
 let birthdaysUnsubscribe = null;
+
+let calendarRefreshInterval = null;
 
 
 // CALENDARIO GOOGLE ==============================================
@@ -517,8 +509,25 @@ export function setRecapEvents(events) {
 }
 
 
-export async function refreshRecapCalendarEvents() {
-  await loadCalendarEvents();
+
+async function refreshCalendarEvents() {
+
+  try {
+
+    const events =
+      await getTodayMonitoredCalendarEvents();
+
+    setRecapEvents(events);
+
+  } catch (error) {
+
+    console.error(
+      "Error refreshing calendar events:",
+      error
+    );
+
+  }
+
 }
 
 
@@ -559,6 +568,15 @@ export function initRecap() {
       listenToBirthdays(user);
 
       loadCalendarEvents();
+
+      if (calendarRefreshInterval) {
+        clearInterval(calendarRefreshInterval);
+      }
+      
+      calendarRefreshInterval = setInterval(
+        refreshCalendarEvents,
+        2 * 60 * 1000
+      );
 
     }
   );
