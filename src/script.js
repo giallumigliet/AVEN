@@ -24,7 +24,7 @@ import { initDailyPlanner } from "./daily-planner.js";
 import { initRoutines, openRoutineModal } from "./routines.js";
 import { initBirthdays, openBirthdayModal } from "./birthdays.js";
 import { isHealthKitAvailable, requestHealthPermission, getTodayHealth } from "./health.js";
-import { initRecap, refreshRecapCalendarEvents } from "./recap.js";
+import { initRecap, refreshCalendarEvents } from "./recap.js";
 import {
   getGoogleCalendarList,
   getGoogleCalendarSettings,
@@ -460,7 +460,7 @@ async function closeMonitoredCalendarsPanel() {
 
     await saveMonitoredCalendarIds(selectedIds);
 
-    await refreshRecapCalendarEvents();
+    await refreshCalendarEvents();
     
     monitoredCalendarsPanel.classList.remove("open");
     monitoredCalendarsPanel.setAttribute("aria-hidden", "true");
