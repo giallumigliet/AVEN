@@ -10,7 +10,7 @@ import {
 
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js";
 import { getRoutineDaysUntilNext } from "./routines.js";
-import { getTodayMonitoredCalendarEvents } from "./google-calendar.js";
+import { getTodayMonitoredCalendarEvents, ensureGoogleCalendarAccess } from "./google-calendar.js";
 
 
 const dailyRecap = document.getElementById("daily-recap");
@@ -567,7 +567,8 @@ export function initRecap() {
       listenToRoutines(user);
       listenToBirthdays(user);
 
-      loadCalendarEvents();
+      await ensureGoogleCalendarAccess();
+      await loadCalendarEvents();
 
       if (calendarRefreshInterval) {
         clearInterval(calendarRefreshInterval);
