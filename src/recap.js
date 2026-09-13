@@ -10,7 +10,7 @@ import {
 
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js";
 import { getRoutineDaysUntilNext } from "./routines.js";
-import { getTodayMonitoredCalendarEvents } from "./google-calendar.js";
+import { getTodayMonitoredCalendarEvents, reconnectGoogleCalendar } from "./google-calendar.js";
 
 
 const dailyRecap = document.getElementById("daily-recap");
@@ -54,6 +54,47 @@ function hideConnectCalendarButton() {
   connectCalendarButton.hidden = true;
 
 }
+
+
+
+
+connectCalendarButton?.addEventListener(
+  "click",
+  async () => {
+
+    if (!connectCalendarButton) {
+      return;
+    }
+
+    connectCalendarButton.disabled = true;
+    connectCalendarButton.textContent = "Connecting...";
+
+    try {
+
+      await reconnectGoogleCalendar();
+
+      const events =
+        await getTodayMonitoredCalendarEvents();
+
+      setRecapEvents(events);
+
+      hideConnectCalendarButton();
+
+    } catch (error) {
+
+      console.error(
+        "Google Calendar reconnect failed:",
+        error
+      );
+
+      connectCalendarButton.disabled = false;
+      connectCalendarButton.textContent =
+        "Connect calendar";
+
+    }
+
+  }
+);
 
 
 
