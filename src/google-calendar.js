@@ -232,6 +232,21 @@ export async function getValidGoogleAccessToken() {
 }
 
 
+export async function ensureGoogleCalendarAccess() {
+  try {
+    await getValidGoogleAccessToken();
+    return true;
+  } catch (error) {
+    console.error(
+      "Unable to authorize Google Calendar:",
+      error
+    );
+
+    return false;
+  }
+}
+
+
 // =========================================================
 // GOOGLE CALENDAR LIST
 // =========================================================
