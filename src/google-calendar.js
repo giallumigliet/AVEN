@@ -50,7 +50,7 @@ function getTodayRange() {
 // =========================================================
 
 const GOOGLE_OAUTH_CLIENT_ID =
-  "INSERISCI_QUI_IL_TUO_WEB_CLIENT_ID.apps.googleusercontent.com";
+  "760754542696-76ubln7l5v654nullin96fsff6drs0sn.apps.googleusercontent.com";
 
 const GOOGLE_CALENDAR_SCOPES = [
   "https://www.googleapis.com/auth/calendar.events.readonly",
