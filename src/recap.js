@@ -533,7 +533,7 @@ export async function refreshCalendarEvents() {
 
 // INIT ===========================================================
 
-export function initRecap() {
+export async function initRecap() {
 
   if (!dailyRecap) {
     return;
