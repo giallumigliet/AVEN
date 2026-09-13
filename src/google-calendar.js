@@ -273,10 +273,24 @@ export async function getGoogleCalendarList() {
   let accessToken;
 
   try {
-    accessToken = await getValidGoogleAccessToken();
+
+    accessToken =
+      await getValidGoogleAccessToken();
+
   } catch (error) {
-    console.error("Unable to authorize Google Calendar:", error);
-    return [];
+
+    console.error(
+      "Unable to authorize Google Calendar:",
+      error
+    );
+
+    // Nessun token valido:
+    // informiamo recap.js che deve mostrare
+    // "Connect calendar".
+    throw new Error(
+      "GOOGLE_CALENDAR_AUTH_REQUIRED"
+    );
+
   }
 
   try {
@@ -310,16 +324,24 @@ export async function getGoogleCalendarList() {
         }
       );
 
+      // --------------------------------------------------
+      // 401 = access token scaduto / non valido
+      // --------------------------------------------------
+
       if (response.status === 401) {
-      
+
         googleAccessToken = null;
         googleAccessTokenExpiresAt = 0;
-      
+
         throw new Error(
-          "Google Calendar authorization expired."
+          "GOOGLE_CALENDAR_AUTH_REQUIRED"
         );
-      
+
       }
+
+      // --------------------------------------------------
+      // Altri errori HTTP
+      // --------------------------------------------------
 
       if (!response.ok) {
 
@@ -384,19 +406,18 @@ export async function getGoogleCalendarList() {
 
       }));
 
+
   } catch (error) {
 
     console.error(
       "Google Calendar list:",
       error
     );
-
     throw error;
 
   }
 
 }
-
 
 // =========================================================
 // GOOGLE CALENDAR SETTINGS
@@ -539,6 +560,7 @@ export async function getTodayMonitoredCalendarEvents() {
 // =========================================================
 
 export async function getTodayCalendarEvents(calendarId) {
+
   const user =
     auth.currentUser;
 
@@ -546,18 +568,29 @@ export async function getTodayCalendarEvents(calendarId) {
     return [];
   }
 
-
   if (!calendarId) {
     return [];
   }
 
 
   let accessToken;
+
   try {
-    accessToken = await getValidGoogleAccessToken();
+
+    accessToken =
+      await getValidGoogleAccessToken();
+
   } catch (error) {
-    console.error("Unable to authorize Google Calendar:", error);
-    return [];
+
+    console.error(
+      "Unable to authorize Google Calendar:",
+      error
+    );
+
+    throw new Error(
+      "GOOGLE_CALENDAR_AUTH_REQUIRED"
+    );
+
   }
 
 
@@ -600,105 +633,27 @@ export async function getTodayCalendarEvents(calendarId) {
       );
 
 
+
     if (response.status === 401) {
 
       googleAccessToken = null;
-    
+
       googleAccessTokenExpiresAt = 0;
-    
+
       console.warn(
-        "Google Calendar access token expired. Retrying..."
+        "Google Calendar access token expired."
       );
-    
-      try {
-    
-        const newAccessToken =
-          await requestGoogleAccessToken();
-    
-    
-        const retryResponse =
-          await fetch(
-            `https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(calendarId)}/events?${params}`,
-            {
-              headers: {
-                Authorization:
-                  `Bearer ${newAccessToken}`
-              }
-            }
-          );
-    
-    
-        if (!retryResponse.ok) {
-    
-          const retryError =
-            await retryResponse
-              .json()
-              .catch(() => null);
-    
-          console.error(
-            "Google Calendar retry error:",
-            retryError
-          );
-    
-          return [];
-    
-        }
-    
-    
-        const retryData =
-          await retryResponse.json();
-    
-    
-        return (retryData.items || [])
-    
-          .filter(
-            (event) =>
-              event.status !== "cancelled"
-          )
-    
-          .map((event) => ({
-    
-            id:
-              event.id,
-    
-            calendarId:
-              calendarId,
-    
-            summary:
-              event.summary ||
-              "Untitled event",
-    
-            start:
-              event.start?.dateTime ||
-              event.start?.date ||
-              null,
-    
-            end:
-              event.end?.dateTime ||
-              event.end?.date ||
-              null,
-    
-            allDay:
-              Boolean(
-                event.start?.date
-              )
-    
-          }));
-    
-    
-      } catch (retryError) {
-    
-        console.error(
-          "Google Calendar retry failed:",
-          retryError
-        );
-    
-        return [];
-    
-      }
-    
+
+      throw new Error(
+        "GOOGLE_CALENDAR_AUTH_REQUIRED"
+      );
+
     }
 
+
+    // --------------------------------------------------
+    // Altri errori HTTP
+    // --------------------------------------------------
 
     if (!response.ok) {
 
@@ -707,12 +662,10 @@ export async function getTodayCalendarEvents(calendarId) {
           () => null
         );
 
-
       console.error(
         "Google Calendar API error:",
         errorData
       );
-
 
       throw new Error(
         `Google Calendar error: ${response.status} ${
@@ -770,6 +723,14 @@ export async function getTodayCalendarEvents(calendarId) {
       "Google Calendar:",
       error
     );
+
+
+    if (
+      error?.message ===
+      "GOOGLE_CALENDAR_AUTH_REQUIRED"
+    ) {
+      throw error;
+    }
 
     return [];
 
