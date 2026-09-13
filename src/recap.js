@@ -506,7 +506,6 @@ function listenToBirthdays(user) {
 
 
 // GOOGLE CALENDAR ================================================
-
 export function setRecapEvents(events) {
 
   calendarEvents =
@@ -515,7 +514,11 @@ export function setRecapEvents(events) {
       : [];
 
   updateRecap();
+}
 
+
+export async function refreshRecapCalendarEvents() {
+  await loadCalendarEvents();
 }
 
 
