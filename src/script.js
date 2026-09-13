@@ -94,6 +94,7 @@ onAuthStateChanged(auth, (user) => {
     if (user.photoURL) {
       userPhoto.src = user.photoURL;
     }
+    initRecap();
 
   } else {
 
