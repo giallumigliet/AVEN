@@ -246,6 +246,20 @@ export async function ensureGoogleCalendarAccess() {
 }
 
 
+
+
+export async function reconnectGoogleCalendar() {
+
+  googleAccessToken = null;
+  googleAccessTokenExpiresAt = 0;
+
+  return requestGoogleAccessToken();
+
+}
+
+
+
+
 // =========================================================
 // GOOGLE CALENDAR LIST
 // =========================================================
