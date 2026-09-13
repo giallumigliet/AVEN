@@ -510,7 +510,7 @@ export function setRecapEvents(events) {
 
 
 
-async function refreshCalendarEvents() {
+export async function refreshCalendarEvents() {
 
   try {
 
