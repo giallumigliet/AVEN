@@ -35,6 +35,8 @@ async function loadCalendarEvents() {
 
   try {
 
+    await ensureGoogleCalendarAccess();
+
     const events =
       await getTodayMonitoredCalendarEvents();
 
@@ -514,6 +516,8 @@ export async function refreshCalendarEvents() {
 
   try {
 
+    await ensureGoogleCalendarAccess();
+
     const events =
       await getTodayMonitoredCalendarEvents();
 
@@ -530,7 +534,6 @@ export async function refreshCalendarEvents() {
 
 }
 
-
 // INIT ===========================================================
 
 export async function initRecap() {
@@ -542,7 +545,7 @@ export async function initRecap() {
 
   onAuthStateChanged(
     auth,
-    user => {
+    async user => {
 
       if (!user) {
 
