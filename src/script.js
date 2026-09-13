@@ -127,28 +127,12 @@ loginButton.addEventListener(
         );
 
 
-      const credential =
-        GoogleAuthProvider
-          .credentialFromResult(
-            result
-          );
+      const settings = await getGoogleCalendarSettings();
 
-
-      if (
-        credential?.accessToken
-      ) {
-
-        sessionStorage.setItem(
-          "aven-google-access-token",
-          credential.accessToken
-        );
-
-        const settings = await getGoogleCalendarSettings();
-
-        if (!settings.configured) {
-          await openMonitoredCalendarsPanel();
-        }
+      if (!settings.configured) {
+        await openMonitoredCalendarsPanel();
       }
+      
 
     } catch (err) {
 
@@ -530,33 +514,16 @@ changeAccountButton.addEventListener(
         );
 
 
-      const credential =
-        GoogleAuthProvider
-          .credentialFromResult(
-            result
-          );
+      const settings = await getGoogleCalendarSettings();
 
 
       if (
-        credential?.accessToken
+        !settings.configured
       ) {
 
-        sessionStorage.setItem(
-          "aven-google-access-token",
-          credential.accessToken
-        );
-
-
-        const settings = await getGoogleCalendarSettings();
-
-
-        if (
-          !settings.configured
-        ) {
-
-          await openMonitoredCalendarsPanel();
-        }
+        await openMonitoredCalendarsPanel();
       }
+      
 
 
     } catch (err) {
