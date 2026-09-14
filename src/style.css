@@ -736,7 +736,7 @@ main {
 .main-view-switcher {
   position: fixed;
   left: 50%;
-  bottom: 91px;
+  top: 90px;
 
   transform: translateX(-50%);
 
@@ -755,7 +755,7 @@ main {
 
 
 .main-view-tab {
-  padding: 5px 9px;
+  padding: 7px 10px;
 
   background: transparent;
   border: 0;
@@ -763,7 +763,7 @@ main {
 
   color: var(--color-muted);
 
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 500;
 
   cursor: pointer;
