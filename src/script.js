@@ -99,6 +99,7 @@ onAuthStateChanged(auth, (user) => {
       userPhoto.src = user.photoURL;
     }
     initRecap();
+    initDailyPlanner();
 
   } else {
 
@@ -795,11 +796,6 @@ initBirthdays();
 // TODOS =========================================================
 initTodos();
 
-// DAILY PLANNER =================================================
-initDailyPlanner();
-
-// DAILY RECAP ===================================================
-initRecap();
 
 
 
