@@ -610,16 +610,6 @@ body.light-mode .auth-gate {
 /* =========================================================
    MAIN
 ========================================================= */
-main-wrap{
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  flex: 1;
-  min-width: 0;
-  width: 100%;
-}
-
-
 main {
   flex: 1;
   min-width: 0;
