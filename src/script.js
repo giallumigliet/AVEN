@@ -289,6 +289,8 @@ const monitoredCalendarsPanelBackdrop = document.getElementById("monitored-calen
 const monitoredCalendarsClose = document.getElementById("monitored-calendars-close");
 const monitoredCalendarsList = document.getElementById("monitored-calendars-list");
 
+const connectCalendarButton = document.getElementById("connect-calendar-button");
+
 
 async function openMonitoredCalendarsPanel() {
 
@@ -693,6 +695,7 @@ function switchMainView(view) {
     view === "planner";
 
   recapView.hidden = isPlanner;
+  connectCalendarButton.hidden = isPlanner;
   plannerView.hidden = !isPlanner;
 
   recapView.classList.toggle(
