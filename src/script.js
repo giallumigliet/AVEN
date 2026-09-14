@@ -54,7 +54,10 @@ const resetDataButton = document.getElementById("reset-data-button");
 
 const navItems = document.querySelectorAll(".nav-item");
 
-
+const recapTab = document.getElementById("recap-tab");
+const plannerTab = document.getElementById("planner-tab");
+const recapView = document.getElementById("recap-view");
+const plannerView = document.getElementById("planner-view");
 
 
 // AUTH =========================================================
@@ -679,6 +682,63 @@ window.addEventListener("resize", () => {
 
 });
 
+
+
+
+// SWITCH RECAP/DAILY PLANNER =========================================================
+function switchMainView(view) {
+
+  const isPlanner =
+    view === "planner";
+
+  recapView.hidden = isPlanner;
+  plannerView.hidden = !isPlanner;
+
+  recapView.classList.toggle(
+    "active",
+    !isPlanner
+  );
+
+  plannerView.classList.toggle(
+    "active",
+    isPlanner
+  );
+
+  recapTab.classList.toggle(
+    "active",
+    !isPlanner
+  );
+
+  plannerTab.classList.toggle(
+    "active",
+    isPlanner
+  );
+
+  recapTab.setAttribute(
+    "aria-selected",
+    String(!isPlanner)
+  );
+
+  plannerTab.setAttribute(
+    "aria-selected",
+    String(isPlanner)
+  );
+}
+
+
+recapTab.addEventListener(
+  "click",
+  () => {
+    switchMainView("recap");
+  }
+);
+
+plannerTab.addEventListener(
+  "click",
+  () => {
+    switchMainView("planner");
+  }
+);
 
 
 
