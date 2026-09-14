@@ -1928,6 +1928,7 @@ body.light-mode .connect-calendar-button:hover {
   color: var(--color-muted);
   font-size: 12px;
   font-weight: 600;
+  text-align: center;
 }
 
 .daily-planner-list {
@@ -1970,7 +1971,7 @@ body.light-mode .connect-calendar-button:hover {
 
   position: absolute;
 
-  left: 28px;
+  left: calc(50%);
 
   top: calc(50% + 20px);
   bottom: -15px;
