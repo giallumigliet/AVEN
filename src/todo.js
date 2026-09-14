@@ -13,6 +13,8 @@ import {
   getDoc
 } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
 
+import { refreshDailyPlanner } from "./daily-planner.js";
+
 
 
 // ELEMENTS ------------------
@@ -1146,6 +1148,9 @@ async function toggleTodoPlanningMode() {
   renderTodosList(
     latestTodos
   );
+
+
+  await refreshDailyPlanner();
   closeTodosPanel();
 }
 
