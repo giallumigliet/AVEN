@@ -84,12 +84,7 @@
 
       <!-- SIDEBAR ==================================================== -->
       <aside class="sidebar" id="sidebar">
-        
-        <button id=daily-planner-sidebar class="nav-item" type="button">
-          <span class="nav-icon">☉</span>
-          <span>Daily planner</span>
-        </button>
-        
+    
         <button id=to-do-sidebar class="nav-item" type="button">
           <span class="nav-icon">✓</span>
           <span>To do lists</span>
@@ -125,12 +120,47 @@
       <!-- MAIN ==================================================== -->
       <main>
 
+        <div class="main-view-switcher" role="tablist">
+      
+          <button
+            type="button"
+            class="main-view-tab active"
+            id="recap-tab"
+            data-view="recap"
+            role="tab"
+            aria-selected="true"
+          >
+            Recap
+          </button>
+      
+          <button
+            type="button"
+            class="main-view-tab"
+            id="planner-tab"
+            data-view="planner"
+            role="tab"
+            aria-selected="false"
+          >
+            Do today
+          </button>
+      
+        </div>
+
         <section class="greeting">
           <p class="greeting-subtitle">Today</p>
           <h1 class="greeting-title" id="daily-recap">
             Your day is clear.
           </h1>
         </section>
+
+
+
+          <section class="main-view main-view-planner" id="planner-view" hidden>
+            <div class="daily-planner-inline">
+              <div class="daily-planner-status" id="daily-planner-status"></div>
+              <div class="daily-planner-list" id="daily-planner-list"></div>
+            </div>
+          </section>
 
         <button
           id="connect-calendar-button"
@@ -294,42 +324,6 @@
 
 
 
-
-
-
-      <!-- DAILY PLANNER PANEL ================================================ -->
-      <div class="daily-planner-panel" id="daily-planner-panel" aria-hidden="true">
-        <div class="daily-planner-panel-backdrop" id="daily-planner-panel-backdrop"></div>
-      
-        <div class="daily-planner-panel-content">
-      
-          <div class="daily-planner-panel-header">
-            <div>
-              <span class="panel-label">DAILY PLANNER</span>
-            </div>
-      
-            <button
-              type="button"
-              class="close-daily-planner-panel"
-              id="close-daily-planner-panel"
-              aria-label="Close"
-            >
-              ×
-            </button>
-          </div>
-      
-          <div
-            class="daily-planner-status"
-            id="daily-planner-status"
-          ></div>
-      
-          <div
-            class="daily-planner-list"
-            id="daily-planner-list"
-          ></div>
-      
-        </div>
-      </div>
 
       
       <!-- ROUTINE MODAL ================================================ -->
