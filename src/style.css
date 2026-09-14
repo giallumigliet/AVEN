@@ -1972,10 +1972,10 @@ body.light-mode .connect-calendar-button:hover {
 
   left: 28px;
 
-  top: calc(50% + 10px);
-  bottom: -4px;
+  top: calc(50% + 20px);
+  bottom: -15px;
 
-  width: 1px;
+  width: 2px;
 
   background: var(--color-accent);
 
