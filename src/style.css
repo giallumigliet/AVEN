@@ -3730,7 +3730,7 @@ button:active {
       opacity var(--transition-fast),
       transform var(--transition-fast);
 
-    z-index: 200;
+    z-index: 900;
   }
   
 
