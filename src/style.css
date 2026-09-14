@@ -2952,8 +2952,14 @@ select option {
 
 
 
-  .main-view-switcher {
-    bottom: 88px;
+   .main-view-switcher {
+    position: fixed;
+    top: 60px;
+    bottom: auto;
+    left: 50%;
+    transform: translateX(-50%);
+
+    z-index: 250;
   }
   
   .daily-planner-inline {
