@@ -730,6 +730,202 @@ main {
    DAILY PANEL
 ========================================================= */
 
+
+
+
+.main-view-switcher {
+  position: fixed;
+  left: 50%;
+  bottom: 91px;
+
+  transform: translateX(-50%);
+
+  display: flex;
+  align-items: center;
+  gap: 4px;
+
+  padding: 3px;
+
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 999px;
+
+  z-index: 250;
+}
+
+
+.main-view-tab {
+  padding: 5px 9px;
+
+  background: transparent;
+  border: 0;
+  border-radius: 999px;
+
+  color: var(--color-muted);
+
+  font-size: 10px;
+  font-weight: 500;
+
+  cursor: pointer;
+
+  transition:
+    color var(--transition-fast),
+    background var(--transition-fast);
+}
+
+
+.main-view-tab.active {
+  color: var(--color-text);
+  background: var(--color-surface);
+}
+
+
+.main-view-tab:not(.active) {
+  opacity: 0.65;
+}
+
+
+
+.main-view {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.main-view[hidden] {
+  display: none;
+}
+
+
+.daily-planner-inline {
+  width: min(620px, 88vw);
+
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+
+  text-align: left;
+}
+
+
+.daily-planner-status {
+  margin-bottom: 18px;
+
+  color: var(--color-muted);
+
+  font-size: 11px;
+  text-align: center;
+}
+
+
+.daily-planner-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+
+.daily-planner-item {
+  min-height: 42px;
+
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  padding: 8px 4px;
+
+  background: transparent;
+  border: 0;
+
+  color: var(--color-text);
+
+  font-size: 14px;
+
+  transition:
+    opacity var(--transition-fast),
+    color var(--transition-fast);
+}
+
+
+.daily-planner-item.completed {
+  color: var(--color-muted);
+}
+
+
+.daily-planner-text {
+  flex: 1;
+}
+
+
+.daily-planner-category {
+  flex-shrink: 0;
+
+  font-size: 13px;
+  opacity: 0.7;
+}
+
+
+.daily-planner-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+
+  padding: 20px 0;
+
+  color: var(--color-muted);
+
+  text-align: center;
+}
+
+
+.daily-planner-empty span {
+  color: var(--color-text);
+  font-size: 14px;
+}
+
+
+.daily-planner-empty small {
+  font-size: 11px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 .daily-panel {
   display: none;
   position: relative;
@@ -2854,6 +3050,21 @@ select option {
     min-height: 50px;
     padding: 10px 12px;
   }
+
+
+
+
+  .main-view-switcher {
+    bottom: 88px;
+  }
+  
+  .daily-planner-inline {
+    width: calc(100vw - 40px);
+  }
+
+
+
+  
 
 }
 
