@@ -354,3 +354,11 @@ export function initDailyPlanner() {
     });
 
 }
+
+
+
+
+export async function refreshDailyPlanner() {
+  await loadTodayPlan();
+  renderDailyPlanner();
+}
