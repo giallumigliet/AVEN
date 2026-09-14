@@ -1155,7 +1155,6 @@ async function toggleTodoPlanningMode() {
   );
 
 
-  await refreshDailyPlanner();
   closeTodosPanel();
 }
 
@@ -1248,6 +1247,7 @@ async function closeTodosPanel() {
   renderTodosList(
     latestTodos
   );
+  await refreshDailyPlanner();
 }
 
 
