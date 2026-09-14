@@ -553,7 +553,6 @@ body.light-mode .auth-gate {
   overflow: hidden;
   opacity: 1;
   transition: width var(--transition-normal), opacity var(--transition-normal);
-  position: fixed;
   z-index: 999;
 }
 
