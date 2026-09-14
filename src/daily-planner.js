@@ -8,7 +8,8 @@ import {
 import {
   doc,
   getDoc,
-  setDoc
+  setDoc,
+  serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
 
 import {
@@ -17,25 +18,7 @@ import {
   updateDoc
 } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
 
-const dailyPlannerSidebar =
-  document.getElementById(
-    "daily-planner-sidebar"
-  );
 
-const dailyPlannerPanel =
-  document.getElementById(
-    "daily-planner-panel"
-  );
-
-const closeDailyPlannerPanelButton =
-  document.getElementById(
-    "close-daily-planner-panel"
-  );
-
-const dailyPlannerPanelBackdrop =
-  document.getElementById(
-    "daily-planner-panel-backdrop"
-  );
 
 const dailyPlannerStatus =
   document.getElementById(
@@ -278,7 +261,15 @@ async function updateTodoCompleted(
   await updateDoc(
     todoRef,
     {
-      completed
+      completed,
+  
+      completedAt:
+        completed
+          ? serverTimestamp()
+          : null,
+  
+      updatedAt:
+        serverTimestamp()
     }
   );
 }
@@ -337,54 +328,12 @@ function listenToTodos() {
 }
 
 
-export async function openDailyPlanner() {
-  try {
-    await loadTodayPlan();
-
-    dailyPlannerPanel.classList.add(
-      "open"
-    );
-
-    dailyPlannerSidebar.classList.add(
-      "active"
-    );
-
-    listenToTodos();
-
-  } catch (error) {
-
-    console.error(
-      "Error opening daily planner:",
-      error
-    );
-
-  }
-}
-
-
-async function closeDailyPlanner() {
-  dailyPlannerPanel.classList.remove(
-    "open"
-  );
-
-  dailyPlannerSidebar.classList.remove(
-    "active"
-  );
-
-  if (todosUnsubscribe) {
-    todosUnsubscribe();
-    todosUnsubscribe = null;
-  }
-
-  todosLoaded = false;
-}
-
 
 export function initDailyPlanner() {
 
   if (
-    !dailyPlannerSidebar ||
-    !dailyPlannerPanel
+    !dailyPlannerStatus ||
+    !dailyPlannerList
   ) {
     console.warn(
       "Daily planner elements not found."
@@ -393,18 +342,15 @@ export function initDailyPlanner() {
     return;
   }
 
-  dailyPlannerSidebar.addEventListener(
-    "click",
-    openDailyPlanner
-  );
+  loadTodayPlan()
+    .then(() => {
+      listenToTodos();
+    })
+    .catch(error => {
+      console.error(
+        "Error initializing daily planner:",
+        error
+      );
+    });
 
-  closeDailyPlannerPanelButton.addEventListener(
-    "click",
-    closeDailyPlanner
-  );
-
-  dailyPlannerPanelBackdrop.addEventListener(
-    "click",
-    closeDailyPlanner
-  );
 }
