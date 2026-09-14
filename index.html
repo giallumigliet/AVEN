@@ -118,7 +118,8 @@
       </aside>
 
       <!-- MAIN ==================================================== -->
-      <div class="main-view-switcher" role="tablist">
+      <div class="main-wrap">
+        <div class="main-view-switcher" role="tablist">
       
           <button
             type="button"
@@ -144,44 +145,46 @@
       
         </div>
 
-      
-      <main>
-       <section class="main-view main-view-recap active" id="recap-view">
-          <section class="greeting">
-            <p class="greeting-subtitle">Today</p>
-      
-            <h1 class="greeting-title" id="daily-recap">
-              Your day is clear.
-            </h1>
+        
+        <main>
+         <section class="main-view main-view-recap active" id="recap-view">
+            <section class="greeting">
+              <p class="greeting-subtitle">Today</p>
+        
+              <h1 class="greeting-title" id="daily-recap">
+                Your day is clear.
+              </h1>
+            </section>
           </section>
-        </section>
+  
+  
+  
+          <section class="main-view main-view-planner" id="planner-view" hidden>
+            <div class="daily-planner-inline">
+              <div class="daily-planner-status" id="daily-planner-status"></div>
+              <div class="daily-planner-list" id="daily-planner-list"></div>
+            </div>
+          </section>
+  
+          <button
+            id="connect-calendar-button"
+            class="connect-calendar-button"
+            type="button"
+            hidden
+          >
+            Connect calendar
+          </button>
+  
+  
+          <section class="assistant-area">
+            <div class="assistant-core">
+              <span class="assistant-status">Ready</span>
+            </div>
+          </section>
+  
+        </main>
 
-
-
-        <section class="main-view main-view-planner" id="planner-view" hidden>
-          <div class="daily-planner-inline">
-            <div class="daily-planner-status" id="daily-planner-status"></div>
-            <div class="daily-planner-list" id="daily-planner-list"></div>
-          </div>
-        </section>
-
-        <button
-          id="connect-calendar-button"
-          class="connect-calendar-button"
-          type="button"
-          hidden
-        >
-          Connect calendar
-        </button>
-
-
-        <section class="assistant-area">
-          <div class="assistant-core">
-            <span class="assistant-status">Ready</span>
-          </div>
-        </section>
-
-      </main>
+      </div>
 
 
       <!-- MONITORED CALENDARS PANEL -->
