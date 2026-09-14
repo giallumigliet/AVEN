@@ -1039,27 +1039,32 @@ function getTodayKey() {
 
 
 async function saveTodoPlanningSelection() {
-
   const user = auth.currentUser;
 
   if (!user) {
     return;
   }
 
+  const today = new Date();
+
+  const year = today.getFullYear();
+  const month = String(today.getMonth() + 1).padStart(2, "0");
+  const day = String(today.getDate()).padStart(2, "0");
+
+  const todayKey = `${year}-${month}-${day}`;
+
   const plannerRef = doc(
     db,
     "users",
     user.uid,
     "dailyPlanner",
-    getTodayKey()
+    todayKey
   );
 
   await setDoc(
     plannerRef,
     {
-      todoIds: [
-        ...todoPlanningSelection
-      ]
+      todoIds: [...todoPlanningSelection]
     },
     {
       merge: true
