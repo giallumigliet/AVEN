@@ -1039,14 +1039,19 @@ function getTodayKey() {
 
 
 async function saveTodoPlanningSelection() {
-
   const user = auth.currentUser;
 
   if (!user) {
     return;
   }
 
-  const todayKey = getTodayKey();
+  const today = new Date();
+
+  const year = today.getFullYear();
+  const month = String(today.getMonth() + 1).padStart(2, "0");
+  const day = String(today.getDate()).padStart(2, "0");
+
+  const todayKey = `${year}-${month}-${day}`;
 
   const plannerRef = doc(
     db,
@@ -1065,47 +1070,10 @@ async function saveTodoPlanningSelection() {
       merge: true
     }
   );
-
-
-  for (const todo of latestTodos) {
-
-    const selected =
-      todoPlanningSelection.has(todo.id);
-
-    const todoRef = doc(
-      db,
-      "users",
-      user.uid,
-      "todos",
-      todo.id
-    );
-
-
-    if (selected && !todo.planned) {
-
-      await updateDoc(
-        todoRef,
-        {
-          planned: true,
-          plannedAt:
-            serverTimestamp()
-        }
-      );
-
-    }
-
-
-    if (!selected && todo.planned) {
-
-      await updateDoc(
-        todoRef,
-        {
-          planned: false
-        }
-      );
-    }
-  }
 }
+
+
+
 
 
 
@@ -1344,4 +1312,3 @@ export function initTodos() {
 
   renderTodoCategoryPicker();
 }
-
