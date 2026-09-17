@@ -143,7 +143,8 @@ function getCategoryIcon(categoryId) {
 function renderDailyPlanner() {
   const plannedTodos =
     todos.filter(todo =>
-      selectedTodoIds.has(todo.id)
+      todo.planned &&
+      !todo.completed
     );
 
   const remaining =
@@ -172,6 +173,14 @@ function renderDailyPlanner() {
 
     return;
   }
+
+  const isOldPlannedTodo =
+    todo.plannedAt?.seconds &&
+    (
+      Date.now() -
+      todo.plannedAt.seconds * 1000
+    ) >= 24 * 60 * 60 * 1000;
+  
 
   plannedTodos.forEach(todo => {
     const item =
@@ -202,6 +211,19 @@ function renderDailyPlanner() {
       </label>
 
       <div class="daily-planner-text"></div>
+      
+      ${
+        isOldPlannedTodo
+          ? `
+            <span
+              class="daily-planner-overdue"
+              aria-label="From a previous day"
+            >
+              !
+            </span>
+          `
+          : ""
+      }
 
       ${
         getCategoryIcon(todo.category)
@@ -267,6 +289,11 @@ async function updateTodoCompleted(
         completed
           ? serverTimestamp()
           : null,
+
+      planned:
+        completed
+          ? false
+          : true,
   
       updatedAt:
         serverTimestamp()
