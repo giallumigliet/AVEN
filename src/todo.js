@@ -1066,14 +1066,11 @@ async function saveTodoPlanningSelection() {
     }
   );
 
+
   for (const todo of latestTodos) {
 
-    const wasSelected =
+    const selected =
       todoPlanningSelection.has(todo.id);
-
-    if (!wasSelected) {
-      continue;
-    }
 
     const todoRef = doc(
       db,
@@ -1083,11 +1080,13 @@ async function saveTodoPlanningSelection() {
       todo.id
     );
 
-    if (!todo.plannedAt) {
+
+    if (selected && !todo.planned) {
 
       await updateDoc(
         todoRef,
         {
+          planned: true,
           plannedAt:
             serverTimestamp()
         }
@@ -1095,11 +1094,18 @@ async function saveTodoPlanningSelection() {
 
     }
 
+
+    if (!selected && todo.planned) {
+
+      await updateDoc(
+        todoRef,
+        {
+          planned: false
+        }
+      );
+    }
   }
-
 }
-
-
 
 
 
