@@ -1039,19 +1039,14 @@ function getTodayKey() {
 
 
 async function saveTodoPlanningSelection() {
+
   const user = auth.currentUser;
 
   if (!user) {
     return;
   }
 
-  const today = new Date();
-
-  const year = today.getFullYear();
-  const month = String(today.getMonth() + 1).padStart(2, "0");
-  const day = String(today.getDate()).padStart(2, "0");
-
-  const todayKey = `${year}-${month}-${day}`;
+  const todayKey = getTodayKey();
 
   const plannerRef = doc(
     db,
@@ -1070,8 +1065,39 @@ async function saveTodoPlanningSelection() {
       merge: true
     }
   );
-}
 
+  for (const todo of latestTodos) {
+
+    const wasSelected =
+      todoPlanningSelection.has(todo.id);
+
+    if (!wasSelected) {
+      continue;
+    }
+
+    const todoRef = doc(
+      db,
+      "users",
+      user.uid,
+      "todos",
+      todo.id
+    );
+
+    if (!todo.plannedAt) {
+
+      await updateDoc(
+        todoRef,
+        {
+          plannedAt:
+            serverTimestamp()
+        }
+      );
+
+    }
+
+  }
+
+}
 
 
 
