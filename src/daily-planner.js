@@ -211,7 +211,7 @@ function renderDailyPlanner() {
         isOldDailyPlannerTodo
           ? `
             <span
-              class="daily-planner-overdue"
+              class="daily-planner-overdue-mark"
               aria-label="From a previous day"
             >
               !
