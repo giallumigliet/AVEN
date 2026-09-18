@@ -501,30 +501,24 @@ function renderTodosList(todos) {
 
   if (selectedTodoCategory === "archived") {
 
-  filteredTodos =
-    todos.filter(
-      todo =>
-        isTodoArchived(todo)
-    );
-
-} else {
-
-  filteredTodos =
-    todos.filter(todo => {
-      if (isTodoArchived(todo)) {
-        return false;
-      }
-      if (
-        selectedTodoCategory === "all"
-      ) {
-        return true;
-      }
-      return (
-        todo.category ===
-        selectedTodoCategory
+    filteredTodos =
+      todos.filter(
+        todo =>
+          isTodoArchived(todo)
       );
-    });
-}
+
+  } else {
+
+    filteredTodos =
+      selectedTodoCategory === "all"
+        ? todos
+        : todos.filter(
+            todo =>
+              todo.category ===
+              selectedTodoCategory
+          );
+
+  }
 
 
   // -----------------------------------------------------
@@ -973,56 +967,44 @@ async function updateTodoCompleted(
   todoId,
   completed
 ) {
+  const user = auth.currentUser;
 
-  const user =
-    auth.currentUser;
+  if (!user) return;
 
-  if (!user) {
-    return;
-  }
+  try {
 
-  const todoRef =
-    doc(
-      db,
-      "users",
-      user.uid,
-      "todos",
-      todoId
+    const todoRef =
+      doc(
+        db,
+        "users",
+        user.uid,
+        "todos",
+        todoId
+      );
+
+    await updateDoc(
+      todoRef,
+      {
+        completed,
+    
+        completedAt:
+          completed
+            ? serverTimestamp()
+            : null,
+    
+        updatedAt:
+          serverTimestamp()
+      }
     );
 
+  } catch (error) {
 
-  await updateDoc(
-    todoRef,
-    {
-      completed,
-
-      completedAt:
-        completed
-          ? serverTimestamp()
-          : null,
-
-      updatedAt:
-        serverTimestamp()
-    }
-  );
-
-
-  if (completed) {
-
-    selectedTodoIds.delete(
-      todoId
+    console.error(
+      "Error updating todo:",
+      error
     );
-
-    overdueTodoIds.delete(
-      todoId
-    );
-
-    await saveTodayPlan();
-
-    renderDailyPlanner();
 
   }
-
 }
 
 
