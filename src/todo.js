@@ -1039,37 +1039,86 @@ function getTodayKey() {
 
 
 async function saveTodoPlanningSelection() {
+
   const user = auth.currentUser;
 
   if (!user) {
     return;
   }
 
-  const today = new Date();
-
-  const year = today.getFullYear();
-  const month = String(today.getMonth() + 1).padStart(2, "0");
-  const day = String(today.getDate()).padStart(2, "0");
-
-  const todayKey = `${year}-${month}-${day}`;
-
-  const plannerRef = doc(
+  const todosRef = collection(
     db,
     "users",
     user.uid,
-    "dailyPlanner",
-    todayKey
+    "todos"
   );
 
+  const snapshot =
+    await getDoc(
+      doc(
+        db,
+        "users",
+        user.uid,
+        "dailyPlanner",
+        getTodayKey()
+      )
+    );
+
+  const previousIds =
+    snapshot.exists()
+      ? snapshot.data().todoIds || []
+      : [];
+
+  const currentIds =
+    new Set(todoPlanningSelection);
+
+  const allIds =
+    new Set([
+      ...previousIds,
+      ...currentIds
+    ]);
+
+  for (const todoId of allIds) {
+
+    const todoRef =
+      doc(
+        todosRef,
+        todoId
+      );
+
+    await updateDoc(
+      todoRef,
+      {
+        dailyPlannerDate:
+          currentIds.has(todoId)
+            ? getTodayKey()
+            : null,
+
+        updatedAt:
+          serverTimestamp()
+      }
+    );
+  }
+
   await setDoc(
-    plannerRef,
+    doc(
+      db,
+      "users",
+      user.uid,
+      "dailyPlanner",
+      getTodayKey()
+    ),
     {
-      todoIds: [...todoPlanningSelection]
+      todoIds: [
+        ...currentIds
+      ]
     },
     {
       merge: true
     }
   );
+
+  refreshDailyPlanner();
 }
 
 
