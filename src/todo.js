@@ -501,24 +501,30 @@ function renderTodosList(todos) {
 
   if (selectedTodoCategory === "archived") {
 
-    filteredTodos =
-      todos.filter(
-        todo =>
-          isTodoArchived(todo)
+  filteredTodos =
+    todos.filter(
+      todo =>
+        isTodoArchived(todo)
+    );
+
+} else {
+
+  filteredTodos =
+    todos.filter(todo => {
+      if (isTodoArchived(todo)) {
+        return false;
+      }
+      if (
+        selectedTodoCategory === "all"
+      ) {
+        return true;
+      }
+      return (
+        todo.category ===
+        selectedTodoCategory
       );
-
-  } else {
-
-    filteredTodos =
-      selectedTodoCategory === "all"
-        ? todos
-        : todos.filter(
-            todo =>
-              todo.category ===
-              selectedTodoCategory
-          );
-
-  }
+    });
+}
 
 
   // -----------------------------------------------------
