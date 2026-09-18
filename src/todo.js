@@ -1156,9 +1156,15 @@ async function toggleTodoPlanningMode() {
 
         if (snapshot.exists()) {
 
-          todoPlanningSelection =
+         todoPlanningSelection =
             new Set(
-              snapshot.data().todoIds || []
+              latestTodos
+                .filter(todo =>
+                  todo.dailyPlannerDate
+                )
+                .map(todo =>
+                  todo.id
+                )
             );
 
         }
