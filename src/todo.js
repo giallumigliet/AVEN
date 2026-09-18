@@ -1079,25 +1079,43 @@ async function saveTodoPlanningSelection() {
     ]);
 
   for (const todoId of allIds) {
-
+    const todo =
+      latestTodos.find(
+        todo => todo.id === todoId
+      );
+  
+    if (!todo) {
+      continue;
+    }
+  
     const todoRef =
       doc(
         todosRef,
         todoId
       );
-
-    await updateDoc(
-      todoRef,
-      {
-        dailyPlannerDate:
-          currentIds.has(todoId)
-            ? getTodayKey()
-            : null,
-
-        updatedAt:
-          serverTimestamp()
+  
+    if (currentIds.has(todoId)) {
+      if (!todo.dailyPlannerDate) {
+        await updateDoc(
+          todoRef,
+          {
+            dailyPlannerDate:
+              getTodayKey(),
+            updatedAt:
+              serverTimestamp()
+          }
+        );
       }
-    );
+    } else {
+      await updateDoc(
+        todoRef,
+        {
+          dailyPlannerDate: null,
+          updatedAt:
+            serverTimestamp()
+        }
+      );
+    }
   }
 
   await setDoc(
