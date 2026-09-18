@@ -548,97 +548,92 @@ function renderTodosList(todos) {
   // -----------------------------------------------------
   // ORDINAMENTO
   // -----------------------------------------------------
-
-  if (!todoPlanningMode) {
-
-    visibleTodos.sort(
-      (a, b) => {
-
-        // ARCHIVED:
-        // più recentemente completati sopra
-
-        if (
-          selectedTodoCategory ===
-          "archived"
-        ) {
-
-          const timeA =
-            getTodoTimestamp(
-              a,
-              "completedAt"
-            );
-
-          const timeB =
-            getTodoTimestamp(
-              b,
-              "completedAt"
-            );
-
-          return timeB - timeA;
-
-        }
-
-
-        // LISTA NORMALE:
-        // prima i non completati
-
-        if (
-          a.completed !==
-          b.completed
-        ) {
-
-          return (
-            Number(a.completed) -
-            Number(b.completed)
-          );
-
-        }
-
-
-        // TODO ATTIVI:
-        // modificati più recentemente sopra
-
-        if (!a.completed) {
-
-          const timeA =
-            getTodoTimestamp(
-              a,
-              "updatedAt"
-            );
-
-          const timeB =
-            getTodoTimestamp(
-              b,
-              "updatedAt"
-            );
-
-          return timeB - timeA;
-
-        }
-
-
-        // COMPLETATI RECENTI:
-        // completati più recentemente sopra
-
+  
+  visibleTodos.sort(
+    (a, b) => {
+  
+      // ARCHIVED:
+      // più recentemente completati sopra
+  
+      if (
+        selectedTodoCategory ===
+        "archived"
+      ) {
+  
         const timeA =
           getTodoTimestamp(
             a,
             "completedAt"
           );
-
+  
         const timeB =
           getTodoTimestamp(
             b,
             "completedAt"
           );
-
+  
         return timeB - timeA;
-
+  
       }
-    );
-
-  }
-
+  
+  
+      // LISTA NORMALE:
+      // prima i non completati
+  
+      if (
+        a.completed !==
+        b.completed
+      ) {
+  
+        return (
+          Number(a.completed) -
+          Number(b.completed)
+        );
+  
+      }
+  
+  
+      // TODO ATTIVI:
+      // modificati più recentemente sopra
+  
+      if (!a.completed) {
+  
+        const timeA =
+          getTodoTimestamp(
+            a,
+            "updatedAt"
+          );
+  
+        const timeB =
+          getTodoTimestamp(
+            b,
+            "updatedAt"
+          );
+  
+        return timeB - timeA;
+  
+      }
+  
+  
+      // COMPLETATI RECENTI:
+      // completati più recentemente sopra
+  
+      const timeA =
+        getTodoTimestamp(
+          a,
+          "completedAt"
+        );
+  
+      const timeB =
+        getTodoTimestamp(
+          b,
+          "completedAt"
+        );
+  
+      return timeB - timeA;
+  
+    }
+  );
 
   // -----------------------------------------------------
   // EMPTY
