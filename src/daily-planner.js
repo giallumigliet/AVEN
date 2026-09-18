@@ -347,6 +347,45 @@ function listenToTodos() {
 
 
 
+function scheduleMidnightRefresh() {
+
+  const now =
+    new Date();
+
+  const tomorrow =
+    new Date(now);
+
+  tomorrow.setDate(
+    tomorrow.getDate() + 1
+  );
+
+  tomorrow.setHours(
+    0,
+    0,
+    1,
+    0
+  );
+
+  const delay =
+    tomorrow.getTime() -
+    now.getTime();
+
+  setTimeout(
+    async () => {
+
+      await loadTodayPlan();
+
+      renderDailyPlanner();
+
+      scheduleMidnightRefresh();
+
+    },
+    delay
+  );
+
+}
+
+
 export function initDailyPlanner() {
 
   if (
@@ -371,6 +410,7 @@ export function initDailyPlanner() {
       );
     });
 
+  scheduleMidnightRefresh();
 }
 
 
