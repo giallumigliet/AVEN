@@ -497,27 +497,36 @@ function renderTodosList(todos) {
   // -----------------------------------------------------
 
   let filteredTodos;
-
-
+  
   if (selectedTodoCategory === "archived") {
-
+  
     filteredTodos =
       todos.filter(
         todo =>
           isTodoArchived(todo)
       );
-
+  
   } else {
-
+  
     filteredTodos =
-      selectedTodoCategory === "all"
-        ? todos
-        : todos.filter(
-            todo =>
-              todo.category ===
-              selectedTodoCategory
-          );
-
+      todos.filter(
+        todo =>
+          !isTodoArchived(todo)
+      );
+  
+    if (
+      selectedTodoCategory !== "all"
+    ) {
+  
+      filteredTodos =
+        filteredTodos.filter(
+          todo =>
+            todo.category ===
+            selectedTodoCategory
+        );
+  
+    }
+  
   }
 
 
