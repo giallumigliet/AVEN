@@ -36,8 +36,11 @@ let overdueTodoIds = new Set();
 let todosUnsubscribe = null;
 let todosLoaded = false;
 
-function getDateKey(offset = 0) {
 
+
+
+
+function getDateKey(offset = 0) {
   const date = new Date();
 
   date.setDate(
@@ -59,6 +62,14 @@ function getDateKey(offset = 0) {
 
   return `${year}-${month}-${day}`;
 }
+
+function getTodayKey() {
+  return getDateKey(0);
+}
+
+
+
+
 
 
 async function loadTodayPlan() {
