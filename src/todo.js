@@ -967,44 +967,56 @@ async function updateTodoCompleted(
   todoId,
   completed
 ) {
-  const user = auth.currentUser;
 
-  if (!user) return;
+  const user =
+    auth.currentUser;
 
-  try {
+  if (!user) {
+    return;
+  }
 
-    const todoRef =
-      doc(
-        db,
-        "users",
-        user.uid,
-        "todos",
-        todoId
-      );
-
-    await updateDoc(
-      todoRef,
-      {
-        completed,
-    
-        completedAt:
-          completed
-            ? serverTimestamp()
-            : null,
-    
-        updatedAt:
-          serverTimestamp()
-      }
+  const todoRef =
+    doc(
+      db,
+      "users",
+      user.uid,
+      "todos",
+      todoId
     );
 
-  } catch (error) {
 
-    console.error(
-      "Error updating todo:",
-      error
+  await updateDoc(
+    todoRef,
+    {
+      completed,
+
+      completedAt:
+        completed
+          ? serverTimestamp()
+          : null,
+
+      updatedAt:
+        serverTimestamp()
+    }
+  );
+
+
+  if (completed) {
+
+    selectedTodoIds.delete(
+      todoId
     );
+
+    overdueTodoIds.delete(
+      todoId
+    );
+
+    await saveTodayPlan();
+
+    renderDailyPlanner();
 
   }
+
 }
 
 
