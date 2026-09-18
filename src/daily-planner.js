@@ -71,35 +71,74 @@ function getTodayKey() {
 
 
 
-
 async function loadTodayPlan() {
   const user = auth.currentUser;
 
   if (!user) {
     selectedTodoIds = new Set();
+    overdueTodoIds = new Set();
     return;
   }
 
-  const plannerRef = doc(
+  const todayKey = getTodayKey();
+  const yesterdayKey = getDateKey(-1);
+
+  const todayRef = doc(
     db,
     "users",
     user.uid,
     "dailyPlanner",
-    getTodayKey()
+    todayKey
   );
 
-  const snapshot =
-    await getDoc(plannerRef);
+  const yesterdayRef = doc(
+    db,
+    "users",
+    user.uid,
+    "dailyPlanner",
+    yesterdayKey
+  );
 
-  if (!snapshot.exists()) {
-    selectedTodoIds = new Set();
-    return;
+  const [todaySnapshot, yesterdaySnapshot] =
+    await Promise.all([
+      getDoc(todayRef),
+      getDoc(yesterdayRef)
+    ]);
+
+  const todayTodoIds = todaySnapshot.exists()
+    ? todaySnapshot.data().todoIds || []
+    : [];
+
+  const yesterdayTodoIds = yesterdaySnapshot.exists()
+    ? yesterdaySnapshot.data().todoIds || []
+    : [];
+
+  const carriedTodoIds = yesterdayTodoIds.filter(
+    todoId => !todayTodoIds.includes(todoId)
+  );
+
+  selectedTodoIds = new Set([
+    ...todayTodoIds,
+    ...carriedTodoIds
+  ]);
+
+  overdueTodoIds = new Set(carriedTodoIds);
+
+  if (carriedTodoIds.length > 0) {
+    await setDoc(
+      todayRef,
+      {
+        todoIds: [...selectedTodoIds]
+      },
+      {
+        merge: true
+      }
+    );
   }
-
-  selectedTodoIds = new Set(
-    snapshot.data().todoIds || []
-  );
 }
+
+
+
 
 
 async function saveTodayPlan() {
@@ -343,8 +382,26 @@ function listenToTodos() {
           }
         );
 
+        const completedTodoIds = new Set(
+          todos
+            .filter(todo => todo.completed)
+            .map(todo => todo.id)
+        );
+        
+        const removedCompletedIds = [...selectedTodoIds].filter(
+          todoId => completedTodoIds.has(todoId)
+        );
+        
+        if (removedCompletedIds.length > 0) {
+          removedCompletedIds.forEach(todoId => {
+            selectedTodoIds.delete(todoId);
+            overdueTodoIds.delete(todoId);
+          });
+        
+          saveTodayPlan();
+        }
+        
         todosLoaded = true;
-
         renderDailyPlanner();
       },
       error => {
