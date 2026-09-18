@@ -2045,7 +2045,15 @@ body.light-mode .connect-calendar-button:hover {
 }
 
 
+.daily-planner-overdue {
+  width: 14px;
+  flex-shrink: 0;
 
+  color: var(--color-danger);
+
+  font-size: 14px;
+  font-weight: 700;
+}
 
 
 
