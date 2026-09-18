@@ -32,43 +32,22 @@ const dailyPlannerList =
 
 let todos = [];
 let selectedTodoIds = new Set();
-let overdueTodoIds = new Set();
 let todosUnsubscribe = null;
 let todosLoaded = false;
 
+function getTodayKey() {
+  const today = new Date();
 
-
-
-
-function getDateKey(offset = 0) {
-  const date = new Date();
-
-  date.setDate(
-    date.getDate() + offset
-  );
-
-  const year =
-    date.getFullYear();
-
-  const month =
-    String(
-      date.getMonth() + 1
-    ).padStart(2, "0");
-
-  const day =
-    String(
-      date.getDate()
-    ).padStart(2, "0");
+  const year = today.getFullYear();
+  const month = String(
+    today.getMonth() + 1
+  ).padStart(2, "0");
+  const day = String(
+    today.getDate()
+  ).padStart(2, "0");
 
   return `${year}-${month}-${day}`;
 }
-
-function getTodayKey() {
-  return getDateKey(0);
-}
-
-
-
 
 
 async function loadTodayPlan() {
@@ -76,137 +55,55 @@ async function loadTodayPlan() {
 
   if (!user) {
     selectedTodoIds = new Set();
-    overdueTodoIds = new Set();
     return;
   }
-
-  const todayKey = getTodayKey();
-  const yesterdayKey = getDateKey(-1);
-
-  const todayRef = doc(
-    db,
-    "users",
-    user.uid,
-    "dailyPlanner",
-    todayKey
-  );
-
-  const yesterdayRef = doc(
-    db,
-    "users",
-    user.uid,
-    "dailyPlanner",
-    yesterdayKey
-  );
-
-  const [todaySnapshot, yesterdaySnapshot] =
-    await Promise.all([
-      getDoc(todayRef),
-      getDoc(yesterdayRef)
-    ]);
-
-  const todayData = todaySnapshot.exists()
-    ? todaySnapshot.data()
-    : {};
-
-  const yesterdayData = yesterdaySnapshot.exists()
-    ? yesterdaySnapshot.data()
-    : {};
-
-  const todayTodoIds =
-    todayData.todoIds || [];
-
-  const excludedTodoIds =
-    todayData.excludedTodoIds || [];
-
-  const yesterdayTodoIds =
-    yesterdayData.todoIds || [];
-
-  const carriedTodoIds =
-    yesterdayTodoIds.filter(
-      todoId =>
-        !todayTodoIds.includes(todoId) &&
-        !excludedTodoIds.includes(todoId)
-    );
-
-  selectedTodoIds = new Set([
-    ...todayTodoIds,
-    ...carriedTodoIds
-  ]);
-
-  overdueTodoIds =
-    new Set(carriedTodoIds);
-
-  if (carriedTodoIds.length > 0) {
-    await setDoc(
-      todayRef,
-      {
-        todoIds: [...selectedTodoIds]
-      },
-      {
-        merge: true
-      }
-    );
-  }
-}
-
-
-
-async function saveTodoPlanningSelection() {
-  const user = auth.currentUser;
-
-  if (!user) {
-    return;
-  }
-
-  const todayKey = getTodayKey();
 
   const plannerRef = doc(
     db,
     "users",
     user.uid,
     "dailyPlanner",
-    todayKey
+    getTodayKey()
   );
 
   const snapshot =
     await getDoc(plannerRef);
 
-  const previousTodoIds =
-    snapshot.exists()
-      ? snapshot.data().todoIds || []
-      : [];
+  if (!snapshot.exists()) {
+    selectedTodoIds = new Set();
+    return;
+  }
 
-  const previousExcludedTodoIds =
-    snapshot.exists()
-      ? snapshot.data().excludedTodoIds || []
-      : [];
+  selectedTodoIds = new Set(
+    snapshot.data().todoIds || []
+  );
+}
 
-  const excludedTodoIds = [
-    ...new Set([
-      ...previousExcludedTodoIds,
-      ...previousTodoIds.filter(
-        todoId =>
-          !todoPlanningSelection.has(todoId)
-      )
-    ])
-  ].filter(
-    todoId =>
-      !todoPlanningSelection.has(todoId)
+
+async function saveTodayPlan() {
+  const user = auth.currentUser;
+
+  if (!user) {
+    return;
+  }
+
+  const plannerRef = doc(
+    db,
+    "users",
+    user.uid,
+    "dailyPlanner",
+    getTodayKey()
   );
 
   await setDoc(
     plannerRef,
     {
-      todoIds: [...todoPlanningSelection],
-      excludedTodoIds
+      todoIds: [...selectedTodoIds]
     },
     {
       merge: true
     }
   );
-
-  await refreshDailyPlanner();
 }
 
 
@@ -246,8 +143,7 @@ function getCategoryIcon(categoryId) {
 function renderDailyPlanner() {
   const plannedTodos =
     todos.filter(todo =>
-      selectedTodoIds.has(todo.id) &&
-      !todo.completed
+      selectedTodoIds.has(todo.id)
     );
 
   const remaining =
@@ -306,12 +202,6 @@ function renderDailyPlanner() {
       </label>
 
       <div class="daily-planner-text"></div>
-      
-      ${
-        overdueTodoIds.has(todo.id)
-          ? `<span class="daily-planner-overdue">!</span>`
-          : ""
-      }
 
       ${
         getCategoryIcon(todo.category)
@@ -424,26 +314,8 @@ function listenToTodos() {
           }
         );
 
-        const completedTodoIds = new Set(
-          todos
-            .filter(todo => todo.completed)
-            .map(todo => todo.id)
-        );
-        
-        const removedCompletedIds = [...selectedTodoIds].filter(
-          todoId => completedTodoIds.has(todoId)
-        );
-        
-        if (removedCompletedIds.length > 0) {
-          removedCompletedIds.forEach(todoId => {
-            selectedTodoIds.delete(todoId);
-            overdueTodoIds.delete(todoId);
-          });
-        
-          saveTodayPlan();
-        }
-        
         todosLoaded = true;
+
         renderDailyPlanner();
       },
       error => {
@@ -455,45 +327,6 @@ function listenToTodos() {
     );
 }
 
-
-
-function scheduleMidnightRefresh() {
-
-  const now =
-    new Date();
-
-  const tomorrow =
-    new Date(now);
-
-  tomorrow.setDate(
-    tomorrow.getDate() + 1
-  );
-
-  tomorrow.setHours(
-    0,
-    0,
-    1,
-    0
-  );
-
-  const delay =
-    tomorrow.getTime() -
-    now.getTime();
-
-  setTimeout(
-    async () => {
-
-      await loadTodayPlan();
-
-      renderDailyPlanner();
-
-      scheduleMidnightRefresh();
-
-    },
-    delay
-  );
-
-}
 
 
 export function initDailyPlanner() {
@@ -520,7 +353,6 @@ export function initDailyPlanner() {
       );
     });
 
-  scheduleMidnightRefresh();
 }
 
 
