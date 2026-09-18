@@ -51,6 +51,7 @@ function getTodayKey() {
 
 
 async function loadTodayPlan() {
+
   const user = auth.currentUser;
 
   if (!user) {
@@ -58,27 +59,18 @@ async function loadTodayPlan() {
     return;
   }
 
-  const plannerRef = doc(
-    db,
-    "users",
-    user.uid,
-    "dailyPlanner",
-    getTodayKey()
-  );
+  selectedTodoIds = new Set();
 
-  const snapshot =
-    await getDoc(plannerRef);
+  const todosRef =
+    collection(
+      db,
+      "users",
+      user.uid,
+      "todos"
+    );
 
-  if (!snapshot.exists()) {
-    selectedTodoIds = new Set();
-    return;
-  }
-
-  selectedTodoIds = new Set(
-    snapshot.data().todoIds || []
-  );
+  // Il listener dei todo farà il rendering.
 }
-
 
 async function saveTodayPlan() {
   const user = auth.currentUser;
@@ -141,9 +133,13 @@ function getCategoryIcon(categoryId) {
 
 
 function renderDailyPlanner() {
+  const todayKey =
+    getTodayKey();
+  
   const plannedTodos =
     todos.filter(todo =>
-      selectedTodoIds.has(todo.id)
+      todo.dailyPlannerDate &&
+      !todo.completed
     );
 
   const remaining =
@@ -177,10 +173,18 @@ function renderDailyPlanner() {
     const item =
       document.createElement("div");
 
+    const isOldDailyPlannerTodo =
+      todo.dailyPlannerDate !==
+      getTodayKey();
+    
     item.className =
       `daily-planner-item ${
         todo.completed
           ? "completed"
+          : ""
+      } ${
+        isOldDailyPlannerTodo
+          ? "daily-planner-overdue"
           : ""
       }`;
 
@@ -202,6 +206,19 @@ function renderDailyPlanner() {
       </label>
 
       <div class="daily-planner-text"></div>
+
+      ${
+        isOldDailyPlannerTodo
+          ? `
+            <span
+              class="daily-planner-overdue"
+              aria-label="From a previous day"
+            >
+              !
+            </span>
+          `
+          : ""
+      }
 
       ${
         getCategoryIcon(todo.category)
