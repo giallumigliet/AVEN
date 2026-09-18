@@ -105,24 +105,37 @@ async function loadTodayPlan() {
       getDoc(yesterdayRef)
     ]);
 
-  const todayTodoIds = todaySnapshot.exists()
-    ? todaySnapshot.data().todoIds || []
-    : [];
+  const todayData = todaySnapshot.exists()
+    ? todaySnapshot.data()
+    : {};
 
-  const yesterdayTodoIds = yesterdaySnapshot.exists()
-    ? yesterdaySnapshot.data().todoIds || []
-    : [];
+  const yesterdayData = yesterdaySnapshot.exists()
+    ? yesterdaySnapshot.data()
+    : {};
 
-  const carriedTodoIds = yesterdayTodoIds.filter(
-    todoId => !todayTodoIds.includes(todoId)
-  );
+  const todayTodoIds =
+    todayData.todoIds || [];
+
+  const excludedTodoIds =
+    todayData.excludedTodoIds || [];
+
+  const yesterdayTodoIds =
+    yesterdayData.todoIds || [];
+
+  const carriedTodoIds =
+    yesterdayTodoIds.filter(
+      todoId =>
+        !todayTodoIds.includes(todoId) &&
+        !excludedTodoIds.includes(todoId)
+    );
 
   selectedTodoIds = new Set([
     ...todayTodoIds,
     ...carriedTodoIds
   ]);
 
-  overdueTodoIds = new Set(carriedTodoIds);
+  overdueTodoIds =
+    new Set(carriedTodoIds);
 
   if (carriedTodoIds.length > 0) {
     await setDoc(
@@ -139,32 +152,61 @@ async function loadTodayPlan() {
 
 
 
-
-
-async function saveTodayPlan() {
+async function saveTodoPlanningSelection() {
   const user = auth.currentUser;
 
   if (!user) {
     return;
   }
 
+  const todayKey = getTodayKey();
+
   const plannerRef = doc(
     db,
     "users",
     user.uid,
     "dailyPlanner",
-    getTodayKey()
+    todayKey
+  );
+
+  const snapshot =
+    await getDoc(plannerRef);
+
+  const previousTodoIds =
+    snapshot.exists()
+      ? snapshot.data().todoIds || []
+      : [];
+
+  const previousExcludedTodoIds =
+    snapshot.exists()
+      ? snapshot.data().excludedTodoIds || []
+      : [];
+
+  const excludedTodoIds = [
+    ...new Set([
+      ...previousExcludedTodoIds,
+      ...previousTodoIds.filter(
+        todoId =>
+          !todoPlanningSelection.has(todoId)
+      )
+    ])
+  ].filter(
+    todoId =>
+      !todoPlanningSelection.has(todoId)
   );
 
   await setDoc(
     plannerRef,
     {
-      todoIds: [...selectedTodoIds]
+      todoIds: [...todoPlanningSelection],
+      excludedTodoIds
     },
     {
       merge: true
     }
   );
+
+  await refreshDailyPlanner();
 }
 
 
