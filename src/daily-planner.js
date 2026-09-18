@@ -32,19 +32,30 @@ const dailyPlannerList =
 
 let todos = [];
 let selectedTodoIds = new Set();
+let overdueTodoIds = new Set();
 let todosUnsubscribe = null;
 let todosLoaded = false;
 
-function getTodayKey() {
-  const today = new Date();
+function getDateKey(offset = 0) {
 
-  const year = today.getFullYear();
-  const month = String(
-    today.getMonth() + 1
-  ).padStart(2, "0");
-  const day = String(
-    today.getDate()
-  ).padStart(2, "0");
+  const date = new Date();
+
+  date.setDate(
+    date.getDate() + offset
+  );
+
+  const year =
+    date.getFullYear();
+
+  const month =
+    String(
+      date.getMonth() + 1
+    ).padStart(2, "0");
+
+  const day =
+    String(
+      date.getDate()
+    ).padStart(2, "0");
 
   return `${year}-${month}-${day}`;
 }
@@ -143,7 +154,8 @@ function getCategoryIcon(categoryId) {
 function renderDailyPlanner() {
   const plannedTodos =
     todos.filter(todo =>
-      selectedTodoIds.has(todo.id)
+      selectedTodoIds.has(todo.id) &&
+      !todo.completed
     );
 
   const remaining =
@@ -202,6 +214,12 @@ function renderDailyPlanner() {
       </label>
 
       <div class="daily-planner-text"></div>
+      
+      ${
+        overdueTodoIds.has(todo.id)
+          ? `<span class="daily-planner-overdue">!</span>`
+          : ""
+      }
 
       ${
         getCategoryIcon(todo.category)
