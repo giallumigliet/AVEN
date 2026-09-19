@@ -29,8 +29,7 @@ import {
   getGoogleCalendarList,
   getGoogleCalendarSettings,
   saveMonitoredCalendarIds,
-  ensureGoogleCalendarAccess,
-  setGoogleAccessToken
+  ensureGoogleCalendarAccess
 } from "./google-calendar.js";
 
 // ELEMENTS =========================================================
@@ -132,24 +131,6 @@ loginButton.addEventListener(
           auth,
           provider
         );
-
-
-      const credential =
-        GoogleAuthProvider.credentialFromResult(result);
-
-      if (credential?.accessToken) {
-
-        setGoogleAccessToken(
-          credential.accessToken,
-          3600
-        );
-      
-      }
-      
-      console.log(
-        "Google Calendar access token:",
-        Boolean(credential?.accessToken)
-      );
       
       
       // AUTORIZZA GOOGLE CALENDAR
@@ -189,6 +170,7 @@ loginButton.addEventListener(
     }
   }
 );
+
 
 
 // RESPONSIVE SIDEBAR =========================================================
