@@ -131,6 +131,15 @@ loginButton.addEventListener(
           auth,
           provider
         );
+
+
+      const credential =
+        GoogleAuthProvider.credentialFromResult(result);
+      
+      console.log(
+        "Google Calendar access token:",
+        Boolean(credential?.accessToken)
+      );
       
       
       // AUTORIZZA GOOGLE CALENDAR
