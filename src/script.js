@@ -71,6 +71,11 @@ provider.addScope(
   "https://www.googleapis.com/auth/calendar.calendarlist.readonly"
 );
 
+provider.setCustomParameters({
+  access_type: "offline",
+  prompt: "consent"
+});
+
 
 setPersistence(
   auth,
