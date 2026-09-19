@@ -217,31 +217,51 @@ export async function getValidGoogleAccessToken() {
 
   if (
     googleAccessToken &&
-    Date.now() <
-      googleAccessTokenExpiresAt
+    Date.now() < googleAccessTokenExpiresAt
   ) {
-
     return googleAccessToken;
-
   }
 
-
-  return requestGoogleAccessToken();
+  throw new Error(
+    "GOOGLE_CALENDAR_AUTH_REQUIRED"
+  );
 
 }
 
 
 export async function ensureGoogleCalendarAccess() {
   try {
-    await getValidGoogleAccessToken();
+    await getValidGoogleCalendarAccessToken();
     return true;
+    
   } catch (error) {
+    if (
+      error?.message ===
+      "GOOGLE_CALENDAR_AUTH_REQUIRED"
+    ) {
+      return false;
+    }
     console.error(
       "Unable to authorize Google Calendar:",
       error
     );
-
     return false;
+  }
+}
+
+
+
+export async function requestGoogleCalendarAccess() {
+  try {
+    const token = await requestGoogleAccessToken();
+    return token;
+    
+  } catch (error) {
+    console.error(
+      "Google Calendar authorization failed:",
+      error
+    );
+    throw error;
   }
 }
 
