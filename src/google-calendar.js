@@ -267,6 +267,19 @@ export async function requestGoogleCalendarAccess() {
 
 
 
+export function setGoogleAccessToken(
+  accessToken,
+  expiresIn = 3600
+) {
+
+  storeGoogleAccessToken(
+    accessToken,
+    expiresIn
+  );
+
+}
+
+
 
 export async function reconnectGoogleCalendar() {
 
