@@ -29,7 +29,8 @@ import {
   getGoogleCalendarList,
   getGoogleCalendarSettings,
   saveMonitoredCalendarIds,
-  ensureGoogleCalendarAccess
+  ensureGoogleCalendarAccess,
+  setGoogleAccessToken
 } from "./google-calendar.js";
 
 // ELEMENTS =========================================================
@@ -135,6 +136,15 @@ loginButton.addEventListener(
 
       const credential =
         GoogleAuthProvider.credentialFromResult(result);
+
+      if (credential?.accessToken) {
+
+        setGoogleAccessToken(
+          credential.accessToken,
+          3600
+        );
+      
+      }
       
       console.log(
         "Google Calendar access token:",
