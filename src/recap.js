@@ -324,10 +324,9 @@ function updateRecap() {
 
 
   // TODO =========================================================
-
   const remainingTodos =
     todos.filter(todo =>
-      plannedTodoIds.has(todo.id) &&
+      todo.dailyPlannerDate &&
       !todo.completed
     ).length;
 
