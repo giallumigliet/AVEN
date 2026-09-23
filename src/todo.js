@@ -1176,20 +1176,16 @@ async function toggleTodoPlanningMode() {
             plannerRef
           );
 
-        if (snapshot.exists()) {
-
-         todoPlanningSelection =
-            new Set(
-              latestTodos
-                .filter(todo =>
-                  todo.dailyPlannerDate
-                )
-                .map(todo =>
-                  todo.id
-                )
-            );
-
-        }
+        todoPlanningSelection =
+          new Set(
+            latestTodos
+              .filter(todo =>
+                todo.dailyPlannerDate
+              )
+              .map(todo =>
+                todo.id
+              )
+          );
 
       }
 
