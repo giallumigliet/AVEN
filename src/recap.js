@@ -334,11 +334,10 @@ function updateRecap() {
   if (remainingTodos > 0) {
 
     sections.push(
-      `Restano <strong>${remainingTodos} ${
+      `${
         remainingTodos === 1
-          ? "todo"
-          : "todo"
-      }</strong> da completare.`
+          ? "Resta"
+          : "Restano"} <strong>${remainingTodos} todo</strong> da completare.`
     );
 
   }
