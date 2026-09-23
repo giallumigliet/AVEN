@@ -38,9 +38,8 @@ AVEN utilizza l'accesso Google Calendar per leggere i tuoi eventi e crearne di n
 
 ## 🧠 How it works
 
-1. Upload your PDF.
-2. Automatic AI data retrieving and organization.
-3. Stats generation.
+1. Set your todos, routines and events.
+2. Automatic recap.
 
 
 ---
