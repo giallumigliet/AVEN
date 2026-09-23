@@ -22,17 +22,17 @@ AVEN utilizza l'accesso Google Calendar per leggere i tuoi eventi e crearne di n
 
 ## 🚀 Features
 
-✅ **Carica il tuo cedolino**
-- Aggiungi le tue (`Entrate`).
+✅ **Add To do lists, Routines, Birthdays**
+- Aggiungi le tue (`Todo`), (`Routines`) e (`Compleanni`) in modo facile.
 
-✅ **Carica il tuo estratto conto**
-- Aggiungi le tue (`Uscite`).
+✅ **Daily Recap**
+- Leggi il recap quotidiano sugli eventi del giorno.
 
-✅ **AI estrae i dati dai documenti caricati e li categorizza per creare stats**
-- Organizzazione e analisi dei dati.
+✅ **Daily Planner**
+- Aggiungi todo urgenti alla giornata di oggi, e visuallizzali nel Daily planner.
 
-✅ **Reminder per abbonamenti attivi o pagamenti singoli**
-- Inserisci la data e ricevi un reminder.
+✅ **Monitor your Google calendars**
+- Aggiungi nel recap gli eventi dei tuoi calendari Google monitorati.
 
 ---
 
