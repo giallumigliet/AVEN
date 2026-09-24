@@ -42,6 +42,7 @@ let todosUnsubscribe = null;
 
 let todoPlanningMode = false;
 let todoPlanningSelection = new Set();
+let todoPlanningInitialSelection = new Set();
 let latestTodos = [];
 
 
@@ -1050,67 +1051,61 @@ async function saveTodoPlanningSelection() {
     return;
   }
 
-  const todosRef = collection(
-    db,
-    "users",
-    user.uid,
-    "todos"
-  );
-
-  const snapshot =
-    await getDoc(
-      doc(
-        db,
-        "users",
-        user.uid,
-        "dailyPlanner",
-        getTodayKey()
-      )
+  const todosRef =
+    collection(
+      db,
+      "users",
+      user.uid,
+      "todos"
     );
-
-  const previousIds =
-    snapshot.exists()
-      ? snapshot.data().todoIds || []
-      : [];
 
   const currentIds =
     new Set(todoPlanningSelection);
 
-  const allIds =
-    new Set([
-      ...previousIds,
-      ...currentIds
-    ]);
+  for (const todo of latestTodos) {
 
-  for (const todoId of allIds) {
-    const todo =
-      latestTodos.find(
-        todo => todo.id === todoId
+    const wasSelected =
+      todoPlanningInitialSelection.has(
+        todo.id
       );
-  
-    if (!todo) {
-      continue;
-    }
-  
+
+    const isSelected =
+      currentIds.has(
+        todo.id
+      );
+
     const todoRef =
       doc(
         todosRef,
-        todoId
+        todo.id
       );
-  
-    if (currentIds.has(todoId)) {
-      if (!todo.dailyPlannerDate) {
-        await updateDoc(
-          todoRef,
-          {
-            dailyPlannerDate:
-              getTodayKey(),
-            updatedAt:
-              serverTimestamp()
-          }
-        );
-      }
-    } else {
+
+    // Se viene selezionato un todo
+    // che non era ancora pianificato
+    if (
+      isSelected &&
+      !todo.dailyPlannerDate
+    ) {
+
+      await updateDoc(
+        todoRef,
+        {
+          dailyPlannerDate:
+            getTodayKey(),
+          updatedAt:
+            serverTimestamp()
+        }
+      );
+
+    }
+
+    // Se era selezionato all'ingresso
+    // ma ora è stato deselezionato
+    else if (
+      wasSelected &&
+      !isSelected
+    ) {
+
       await updateDoc(
         todoRef,
         {
@@ -1119,7 +1114,9 @@ async function saveTodoPlanningSelection() {
             serverTimestamp()
         }
       );
+
     }
+
   }
 
   await setDoc(
@@ -1140,9 +1137,10 @@ async function saveTodoPlanningSelection() {
     }
   );
 
+  todoPlanningInitialSelection.clear();
+
   refreshDailyPlanner();
 }
-
 
 
 
@@ -1186,6 +1184,9 @@ async function toggleTodoPlanningMode() {
                 todo.id
               )
           );
+        
+        todoPlanningInitialSelection =
+          new Set(todoPlanningSelection);
 
       }
 
