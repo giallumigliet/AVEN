@@ -493,7 +493,7 @@ async function handleBirthdaySubmit(
     birthdayForm.reset();
 
     closeBirthdayModal();
-    openBirthdayPanel();
+    window.showAddedToast();
 
   } catch (error) {
 
