@@ -60,6 +60,23 @@ const recapView = document.getElementById("recap-view");
 const plannerView = document.getElementById("planner-view");
 
 
+
+
+
+const addedToast = document.getElementById("added-toast");
+let addedToastTimeout = null;
+
+window.showAddedToast = function () {
+  clearTimeout(addedToastTimeout);
+  addedToast.hidden = false;
+  addedToastTimeout =
+    setTimeout(() => {
+      addedToast.hidden = true;
+    }, 1000);
+};
+
+
+
 // AUTH =========================================================
 const provider = new GoogleAuthProvider();
 
