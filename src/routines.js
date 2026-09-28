@@ -568,7 +568,7 @@ async function handleRoutineSubmit(event) {
     updateRoutineFrequencyUI();
 
     closeRoutineModal();
-    openRoutinesPanel()
+    window.showAddedToast();
 
   } catch (error) {
 
