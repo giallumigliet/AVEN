@@ -3435,7 +3435,7 @@ select option {
 .added-toast {
   position: fixed;
   left: 50%;
-  bottom: 90px;
+  top: 50%;
 
   transform: translateX(-50%);
 
@@ -3443,7 +3443,7 @@ select option {
 
   border-radius: 12px;
 
-  background: var(--color-panel);
+  background: var(--color-accent-soft);
   border: 1px solid var(--color-panel-border);
 
   color: var(--color-text);
