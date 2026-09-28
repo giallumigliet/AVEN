@@ -3448,7 +3448,7 @@ select option {
 
   color: var(--color-accent);
 
-  font-size: 12px;
+  font-size: 15px;
   font-weight: 600;
 
   z-index: 1000;
