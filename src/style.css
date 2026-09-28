@@ -3439,7 +3439,7 @@ select option {
 
   transform: translateX(-50%);
 
-  padding: 10px 18px;
+  padding: 12px 20px;
 
   border-radius: 12px;
 
@@ -3448,7 +3448,7 @@ select option {
 
   color: var(--color-accent);
 
-  font-size: 15px;
+  font-size: 13px;
   font-weight: 600;
 
   z-index: 1000;
