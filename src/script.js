@@ -72,7 +72,7 @@ window.showAddedToast = function () {
   addedToastTimeout =
     setTimeout(() => {
       addedToast.hidden = true;
-    }, 1000);
+    }, 2000);
 };
 
 
