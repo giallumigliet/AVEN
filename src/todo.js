@@ -947,7 +947,7 @@ async function handleTodoSubmit(event) {
     editingTodoId = null;
 
     closeTodoModal();
-    openTodosPanel();
+    window.showAddedToast();
 
   } catch (error) {
 
