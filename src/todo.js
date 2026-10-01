@@ -78,6 +78,7 @@ export function openTodoModal() {
   todoSubmitButton.textContent = "Add";
 
   todoForm.reset();
+  todoDoToday.parentElement.hidden = false;
   todoText.style.height = "23px";
 
   renderTodoCategoryPicker();
@@ -97,6 +98,8 @@ export function openTodoModal() {
 export function openTodoEditModal(todoId, todo) {
   closeTodosPanel();
   editingTodoId = todoId;
+
+  todoDoToday.parentElement.hidden = true;
 
   todoText.value = todo.text || "";
   todoFormCategory = todo.category || "";
