@@ -1430,6 +1430,23 @@ body.light-mode .connect-calendar-button:hover {
   background: var(--color-surface-hover);
 }
 
+.todo-do-today {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  margin-top: 4px;
+
+  font-size: 12px;
+  color: var(--color-text);
+  cursor: pointer;
+}
+
+.todo-do-today input {
+  margin: 0;
+  accent-color: var(--color-accent);
+}
+
 
 .todo-category-archived .routine-category-icon {
   color: var(--color-danger) !important; 
