@@ -1433,11 +1433,12 @@ body.light-mode .connect-calendar-button:hover {
 .todo-do-today {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
 
   margin: 0px 4px 20px 4px;
 
-  font-size: 12px;
+  font-size: 13px;
   color: var(--color-text);
   cursor: pointer;
 }
