@@ -18,6 +18,10 @@ import {
   updateDoc
 } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
 
+import {
+  openTodoEditModal
+} from "./todo.js";
+
 
 
 const dailyPlannerStatus =
@@ -249,6 +253,16 @@ function renderDailyPlanner() {
           todo.id,
           checkbox.checked
         );
+      }
+    );
+
+    item.addEventListener(
+      "click",
+      event => {
+        if ( event.target.closest( ".daily-planner-check" ) ) {
+          return;
+        }
+        openTodoEditModal(todo.id, todo);
       }
     );
 
