@@ -94,7 +94,7 @@ export function openTodoModal() {
 }
 
 
-function openTodoEditModal(todoId, todo) {
+export function openTodoEditModal(todoId, todo) {
   closeTodosPanel();
   editingTodoId = todoId;
 
