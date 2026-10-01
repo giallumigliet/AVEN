@@ -32,8 +32,10 @@ const deleteTodoButton = document.getElementById("delete-todo");
 const todoForm = document.getElementById("todo-form");
 const todoSubmitButton = todoForm.querySelector('button[type="submit"]');
 const todoText = document.getElementById("todo-text");
+const todoDoToday = document.getElementById("todo-do-today");
 const todoCategoryPicker = document.getElementById("todo-category-picker");
 const todoCategoryFilter = document.getElementById("todo-category-filter");
+
 
 let selectedTodoCategory = "all";
 let editingTodoId = null;
@@ -341,11 +343,17 @@ async function saveTodo() {
       "todos"
     );
 
+ 
   const todoData = {
     text: todoText.value.trim(),
     category: todoFormCategory,
-    completed: false
+    completed: false,
+    dailyPlannerDate:
+      todoDoToday.checked
+        ? getTodayKey()
+        : null
   };
+  
 
   if (editingTodoId) {
 
