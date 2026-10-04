@@ -2321,6 +2321,8 @@ body.light-mode .connect-calendar-button:hover {
   min-width: 0;
 
   box-sizing: border-box;
+  background: var(--color-bg);
+  color: var(--color-text);
 }
 
 [hidden] {
@@ -2589,14 +2591,14 @@ body.light-mode .connect-calendar-button:hover {
 
 
 select {
-  background: var(--color-card);
+  background: var(--color-bg);
   color: var(--color-text);
   border: 1px solid var(--color-border);
   color-scheme: dark;
 }
 
 select option {
-  background: var(--color-card);
+  background: var(--color-bg);
   color: var(--color-text);
 }
 
@@ -2622,7 +2624,7 @@ body.light-mode select {
 
   outline: none;
 
-  background: var(--color-surface);
+  background: var(--color-bg);
 
   color: var(--color-text);
 
