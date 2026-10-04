@@ -2624,7 +2624,7 @@ body.light-mode select {
 
   outline: none;
 
-  background: var(--color-bg);
+  background: var(--color-card);
 
   color: var(--color-text);
 
