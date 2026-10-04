@@ -55,7 +55,7 @@ const resetDataButton = document.getElementById("reset-data-button");
 const navItems = document.querySelectorAll(".nav-item");
 
 const recapTab = document.getElementById("recap-tab");
-const plannerTab = document.getElementById("planner-tab");
+const Tab = document.getElementById("planner-tab");
 const recapView = document.getElementById("recap-view");
 const plannerView = document.getElementById("planner-view");
 
@@ -276,7 +276,7 @@ function openAccountMenu() {
   accountMenu.classList.add("open");
   profileButton.classList.add("active");
   profileButton.setAttribute("aria-expanded", "true");
-
+  updateMainViewTabsVisibility();
 }
 
 
@@ -285,7 +285,7 @@ function closeAccountMenu() {
   accountMenu.classList.remove("open");
   profileButton.classList.remove("active");
   profileButton.setAttribute("aria-expanded", "false");
-
+  updateMainViewTabsVisibility();
 }
 
 
@@ -907,6 +907,7 @@ function openWeatherPanel() {
   weatherPanel.classList.add("open");
   weatherButton.classList.add("active");
   weatherButton.setAttribute("aria-expanded", "true");
+  updateMainViewTabsVisibility();
 }
 
 
@@ -914,6 +915,7 @@ function closeWeatherPanel() {
   weatherPanel.classList.remove("open");
   weatherButton.classList.remove("active");
   weatherButton.setAttribute("aria-expanded", "false");
+  updateMainViewTabsVisibility();
 }
 
 
@@ -922,6 +924,24 @@ document.addEventListener("click", (event) => {
     closeWeatherPanel();
   }
 });
+
+
+
+
+
+
+function updateMainViewTabsVisibility() {
+  const menuOpen = accountMenu.classList.contains("open");
+  const weatherOpen = weatherPanel.classList.contains("open");
+  const hideTabs = menuOpen || weatherOpen;
+
+  recapTab.hidden = hideTabs;
+  plannerTab.hidden = hideTabs;
+}
+
+
+
+
 
 
 
