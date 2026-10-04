@@ -2585,16 +2585,26 @@ body.light-mode .connect-calendar-button:hover {
   font-size: 12px;
 }
 
+
+
+
 select {
   background: var(--color-card);
   color: var(--color-text);
   border: 1px solid var(--color-border);
+  color-scheme: dark;
 }
 
 select option {
   background: var(--color-card);
   color: var(--color-text);
 }
+
+body.light-mode select {
+  color-scheme: light;
+}
+
+
 
 
 .birthday-field input,
