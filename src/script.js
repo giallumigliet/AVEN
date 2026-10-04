@@ -55,7 +55,7 @@ const resetDataButton = document.getElementById("reset-data-button");
 const navItems = document.querySelectorAll(".nav-item");
 
 const recapTab = document.getElementById("recap-tab");
-const Tab = document.getElementById("planner-tab");
+const plannerTab = document.getElementById("planner-tab");
 const recapView = document.getElementById("recap-view");
 const plannerView = document.getElementById("planner-view");
 
