@@ -57,6 +57,7 @@ const TODO_CATEGORIES = [
   { id: "training", label: "Training", icon: "🏋️" },
   { id: "work", label: "Work", icon: "💼" },
   { id: "freeTime", label: "Free time", icon: "🎨" },
+  { id: "music", label: "Music", icon: "🎵" },
   { id: "car", label: "Car", icon: "🚗" },
   { id: "travel", label: "Travel", icon: "✈️" },
   { id: "health", label: "Health", icon: "❤️" },
