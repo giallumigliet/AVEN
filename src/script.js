@@ -23,6 +23,7 @@ import { initTodos, openTodoModal } from "./todo.js";
 import { initDailyPlanner } from "./daily-planner.js";
 import { initRoutines, openRoutineModal } from "./routines.js";
 import { initBirthdays, openBirthdayModal } from "./birthdays.js";
+import { initBackpacks, openBackpackModal } from "./backpack.js";
 import { isHealthKitAvailable, requestHealthPermission, getTodayHealth } from "./health.js";
 import { initRecap, refreshCalendarEvents } from "./recap.js";
 import {
@@ -770,6 +771,7 @@ const addToggle = document.getElementById("add-toggle");
 const addRoutineButton = document.getElementById("add-routine");
 const addBirthdayButton = document.getElementById("add-birthday");
 const addTodoButton = document.getElementById("add-todo");
+const addBackpackButton = document.getElementById("add-backpack");
 
 
 addToggle.addEventListener("click", () => {
@@ -799,6 +801,12 @@ addBirthdayButton.addEventListener("click", () => {
 });
 
 
+addBackpackButton.addEventListener("click", () => {
+  addPanel.classList.remove("open");
+  openBackpackModal();
+});
+
+
 addTodoButton.addEventListener("click", () => {
   addPanel.classList.remove("open");
   openTodoModal();
@@ -810,6 +818,9 @@ initRoutines();
 
 // BIRTHDAYS =====================================================
 initBirthdays();
+
+// BACKPACKS =====================================================
+initBackpacks();
 
 // TODOS =========================================================
 initTodos();
