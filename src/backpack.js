@@ -66,7 +66,7 @@ function openBackpackEditModal(backpackId, backpack) {
 
   editingBackpackId = backpackId;
 
-  deleteBackpackButton.hidden = false;
+  Button.hidden = false;
   backpackSubmitButton.textContent = "Salva modifiche";
 
   backpackName.value = backpack.name || "";
@@ -265,9 +265,21 @@ export function initBackpacks() {
 
     return;
   }
+
+
+
+  backpacksSidebar.addEventListener("click", openBackpacksPanel);
+  closeBackpacksPanelButton.addEventListener("click", closeBackpacksPanel);
+  addBackpacksPanelButton.addEventListener("click", openBackpackModal);
+  backpacksPanelBackdrop.addEventListener("click", closeBackpacksPanel);
+  addBackpackButton.addEventListener("click", openBackpackModal);
+  closeBackpackModalButton.addEventListener("click", closeBackpackModal);
+  deleteBackpackButton.addEventListener("click", deleteBackpack);
+  backpackModalBackdrop.addEventListener("click", closeBackpackModal);
   
   backpackName.addEventListener("input", updateBackpackPreview);
   backpackForm.addEventListener("submit", handleBackpackSubmit);
+  backpackName.addEventListener("input", updateBackpackPreview)
 
   updateBackpackPreview();
 }
