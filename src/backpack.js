@@ -42,7 +42,7 @@ let backpacksUnsubscribe = null;
 // MODAL =========================================================
 
 export function openBackpackModal() {
-  closeBackpacksPanel();
+  closeBackpackPanel();
 
   editingBackpackId = null;
 
@@ -62,11 +62,11 @@ export function openBackpackModal() {
 
 
 function openBackpackEditModal(backpackId, backpack) {
-  closeBackpacksPanel();
+  closeBackpackPanel();
 
   editingBackpackId = backpackId;
 
-  Button.hidden = false;
+  deleteBackpackButton.hidden = false;
   backpackSubmitButton.textContent = "Salva modifiche";
 
   backpackName.value = backpack.name || "";
