@@ -22,6 +22,7 @@ const todoPlannerButton = document.getElementById("todo-planner-button");
 const todosSidebar = document.getElementById("to-do-sidebar");
 const todosPanel = document.getElementById("todos-panel");
 const closeTodosPanelButton = document.getElementById("close-todos-panel");
+const addTodosPanelButton = document.getElementById("panel-add-todo");
 const todosPanelBackdrop = document.getElementById("todos-panel-backdrop");
 const todosList = document.getElementById("todos-list");
 const todoModal = document.getElementById("todo-modal");
@@ -35,6 +36,9 @@ const todoText = document.getElementById("todo-text");
 const todoDoToday = document.getElementById("todo-do-today");
 const todoCategoryPicker = document.getElementById("todo-category-picker");
 const todoCategoryFilter = document.getElementById("todo-category-filter");
+
+
+
 
 
 let selectedTodoCategory = "all";
@@ -1354,6 +1358,11 @@ export function initTodos() {
   todosSidebar.addEventListener(
     "click",
     openTodosPanel
+  );
+  
+  addTodosPanelButton.addEventListener(
+    "click",
+    openTodoModal
   );
 
   closeTodosPanelButton.addEventListener(
