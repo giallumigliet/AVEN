@@ -418,22 +418,14 @@ function listenToBackpacks() {
 function openBackpackPanel() {
   listenToBackpacks();
 
-  backpackPanel.classList.add(
-    "open"
-  );
+  backpackPanel.classList.add("open");
 
-  backpackSidebar.classList.add(
-    "active"
-  );
+  backpackSidebar.classList.add("active");
 }
 
 
 function closeBackpackPanel() {
-  backpackPanel.classList.remove(
-    "open"
-  );
+  backpackPanel.classList.remove("open");
 
-  backpackSidebar.classList.remove(
-    "active"
-  );
+  backpackSidebar.classList.remove("active");
 }
