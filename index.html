@@ -868,267 +868,108 @@
 
 
 
-      
-      <!-- BACKPACK MODAL -->
-      <div class="modal-backdrop" id="backpack-modal-backdrop"></div>
-      
-      <section class="routine-modal" id="backpack-modal" aria-hidden="true">
-        <div class="routine-modal-header">
-          <div>
-            <span class="panel-label">PACKING</span>
-            <div class="daily-label" id="backpack-preview">
-              Inserisci il nome del viaggio
-            </div>
-          </div>
-      
-          <button
-            class="icon-button"
-            id="close-backpack-modal"
-            type="button"
-            aria-label="Chiudi"
-          >×</button>
-        </div>
-      
-        <form id="backpack-form">
-          <div class="routine-field">
-            <label for="backpack-name">Nome del viaggio</label>
-            <input
-              id="backpack-name"
-              class="routine-input"
-              type="text"
-              maxlength="80"
-              placeholder="Es. Vacanze in Puglia"
-              autocomplete="off"
-              required
-            >
-          </div>
-      
-          <div class="routine-actions">
-            <button
-              type="button"
-              id="delete-backpack"
-              class="danger-button"
-              hidden
-            >
-              Elimina
-            </button>
-      
-            <button type="submit" class="primary-button">
-              Crea viaggio
-            </button>
-          </div>
-        </form>
-      </section>
-
-
-      
-      <!-- PACKING CREATE CHOICE MODAL -->
-      <div class="modal-backdrop" id="packing-choice-backdrop"></div>
-      
-      <section
-        class="routine-modal"
-        id="packing-choice-modal"
-        aria-hidden="true"
-      >
-        <div class="routine-modal-header">
-          <div>
-            <span class="panel-label">PACKING</span>
-            <h2>Nuovo viaggio</h2>
-            <p>Come vuoi iniziare?</p>
-          </div>
-      
-          <button
-            class="icon-button"
-            id="close-packing-choice"
-            type="button"
-            aria-label="Chiudi"
-          >×</button>
-        </div>
-      
-        <div class="packing-create-options">
-          <button
-            type="button"
-            class="packing-create-option"
-            id="packing-create-empty"
-          >
-            <span>＋</span>
-            <span>
-              <strong>Parti da zero</strong>
-              <small>Crea una lista vuota</small>
-            </span>
-          </button>
-      
-          <button
-            type="button"
-            class="packing-create-option"
-            id="packing-copy-trip"
-          >
-            <span>▢</span>
-            <span>
-              <strong>Copia un viaggio</strong>
-              <small>Riutilizza una lista precedente</small>
-            </span>
-          </button>
-        </div>
-      </section>
-
-
-      
-      <!-- PACKING TRIP DETAIL PANEL -->
-      <div
-        class="backpack-detail-panel"
-        id="backpack-detail-panel"
-        aria-hidden="true"
-      >
+      <!-- BACKPACKS / PACKING PANEL -->
+      <div class="backpacks-panel" id="backpacks-panel" aria-hidden="true">
         <div
-          class="backpack-detail-backdrop"
-          id="backpack-detail-backdrop"
+          class="backpacks-panel-backdrop"
+          id="backpacks-panel-backdrop"
         ></div>
       
-        <div class="backpack-detail-content">
-          <header class="backpack-detail-header">
-            <button
-              type="button"
-              class="icon-button"
-              id="backpack-detail-back"
-              aria-label="Torna ai viaggi"
-            >←</button>
-      
-            <div class="backpack-detail-heading">
+        <div class="backpacks-panel-content">
+          <div class="backpacks-panel-header">
+            <div>
               <span class="panel-label">PACKING</span>
-              <h2 id="backpack-detail-title">Il mio viaggio</h2>
-              <p id="backpack-detail-progress">0 oggetti</p>
             </div>
       
-            <button
-              type="button"
-              class="icon-button"
-              id="backpack-detail-menu"
-              aria-label="Opzioni del viaggio"
-            >···</button>
-          </header>
-      
-          <!-- Attività preliminari -->
-          <section class="packing-preparation">
-            <h3>Prima di partire</h3>
-            <div id="packing-preparation-list"></div>
-      
-            <button
-              type="button"
-              class="packing-text-button"
-              id="packing-add-preparation"
-            >+ Aggiungi attività</button>
-          </section>
-      
-          <!-- Lista degli oggetti -->
-          <section class="packing-items-section">
-            <div class="packing-section-header">
-              <h3>La tua valigia</h3>
-      
+            <div class="panel-header-actions">
               <button
                 type="button"
                 class="panel-add-button"
-                id="packing-add-item"
-                aria-label="Aggiungi oggetto"
+                id="panel-add-backpack"
+                aria-label="Nuovo viaggio"
               >+</button>
+      
+              <button
+                type="button"
+                class="close-backpacks-panel"
+                id="close-backpacks-panel"
+                aria-label="Chiudi"
+              >×</button>
             </div>
+          </div>
       
-            <div
-              class="packing-category-filter"
-              id="packing-category-filter"
-            ></div>
-      
-            <div
-              class="packing-items-list"
-              id="packing-items-list"
-            ></div>
-          </section>
+          <div class="backpacks-list" id="backpacks-list"></div>
         </div>
       </div>
-
-
-
       
-      <!-- PACKING ITEM PICKER -->
-      <div class="modal-backdrop" id="packing-item-modal-backdrop"></div>
+      <!-- BACKPACK / NEW TRIP MODAL -->
+      <div
+        class="backpack-modal-backdrop"
+        id="backpack-modal-backdrop"
+      ></div>
       
       <section
-        class="routine-modal"
-        id="packing-item-modal"
+        class="backpack-modal"
+        id="backpack-modal"
         aria-hidden="true"
       >
-        <div class="routine-modal-header">
-          <div>
-            <span class="panel-label">I MIEI OGGETTI</span>
-            <h2>Aggiungi alla valigia</h2>
-          </div>
-      
-          <button
-            type="button"
-            class="icon-button"
-            id="close-packing-item-modal"
-            aria-label="Chiudi"
-          >×</button>
-        </div>
-      
-        <div class="routine-field">
-          <input
-            type="search"
-            id="packing-item-search"
-            class="routine-input"
-            placeholder="Cerca un oggetto..."
-          >
-        </div>
-      
         <div
-          class="packing-library-list"
-          id="packing-library-list"
-        ></div>
+          class="backpack-modal-content"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="backpack-modal-title"
+        >
+          <div class="backpack-modal-header">
+            <div>
+              <span class="panel-label">PACKING</span>
+              <h2 id="backpack-modal-title">Nuovo viaggio</h2>
+              <div class="daily-label" id="backpack-preview">
+                Inserisci il nome del viaggio
+              </div>
+            </div>
       
-        <form id="packing-new-item-form">
-          <div class="routine-field">
-            <label for="packing-new-item-name">Nuovo oggetto</label>
-            <input
-              id="packing-new-item-name"
-              class="routine-input"
-              type="text"
-              maxlength="100"
-              placeholder="Es. Caricatore"
-              required
-            >
+            <button
+              type="button"
+              class="icon-button"
+              id="close-backpack-modal"
+              aria-label="Chiudi"
+            >×</button>
           </div>
       
-          <div class="routine-field">
-            <label for="packing-new-item-category">Categoria</label>
-            <select
-              id="packing-new-item-category"
-              class="routine-input"
-            >
-              <option value="Vestiti">Vestiti</option>
-              <option value="Igiene e cura personale">Igiene e cura personale</option>
-              <option value="Tecnologia">Tecnologia</option>
-              <option value="Documenti e denaro">Documenti e denaro</option>
-              <option value="Altro">Altro</option>
-            </select>
-          </div>
+          <form id="backpack-form">
+            <div class="backpack-field">
+              <label for="backpack-name">Nome del viaggio</label>
+              <input
+                id="backpack-name"
+                class="routine-input"
+                type="text"
+                placeholder="Es. Puglia"
+                maxlength="100"
+                autocomplete="off"
+                required
+              >
+            </div>
       
-          <div class="routine-field">
-            <label for="packing-new-item-quantity">Quantità</label>
-            <input
-              id="packing-new-item-quantity"
-              class="routine-input"
-              type="number"
-              min="1"
-              value="1"
-              required
-            >
-          </div>
+            <div class="backpack-actions">
+              <button
+                type="button"
+                id="delete-backpack"
+                class="danger-button"
+                hidden
+              >Elimina</button>
       
-          <button type="submit" class="primary-button">
-            Crea e aggiungi
-          </button>
-        </form>
+              <button
+                type="submit"
+                class="primary-button"
+              >Crea viaggio</button>
+            </div>
+          </form>
+        </div>
       </section>
+
+
+      
+      
 
 
 
