@@ -34,6 +34,8 @@ const weekdayButtons = document.querySelectorAll(".weekday-picker button");
 
 const routinesPanel = document.getElementById("routines-panel");
 const closeRoutinesPanelButton = document.getElementById("close-routines-panel");
+const addRoutinesPanelButton = document.getElementById("panel-add-routine");
+
 const routinesList = document.getElementById("routines-list");
 const routinesPanelBackdrop = document.getElementById("routines-panel-backdrop");
 
@@ -598,6 +600,8 @@ export function initRoutines() {
   closeRoutineModalButton.addEventListener("click", closeRoutineModal);
   
   closeRoutinesPanelButton.addEventListener("click", closeRoutinesPanel);
+
+  addRoutinesPanelButton.addEventListener("click", openRoutineModal);
 
   deleteRoutineButton.addEventListener("click", deleteRoutine);
 
