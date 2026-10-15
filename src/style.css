@@ -1567,6 +1567,7 @@ body.light-mode .connect-calendar-button:hover {
 .todos-panel,
 .routines-panel,
 .birthdays-panel,
+.backpacks-panel,
 .daily-planner-panel {
   position: fixed;
   inset: 0;
@@ -1591,6 +1592,7 @@ body.light-mode .connect-calendar-button:hover {
 .todos-panel.open,
 .routines-panel.open,
 .birthdays-panel.open,
+.backpacks-panel.open,
 .daily-planner-panel.open {
   opacity: 1;
   visibility: visible;
@@ -1600,6 +1602,7 @@ body.light-mode .connect-calendar-button:hover {
 .todos-panel-content,
 .routines-panel-content,
 .birthdays-panel-content,
+.backpacks-panel-content,
 .daily-planner-panel-content {
   position: relative;
   z-index: 1;
@@ -1636,6 +1639,7 @@ body.light-mode .connect-calendar-button:hover {
 .todos-panel.open .todos-panel-content,
 .routines-panel.open .routines-panel-content,
 .birthdays-panel.open .birthdays-panel-content,
+.backpacks-panel.open .backpacks-panel-content,
 .daily-planner-panel.open .daily-planner-panel-content {
   transform:
     translateY(0)
@@ -1650,6 +1654,7 @@ body.light-mode .connect-calendar-button:hover {
 .todos-panel-header,
 .routines-panel-header,
 .birthdays-panel-header,
+.backpacks-panel-header,
 .daily-planner-panel-header {
   display: flex;
   align-items: center;
@@ -1661,6 +1666,7 @@ body.light-mode .connect-calendar-button:hover {
 .routines-panel-header h2,
 .todos-panel-header h2,
 .birthdays-panel-header h2,
+.backpacks-panel-header h2,
 .daily-planner-panel-header h2 {
   margin: 0;
   font-size: 22px;
@@ -1668,7 +1674,8 @@ body.light-mode .connect-calendar-button:hover {
 
 .routines-panel-header p,
 .todos-panel-header p,
-.birthdays-panel-header p {
+.birthdays-panel-header p,
+.backpacks-panel-header p {
   margin: 4px 0 0;
 
   color: var(--color-text-muted);
@@ -1678,6 +1685,7 @@ body.light-mode .connect-calendar-button:hover {
 .close-todos-panel,
 .close-routines-panel,
 .close-birthdays-panel,
+.close-backpacks-panel,
 .close-daily-planner-panel {
   width: 36px;
   height: 36px;
@@ -1875,6 +1883,7 @@ body.light-mode .connect-calendar-button:hover {
 .todos-empty,
 .routines-empty,
 .birthdays-empty,
+.backpacks-empty,
 .daily-planner-empty {
   padding: 32px 16px;
 
@@ -1893,6 +1902,7 @@ body.light-mode .connect-calendar-button:hover {
 .todos-empty small,
 .routines-empty small,
 .birthdays-empty small,
+.backpacks-empty small,
 .daily-planner-empty small {
   font-size: 11px;
 }
@@ -2329,6 +2339,20 @@ body.light-mode .connect-calendar-button:hover {
   display: none !important;
 }
 
+
+/* BACKPACK LIST */
+
+.backpacks-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow-y: auto;
+  min-height: 0;
+  scrollbar-width: none;
+}
+
+
+
 /* BIRTHDAY LIST */
 
 .birthdays-list {
@@ -2672,7 +2696,8 @@ body.light-mode select {
 /* ACTIONS -------------------------------------------------------- */
 .todo-actions,
 .routine-actions,
-.birthday-actions {
+.birthday-actions,
+.backpack-actions{
   display: flex;
   justify-content: flex-end;
   gap: 8px;
@@ -2682,7 +2707,8 @@ body.light-mode select {
 
 .todo-actions button,
 .routine-actions button,
-.birthday-actions button {
+.birthday-actions button,
+.backpack-actions button {
   flex: 1;
 }
 
@@ -3106,6 +3132,7 @@ body.light-mode select {
 .todos-panel-backdrop,
 .routines-panel-backdrop, 
 .birthdays-panel-backdrop,
+.backpacks-panel-backdrop,
 .daily-planner-panel-backdrop,
 .monitored-calendars-panel-backdrop {
   position: absolute;
@@ -4122,13 +4149,15 @@ button:active {
 
   .todos-panel,
   .routines-panel,
-  .birthdays-panel {
+  .birthdays-panel,
+  .backpacks-panel {
     padding: 16px;
   }
   
   .todos-panel-content,
   .routines-panel-content,
-  .birthdays-panel-content {
+  .birthdays-panel-content,
+  .backpacks-panel-content {
     width: calc(100vw - 32px);
     max-width: calc(100vw - 32px);
     padding: 20px;
