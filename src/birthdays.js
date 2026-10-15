@@ -18,6 +18,7 @@ const birthdaysSidebar = document.getElementById("birthdays-sidebar");
 
 const birthdaysPanel = document.getElementById("birthdays-panel");
 const closeBirthdaysPanelButton = document.getElementById("close-birthdays-panel");
+const addBirthdaysPanelButton = document.getElementById("panel-add-birthday");
 const birthdaysPanelBackdrop = document.getElementById("birthdays-panel-backdrop");
 
 const birthdaysList = document.getElementById("birthdays-list");
@@ -523,6 +524,7 @@ export function initBirthdays() {
   
   birthdaysSidebar.addEventListener("click", openBirthdaysPanel);
   closeBirthdaysPanelButton.addEventListener("click", closeBirthdaysPanel);
+  addBirthdaysPanelButton.addEventListener("click", openBirthdayModal);
   birthdaysPanelBackdrop.addEventListener("click", closeBirthdaysPanel);
   addBirthdayButton.addEventListener("click", openBirthdayModal);
   closeBirthdayModalButton.addEventListener("click", closeBirthdayModal);
