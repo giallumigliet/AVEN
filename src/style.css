@@ -4057,12 +4057,14 @@ button:active {
 
 
 
-  .birthday-modal {
+  .birthday-modal,
+  .backpack-modal {
     padding: 16px;
   }
 
 
-  .birthday-modal-content {
+  .birthday-modal-content,
+  .backpack-modal-content {
     width: calc(100vw - 32px);
     max-width: calc(100vw - 32px);
 
@@ -4072,17 +4074,20 @@ button:active {
   }
 
 
-  .birthday-modal-header {
+  .birthday-modal-header,
+  .backpack-modal-header {
     margin-bottom: 23px;
   }
 
 
-  .birthday-modal-header h2 {
+  .birthday-modal-header h2,
+  .backpack-modal-header h2 {
     font-size: 20px;
   }
 
 
-  .birthday-date-fields {
+  .birthday-date-fields,
+  .backpack-date-fields {
     grid-template-columns:
       0.7fr
       1.4fr
@@ -4093,7 +4098,9 @@ button:active {
 
 
   .birthday-field input,
-  .birthday-field select {
+  .birthday-field select,
+  .backpack-field input,
+  .backpack-field select {
     height: 46px;
 
     padding-left: 11px;
