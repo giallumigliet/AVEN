@@ -267,11 +267,10 @@ export function initBackpacks() {
   }
 
 
-
-  backpacksSidebar.addEventListener("click", openBackpacksPanel);
-  closeBackpacksPanelButton.addEventListener("click", closeBackpacksPanel);
-  addBackpacksPanelButton.addEventListener("click", openBackpackModal);
-  backpacksPanelBackdrop.addEventListener("click", closeBackpacksPanel);
+  backpackSidebar.addEventListener("click", openBackpackPanel);
+  closeBackpackPanelButton.addEventListener("click", closeBackpackPanel);
+  addBackpackPanelButton.addEventListener("click", openBackpackModal);
+  backpackPanelBackdrop.addEventListener("click", closeBackpackPanel);
   addBackpackButton.addEventListener("click", openBackpackModal);
   closeBackpackModalButton.addEventListener("click", closeBackpackModal);
   deleteBackpackButton.addEventListener("click", deleteBackpack);
@@ -279,7 +278,6 @@ export function initBackpacks() {
   
   backpackName.addEventListener("input", updateBackpackPreview);
   backpackForm.addEventListener("submit", handleBackpackSubmit);
-  backpackName.addEventListener("input", updateBackpackPreview)
 
   updateBackpackPreview();
 }
