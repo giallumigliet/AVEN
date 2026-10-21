@@ -2445,9 +2445,6 @@ body.light-mode .connect-calendar-button:hover {
   color: var(--color-danger);
 }
 
-.backpack-delete-icon:hover {
-  background: var(--color-danger-soft);
-}
 
 .backpack-detail-title {
   margin-bottom: 20px;
