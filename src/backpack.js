@@ -590,15 +590,13 @@ function listenToBackpacks() {
 
 function openBackpackPanel() {
   listenToBackpacks();
-
   backpackPanel.classList.add("open");
-
   backpackSidebar.classList.add("active");
 }
 
 
 function closeBackpackPanel() {
+  showBackpacksList()
   backpackPanel.classList.remove("open");
-
   backpackSidebar.classList.remove("active");
 }
