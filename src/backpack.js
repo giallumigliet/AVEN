@@ -240,7 +240,7 @@ async function deleteBackpack() {
 
   const confirmed =
     confirm(
-      "Sei sicuro di voler eliminare questo compleanno?"
+      "Sei sicuro di voler eliminare questa valigia?"
     );
 
   if (!confirmed) {
