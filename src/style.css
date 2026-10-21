@@ -2413,8 +2413,67 @@ body.light-mode .connect-calendar-button:hover {
 }
 
 
+/* BACKPACK DETAIL */
 
+.backpack-detail {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
 
+.backpack-detail[hidden] {
+  display: none !important;
+}
+
+.backpack-detail-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.backpack-detail-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.backpack-delete-icon {
+  color: var(--color-danger);
+}
+
+.backpack-delete-icon:hover {
+  background: var(--color-danger-soft);
+}
+
+.backpack-detail-title {
+  margin-bottom: 20px;
+  font-size: 25px;
+  font-weight: 550;
+  letter-spacing: -0.6px;
+  overflow-wrap: anywhere;
+}
+
+.backpack-detail-items {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  gap: 8px;
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+
+.backpack-detail-items::-webkit-scrollbar {
+  display: none;
+}
+
+.backpacks-empty {
+  color: var(--color-muted);
+}
 
 
 
