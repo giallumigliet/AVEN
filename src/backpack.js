@@ -35,28 +35,91 @@ const backpackSubmitButton = backpackForm.querySelector('button[type="submit"]')
 const backpackName = document.getElementById("backpack-name");
 
 const backpackPreview = document.getElementById("backpack-preview");
+const backpackSourceCarousel = document.getElementById("backpack-source-carousel");
+const backpackSourceField = backpackSourceCarousel.closest(".backpack-field");
+
+let availableBackpacks = [];
+let selectedSourceBackpackId = null;
 
 let editingBackpackId = null;
 let backpacksUnsubscribe = null;
 
 // MODAL =========================================================
+function renderBackpackSourceCarousel() {
+  backpackSourceCarousel.innerHTML = "";
 
-export function openBackpackModal() {
+  const options = [
+    { id: null, name: "NEW" },
+    ...availableBackpacks.map((backpack) => ({
+      id: backpack.id,
+      name: backpack.name || "Viaggio senza nome"
+    }))
+  ];
+
+  options.forEach((option) => {
+    const button = document.createElement("button");
+
+    button.type = "button";
+    button.className = "backpack-source-option";
+    button.textContent = option.name;
+    button.classList.toggle(
+      "selected",
+      option.id === selectedSourceBackpackId
+    );
+    button.setAttribute(
+      "aria-pressed",
+      String(option.id === selectedSourceBackpackId)
+    );
+
+    button.addEventListener("click", () => {
+      selectedSourceBackpackId = option.id;
+      renderBackpackSourceCarousel();
+    });
+
+    backpackSourceCarousel.appendChild(button);
+  });
+}
+
+
+
+export async function openBackpackModal() {
   closeBackpackPanel();
 
   editingBackpackId = null;
+  selectedSourceBackpackId = null;
 
   deleteBackpackButton.hidden = true;
   backpackSubmitButton.textContent = "Crea viaggio";
-
   backpackForm.reset();
   backpackPreview.textContent = "Inserisci il nome del viaggio";
+  backpackSourceField.hidden = false;
 
-  backpackModal.classList.add("open");
-  backpackModalBackdrop.classList.add("open");
-  backpackModal.setAttribute("aria-hidden", "false");
+  try {
+    const user = auth.currentUser;
 
-  backpackName.focus();
+    if (!user) {
+      throw new Error("User not authenticated.");
+    }
+
+    const snapshot = await getDocs(
+      collection(db, "users", user.uid, "backpacks")
+    );
+
+    availableBackpacks = snapshot.docs.map((item) => ({
+      id: item.id,
+      ...item.data()
+    }));
+
+    renderBackpackSourceCarousel();
+
+    backpackModal.classList.add("open");
+    backpackModalBackdrop.classList.add("open");
+    backpackModal.setAttribute("aria-hidden", "false");
+
+    backpackName.focus();
+  } catch (error) {
+    console.error("Error loading trips:", error);
+  }
 }
 
 
@@ -66,6 +129,7 @@ function openBackpackEditModal(backpackId, backpack) {
 
   editingBackpackId = backpackId;
 
+  backpackSourceField.hidden = true;
   deleteBackpackButton.hidden = false;
   backpackSubmitButton.textContent = "Salva modifiche";
 
@@ -235,10 +299,20 @@ async function handleBackpackSubmit(event) {
   }
 
   try {
-    await saveBackpack(backpack);
+    if (editingBackpackId) {
+      await saveBackpack(backpack);
+    } else if (selectedSourceBackpackId) {
+      await duplicateBackpack(
+        selectedSourceBackpackId,
+        backpack.name
+      );
+    } else {
+      await saveBackpack(backpack);
+    }
 
     editingBackpackId = null;
     backpackForm.reset();
+    selectedSourceBackpackId = null;
 
     closeBackpackModal();
 
