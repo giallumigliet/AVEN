@@ -99,6 +99,7 @@ export async function openBackpackModal() {
   backpackSubmitButton.textContent = "Crea viaggio";
   backpackForm.reset();
   backpackPreview.textContent = "Inserisci il nome del viaggio";
+  deleteBackpackButton.hidden = true;
   backpackSourceField.hidden = false;
 
   try {
@@ -134,6 +135,7 @@ export async function openBackpackModal() {
 function openBackpackEditModal(backpackId, backpack) {
   editingBackpackId = backpackId;
 
+  deleteBackpackButton.hidden = false;
   backpackSourceField.hidden = true;
   backpackSubmitButton.textContent = "Salva modifiche";
 
