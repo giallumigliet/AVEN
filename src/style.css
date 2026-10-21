@@ -2353,6 +2353,39 @@ body.light-mode .connect-calendar-button:hover {
 
 
 
+
+
+
+
+
+.backpack-list-item {
+  min-height: 68px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px 14px;
+  border: 1px solid var(--color-card-border);
+  border-radius: 16px;
+  background: var(--color-card);
+  cursor: pointer;
+  transition:
+    background .2s ease,
+    border-color .2s ease,
+    transform .2s ease;
+}
+
+
+
+
+
+
+
+
+
+
+
+
 /* BIRTHDAY LIST */
 
 .birthdays-list {
