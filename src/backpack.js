@@ -596,7 +596,7 @@ function openBackpackPanel() {
 
 
 function closeBackpackPanel() {
-  showBackpacksList()
   backpackPanel.classList.remove("open");
   backpackSidebar.classList.remove("active");
+  showBackpacksList()
 }
