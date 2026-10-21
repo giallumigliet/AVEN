@@ -2356,7 +2356,7 @@ body.light-mode .connect-calendar-button:hover {
   min-height: 100px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   gap: 16px;
   padding: 14px;
   border: 1px solid var(--color-card-border);
