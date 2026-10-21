@@ -23,6 +23,15 @@ const addBackpackPanelButton = document.getElementById("panel-add-backpack");
 const backpackPanelBackdrop = document.getElementById("backpacks-panel-backdrop");
 
 const backpacksList = document.getElementById("backpacks-list");
+const backpackDetail = document.getElementById("backpack-detail");
+const backpackDetailTitle = document.getElementById("backpack-detail-title");
+const backpackDetailItems = document.getElementById("backpack-detail-items");
+const backpackDetailBackButton = document.getElementById("backpack-detail-back");
+const backpackDetailDeleteButton = document.getElementById("backpack-detail-delete");
+const backpackDetailEditButton = document.getElementById("backpack-detail-edit");
+
+let currentBackpackId = null;
+let currentBackpackData = null;
 
 const addBackpackButton = document.getElementById("add-backpack");
 const backpackModal = document.getElementById("backpack-modal");
@@ -125,8 +134,6 @@ export async function openBackpackModal() {
 
 
 function openBackpackEditModal(backpackId, backpack) {
-  closeBackpackPanel();
-
   editingBackpackId = backpackId;
 
   backpackSourceField.hidden = true;
@@ -349,6 +356,9 @@ export function initBackpacks() {
   closeBackpackModalButton.addEventListener("click", closeBackpackModal);
   deleteBackpackButton.addEventListener("click", deleteBackpack);
   backpackModalBackdrop.addEventListener("click", closeBackpackModal);
+  backpackDetailBackButton.addEventListener("click", showBackpacksList);
+  backpackDetailDeleteButton.addEventListener("click", deleteCurrentBackpack);
+  backpackDetailEditButton.addEventListener("click", editCurrentBackpack);
   
   backpackName.addEventListener("input", updateBackpackPreview);
   backpackForm.addEventListener("submit", handleBackpackSubmit);
@@ -414,6 +424,81 @@ async function duplicateBackpack(sourceBackpackId, newName) {
 
 
 // RENDER =========================================================
+function openBackpackDetail(backpackId, backpack) {
+  currentBackpackId = backpackId;
+  currentBackpackData = backpack;
+
+  backpacksList.hidden = true;
+  backpackDetail.hidden = false;
+
+  renderBackpackDetail();
+}
+
+function renderBackpackDetail() {
+  if (!currentBackpackData) return;
+
+  backpackDetailTitle.textContent =
+    currentBackpackData.name || "Viaggio senza nome";
+
+  backpackDetailItems.innerHTML = `
+    <div class="backpacks-empty">
+      <span>Nessun oggetto</span>
+      <small>La lista degli oggetti verrà aggiunta qui.</small>
+    </div>
+  `;
+}
+
+function showBackpacksList() {
+  currentBackpackId = null;
+  currentBackpackData = null;
+
+  backpackDetail.hidden = true;
+  backpacksList.hidden = false;
+}
+
+function editCurrentBackpack() {
+  if (!currentBackpackId || !currentBackpackData) return;
+
+  openBackpackEditModal(currentBackpackId, currentBackpackData);
+}
+
+async function deleteCurrentBackpack() {
+  if (!currentBackpackId) return;
+
+  const confirmed = confirm(
+    `Vuoi eliminare il viaggio "${currentBackpackData.name}"? Questa azione non può essere annullata.`
+  );
+
+  if (!confirmed) return;
+
+  const user = auth.currentUser;
+  if (!user) return;
+
+  try {
+    const itemsRef = collection(
+      db,
+      "users",
+      user.uid,
+      "backpacks",
+      currentBackpackId,
+      "items"
+    );
+
+    const itemsSnapshot = await getDocs(itemsRef);
+
+    for (const itemSnapshot of itemsSnapshot.docs) {
+      await deleteDoc(itemSnapshot.ref);
+    }
+
+    await deleteDoc(
+      doc(db, "users", user.uid, "backpacks", currentBackpackId)
+    );
+
+    showBackpacksList();
+  } catch (error) {
+    console.error("Error deleting trip:", error);
+  }
+}
 
 function renderBackpacks(snapshot) {
   backpacksList.innerHTML = "";
@@ -442,12 +527,30 @@ function renderBackpacks(snapshot) {
     item.appendChild(name);
 
     item.addEventListener("click", () => {
-      closeBackpackPanel();
-      openBackpackEditModal(id, data);
+      openBackpackDetail(id, data);
     });
 
     backpacksList.appendChild(item);
   });
+
+
+  if (currentBackpackId) {
+    const updatedTrip = snapshot.docs.find(
+      (item) => item.id === currentBackpackId
+    );
+  
+    if (updatedTrip) {
+      currentBackpackData = {
+        id: updatedTrip.id,
+        ...updatedTrip.data()
+      };
+  
+      renderBackpackDetail();
+    } else {
+      showBackpacksList();
+    }
+  }
+  
 }
 
 
