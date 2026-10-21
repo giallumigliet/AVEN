@@ -27,7 +27,6 @@ const backpackDetail = document.getElementById("backpack-detail");
 const backpackDetailTitle = document.getElementById("backpack-detail-title");
 const backpackDetailItems = document.getElementById("backpack-detail-items");
 const backpackDetailBackButton = document.getElementById("backpack-detail-back");
-const backpackDetailDeleteButton = document.getElementById("backpack-detail-delete");
 const backpackDetailEditButton = document.getElementById("backpack-detail-edit");
 
 let currentBackpackId = null;
@@ -97,7 +96,6 @@ export async function openBackpackModal() {
   editingBackpackId = null;
   selectedSourceBackpackId = null;
 
-  deleteBackpackButton.hidden = true;
   backpackSubmitButton.textContent = "Crea viaggio";
   backpackForm.reset();
   backpackPreview.textContent = "Inserisci il nome del viaggio";
@@ -137,7 +135,6 @@ function openBackpackEditModal(backpackId, backpack) {
   editingBackpackId = backpackId;
 
   backpackSourceField.hidden = true;
-  deleteBackpackButton.hidden = false;
   backpackSubmitButton.textContent = "Salva modifiche";
 
   backpackName.value = backpack.name || "";
@@ -357,7 +354,6 @@ export function initBackpacks() {
   deleteBackpackButton.addEventListener("click", deleteBackpack);
   backpackModalBackdrop.addEventListener("click", closeBackpackModal);
   backpackDetailBackButton.addEventListener("click", showBackpacksList);
-  backpackDetailDeleteButton.addEventListener("click", deleteCurrentBackpack);
   backpackDetailEditButton.addEventListener("click", editCurrentBackpack);
   
   backpackName.addEventListener("input", updateBackpackPreview);
