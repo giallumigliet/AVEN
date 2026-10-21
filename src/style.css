@@ -2432,7 +2432,7 @@ body.light-mode .connect-calendar-button:hover {
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  margin-bottom: 24px;
+  margin-bottom: 4px;
 }
 
 .backpack-detail-actions {
