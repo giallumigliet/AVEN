@@ -2343,28 +2343,22 @@ body.light-mode .connect-calendar-button:hover {
 /* BACKPACK LIST */
 
 .backpacks-list {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 12px;
   overflow-y: auto;
   min-height: 0;
+  align-content: start;
   scrollbar-width: none;
 }
 
-
-
-
-
-
-
-
 .backpack-list-item {
-  min-height: 68px;
+  min-height: 100px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  padding: 12px 14px;
+  padding: 14px;
   border: 1px solid var(--color-card-border);
   border-radius: 16px;
   background: var(--color-card);
@@ -2374,11 +2368,6 @@ body.light-mode .connect-calendar-button:hover {
     border-color .2s ease,
     transform .2s ease;
 }
-
-
-
-
-
 
 
 
