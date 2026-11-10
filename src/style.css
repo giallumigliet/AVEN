@@ -4046,7 +4046,6 @@ button:active {
     position: fixed;
     inset: 0;
     z-index: 150;
-    background: rgba(0,0,0,0.35);
     opacity: 1;
     visibility: visible;
     transition: opacity var(--transition-normal), visibility var(--transition-normal);
