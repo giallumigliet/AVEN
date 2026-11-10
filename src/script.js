@@ -192,69 +192,6 @@ loginButton.addEventListener(
 
 
 
-// RESPONSIVE SIDEBAR =========================================================
-
-function isMobile() {
-  return window.matchMedia("(max-width: 700px)").matches;
-}
-
-
-function openSidebar() {
-
-  app.classList.remove("sidebar-closed");
-  menuButton.setAttribute("aria-expanded", "true");
-
-}
-
-
-function closeSidebar() {
-
-  app.classList.add("sidebar-closed");
-  menuButton.setAttribute("aria-expanded", "false");
-
-}
-
-
-function toggleSidebar() {
-
-  if (app.classList.contains("sidebar-closed")) {
-    openSidebar();
-  } else {
-    closeSidebar();
-  }
-
-}
-
-
-menuButton.addEventListener("click", toggleSidebar);
-
-sidebarBackdrop.addEventListener("click", closeSidebar);
-
-
-// SIDEBAR NAVIGATION =========================================================
-
-navItems.forEach((item) => {
-
-  item.addEventListener("click", () => {
-
-    navItems.forEach((navItem) => {
-      navItem.classList.remove("active");
-    });
-
-    item.classList.add("active");
-
-    if (isMobile()) {
-      closeSidebar();
-    }
-
-  });
-
-});
-
-
-checkCalendarSidebar.addEventListener("click", () => {
-  window.location.href = "https://giallumigliet.github.io/check_calendar/";
-});
 
 
 // ACCOUNT MENU =========================================================
@@ -940,6 +877,38 @@ document.addEventListener("click", (event) => {
 });
 
 
+
+// RESPONSIVE SIDEBAR =========================================================
+
+function isMobile() {
+  return window.matchMedia("(max-width: 700px)").matches;
+}
+
+
+// SIDEBAR NAVIGATION =========================================================
+
+navItems.forEach((item) => {
+
+  item.addEventListener("click", () => {
+
+    navItems.forEach((navItem) => {
+      navItem.classList.remove("active");
+    });
+
+    item.classList.add("active");
+
+    if (isMobile()) {
+      closeSidebar();
+    }
+
+  });
+
+});
+
+
+checkCalendarSidebar.addEventListener("click", () => {
+  window.location.href = "https://giallumigliet.github.io/check_calendar/";
+});
 
 
 // SIDEBAR 
