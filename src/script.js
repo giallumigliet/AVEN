@@ -40,7 +40,8 @@ const authGate = document.getElementById("auth-gate");
 const loginButton = document.getElementById("login-button");
 
 const menuButton = document.getElementById("menu-button");
-const sidebarBackdrop = document.getElementById("sidebar-backdrop");
+const sidebar = document.getElementById("sidebar");
+
 
 const checkCalendarSidebar = document.getElementById("check-calendar-sidebar");
 
@@ -942,7 +943,7 @@ document.addEventListener("click", (event) => {
 
 
 // SIDEBAR 
-sidebarButton.addEventListener("click", (event) => {
+menuButton.addEventListener("click", (event) => {
   event.stopPropagation();
 
   if (sidebar.classList.contains("open")) {
@@ -957,16 +958,16 @@ sidebarButton.addEventListener("click", (event) => {
 
 function openSidebar() {
   sidebar.classList.add("open");
-  sidebarButton.classList.add("active");
-  sidebarButton.setAttribute("aria-expanded", "true");
+  menuButton.classList.add("active");
+  menuButton.setAttribute("aria-expanded", "true");
   updateMainViewTabsVisibility();
 }
 
 
 function closeSidebar() {
   sidebar.classList.remove("open");
-  sidebarButton.classList.remove("active");
-  sidebarButton.setAttribute("aria-expanded", "false");
+  menuButton.classList.remove("active");
+  menuButton.setAttribute("aria-expanded", "false");
   updateMainViewTabsVisibility();
 }
 
