@@ -294,7 +294,7 @@ body.light-mode .auth-gate {
 }
 
 
-.weather-button {
+.weather-button, .news-button {
   min-width: 68px;
   height: 44px;
   display: flex;
@@ -422,11 +422,11 @@ body.light-mode .auth-gate {
 ========================================================= */
 
 
-.weather {
+.weather, .news {
   position: relative;
 }
 
-.weather-panel {
+.weather-panel, .news-panel {
   position: absolute;
   top: calc(100% + 10px);
   right: 0;
@@ -448,20 +448,20 @@ body.light-mode .auth-gate {
   z-index: 100;
 }
 
-.weather-panel.open {
+.weather-panel.open, .news-panel.open {
   opacity: 1;
   visibility: visible;
   transform: translateY(0) scale(1);
 }
 
 
-.weather-tabs {
+.weather-tabs, .news-tabs {
   display: flex;
   gap: 4px;
   margin-bottom: 8px;
 }
 
-.weather-tab {
+.weather-tab, .news-tab {
   flex: 1;
   padding: 6px 6px;
   border: 0;
@@ -474,7 +474,7 @@ body.light-mode .auth-gate {
   transition: background var(--transition-fast), opacity var(--transition-fast);
 }
 
-.weather-tab.active {
+.weather-tab.active, .news-tab.active {
   background: var(--color-panel-border);
   opacity: 1;
 }
@@ -487,6 +487,20 @@ body.light-mode .auth-gate {
 }
 
 #weather-daily {
+  display: none;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+}
+
+#news-global {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+}
+
+#news-local {
   display: none;
   flex-direction: column;
   align-items: flex-start;
