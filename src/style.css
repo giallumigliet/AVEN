@@ -658,8 +658,6 @@ main {
   align-items: center;
   justify-content: center;
   position: relative;
-  padding-right: var(--sidebar-width);
-  transition: padding-right var(--transition-normal);
 }
 
 
