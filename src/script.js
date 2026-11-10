@@ -42,6 +42,7 @@ const loginButton = document.getElementById("login-button");
 const menuButton = document.getElementById("menu-button");
 const sidebar = document.getElementById("sidebar");
 
+const weatherPanel = document.getElementById("weather-panel");
 
 const checkCalendarSidebar = document.getElementById("check-calendar-sidebar");
 
@@ -773,7 +774,7 @@ const weatherHourly = document.getElementById("weather-hourly");
 const weatherDaily = document.getElementById("weather-daily");
 const weatherWarning = document.querySelector(".weather-warning");
 
-const weatherPanel = document.getElementById("weather-panel");
+
 
 const hourlyTab = document.getElementById("weather-hourly-tab");
 const dailyTab = document.getElementById("weather-daily-tab");
