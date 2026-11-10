@@ -621,28 +621,6 @@ if (savedTheme) {
 }
 
 
-// INITIAL SIDEBAR =========================================================
-
-if (isMobile()) {
-  closeSidebar();
-} else {
-  openSidebar();
-}
-
-
-// HANDLE RESIZE =========================================================
-
-window.addEventListener("resize", () => {
-
-  if (isMobile()) {
-    closeSidebar();
-  } else {
-    openSidebar();
-  }
-
-});
-
-
 
 
 // SWITCH RECAP/DAILY PLANNER =========================================================
