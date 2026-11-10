@@ -268,6 +268,7 @@ profileButton.addEventListener("click", (event) => {
     openAccountMenu();
   }
   closeWeatherPanel();
+  closeSidebar();
 
 });
 
@@ -911,6 +912,7 @@ weatherButton.addEventListener("click", (event) => {
     openWeatherPanel();
   }
   closeAccountMenu();
+  closeSidebar();
 });
 
 
@@ -939,12 +941,51 @@ document.addEventListener("click", (event) => {
 
 
 
+// SIDEBAR 
+sidebarButton.addEventListener("click", (event) => {
+  event.stopPropagation();
+
+  if (sidebar.classList.contains("open")) {
+    closeSidebar();
+  } else {
+    openSidebar();
+  }
+  closeAccountMenu();
+  closeWeatherPanel();
+});
+
+
+function openSidebar() {
+  sidebar.classList.add("open");
+  sidebarButton.classList.add("active");
+  sidebarButton.setAttribute("aria-expanded", "true");
+  updateMainViewTabsVisibility();
+}
+
+
+function closeSidebar() {
+  sidebar.classList.remove("open");
+  sidebarButton.classList.remove("active");
+  sidebarButton.setAttribute("aria-expanded", "false");
+  updateMainViewTabsVisibility();
+}
+
+
+document.addEventListener("click", (event) => {
+  if (!event.target.closest(".side")) {
+    closeSidebar();
+  }
+});
+
+
+
 
 
 function updateMainViewTabsVisibility() {
   const menuOpen = accountMenu.classList.contains("open");
   const weatherOpen = weatherPanel.classList.contains("open");
-  const hideTabs = menuOpen || weatherOpen;
+  const sidebarOpen = sidebar.classList.contains("open");
+  const hideTabs = menuOpen || weatherOpen || sidebarOpen;
 
   recapTab.hidden = hideTabs;
   plannerTab.hidden = hideTabs;
