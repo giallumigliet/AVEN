@@ -561,6 +561,9 @@ body.light-mode .auth-gate {
 
 
 .sidebar {
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 0;
   width: var(--sidebar-width);
   flex-shrink: 0;
   display: flex;
