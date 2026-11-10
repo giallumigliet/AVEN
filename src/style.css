@@ -658,6 +658,7 @@ main {
   align-items: center;
   justify-content: center;
   position: relative;
+  padding: 0px 30px;
 }
 
 
