@@ -315,6 +315,8 @@ body.light-mode .auth-gate {
   font-size: 10px;
   font-weight: 500;
   margin-bottom: 8px;
+  display: flex;
+  justify-content: center;
 }
 
 .weather-icon {
