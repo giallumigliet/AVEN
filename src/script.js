@@ -838,16 +838,16 @@ const weatherPanel = document.getElementById("weather-panel");
 
 const hourlyTab = document.getElementById("weather-hourly-tab");
 const dailyTab = document.getElementById("weather-daily-tab");
-
+const weatherLocation = document.getElementById("weather-location");
 
 const weatherData = await getWeather();
 const currentWeather = getCurrentWeather(weatherData);
 const hours = getHourlyPreview(weatherData);
 const days = getNextDays(weatherData);
 
+weatherLocation.innerHTML = weatherData.location
 
 weatherButton.innerHTML = `
-    <span class="location">${weatherData.location}</span>
     <span class="weather-icon">${currentWeather.icon}</span>
     <span class="temperature">${currentWeather.temperature}°</span>
     <span class="weather-warning">${hasPrecipitationToday(weatherData) ? "⚠" : ""}</span>
