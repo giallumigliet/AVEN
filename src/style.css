@@ -561,6 +561,9 @@ body.light-mode .auth-gate {
 
 
 .sidebar {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
   width: var(--sidebar-width);
   flex-shrink: 0;
   display: flex;
@@ -612,10 +615,6 @@ body.light-mode .auth-gate {
   color: var(--color-accent);
 }
 
-
-.sidebar-backdrop {
-  display: none;
-}
 
 
 
@@ -4021,16 +4020,6 @@ button:active {
     z-index: 900;
   }
   
-
-  .sidebar-backdrop {
-    display: block;
-    position: fixed;
-    inset: 0;
-    z-index: 150;
-    opacity: 1;
-    visibility: visible;
-    transition: opacity var(--transition-normal), visibility var(--transition-normal);
-  }
 
 
 
