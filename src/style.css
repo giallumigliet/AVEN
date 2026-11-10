@@ -577,12 +577,6 @@ body.light-mode .auth-gate {
 }
 
 
-.app.sidebar-closed .sidebar {
-  width: 0;
-  opacity: 0;
-  pointer-events: none;
-}
-
 
 .nav-item {
   width: 155px;
@@ -643,10 +637,6 @@ main {
   transition: padding-right var(--transition-normal);
 }
 
-
-.app.sidebar-closed main {
-  padding-right: 0;
-}
 
 
 .greeting {
@@ -4035,15 +4025,6 @@ button:active {
   }
   
 
-
-  .app.sidebar-closed .sidebar {
-    width: min(280px, calc(100vw - 28px));
-    opacity: 0;
-    transform: translateY(-6px) scale(0.97);
-    pointer-events: none;
-  }
-
-
   .sidebar-backdrop {
     display: block;
     position: fixed;
@@ -4054,12 +4035,6 @@ button:active {
     transition: opacity var(--transition-normal), visibility var(--transition-normal);
   }
 
-
-  .app.sidebar-closed .sidebar-backdrop {
-    opacity: 0;
-    visibility: hidden;
-    pointer-events: none;
-  }
 
 
   .nav-item {
