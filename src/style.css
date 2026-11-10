@@ -314,6 +314,7 @@ body.light-mode .auth-gate {
 .location {
   font-size: 10px;
   font-weight: 500;
+  margin-bottom: 8px;
 }
 
 .weather-icon {
