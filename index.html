@@ -31,9 +31,48 @@
     <!-- HEADER ====================================================== -->
     <header class="topbar">
       <div class="topbar-left">
-        <button class="icon-button menu-button" id="menu-button" type="button" aria-label="Open menu" aria-expanded="true">
-          ☰
-        </button>
+        <div class="side">
+          <button class="icon-button menu-button" id="menu-button" type="button" aria-label="Open menu" aria-expanded="true"> ☰ </button>
+          <!-- SIDEBAR ==================================================== -->
+          <div class="sidebar" id="sidebar">
+            <button id=to-do-sidebar class="nav-item" type="button">
+              <span class="nav-icon">✓</span>
+              <span>To do lists</span>
+            </button>
+    
+            <button id=routines-sidebar class="nav-item" type="button">
+              <span class="nav-icon">↺</span>
+              <span>Routines</span>
+            </button>
+    
+            <button id=backpacks-sidebar class="nav-item" type="button">
+              <span class="nav-icon">✈︎</span>
+              <span>Backpacks</span>
+            </button>
+    
+            <button id=birthdays-sidebar class="nav-item" type="button">
+              <span class="nav-icon">☆</span>
+              <span>Birthdays</span>
+            </button>
+    
+            <button id=health-sidebar class="nav-item" type="button">
+              <span class="nav-icon">♡</span>
+              <span>Health</span>
+            </button>
+    
+            <button id=check-calendar-sidebar class="nav-item active" type="button">
+              <span class="nav-icon">□</span>
+              <span>Check calendar</span>
+            </button>
+            
+            <button id=home-sidebar class="nav-item" type="button">
+              <span class="nav-icon">⌂</span>
+              <span>Home</span>
+            </button>
+    
+          </div>
+
+        </div>
         
         <div class="brand">
           <span class="status-dot"></span>
@@ -94,49 +133,6 @@
     
     <!-- CONTENT ====================================================== -->
     <div class="content">
-      <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
-
-
-      <!-- SIDEBAR ==================================================== -->
-      <aside class="sidebar" id="sidebar">
-    
-        <button id=to-do-sidebar class="nav-item" type="button">
-          <span class="nav-icon">✓</span>
-          <span>To do lists</span>
-        </button>
-
-        <button id=routines-sidebar class="nav-item" type="button">
-          <span class="nav-icon">↺</span>
-          <span>Routines</span>
-        </button>
-
-        <button id=backpacks-sidebar class="nav-item" type="button">
-          <span class="nav-icon">✈︎</span>
-          <span>Backpacks</span>
-        </button>
-
-        <button id=birthdays-sidebar class="nav-item" type="button">
-          <span class="nav-icon">☆</span>
-          <span>Birthdays</span>
-        </button>
-
-        <button id=health-sidebar class="nav-item" type="button">
-          <span class="nav-icon">♡</span>
-          <span>Health</span>
-        </button>
-
-        <button id=check-calendar-sidebar class="nav-item active" type="button">
-          <span class="nav-icon">□</span>
-          <span>Check calendar</span>
-        </button>
-        
-        <button id=home-sidebar class="nav-item" type="button">
-          <span class="nav-icon">⌂</span>
-          <span>Home</span>
-        </button>
-
-      </aside>
-
       <!-- MAIN ==================================================== -->
 
       <div class="main-view-switcher" role="tablist">
