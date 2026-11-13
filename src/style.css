@@ -3343,21 +3343,6 @@ body.light-mode select {
     width: calc(100vw - 40px);
   }
 
-  
-  .news-panel {
-    left: 50%;
-    right: auto;
-    transform: translate(-50%, -6px) scale(0.97);
-    transform-origin: top center;
-    width: min( calc(100vw - 32px), 360px );
-  }
-  
-  .news-panel.open {
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0) scale(1);
-  }
-
 
   
 
