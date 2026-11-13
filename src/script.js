@@ -744,8 +744,7 @@ initBackpacks();
 // TODOS =========================================================
 initTodos();
 
-// NEWS ==========================================================
-loadAllNews();
+
 
 
 
@@ -768,7 +767,6 @@ const hours = getHourlyPreview(weatherData);
 const days = getNextDays(weatherData);
 
 weatherLocation.innerHTML = weatherData.location
-setNewsLocation(weatherData.newsLocation);
 
 weatherButton.innerHTML = `
     <span class="weather-icon">${currentWeather.icon}</span>
@@ -863,7 +861,10 @@ document.addEventListener("click", (event) => {
 
 
 
-// NEWS =========================================================================
+// NEWS ========================================================================
+setNewsLocation(weatherData.newsLocation);
+loadAllNews();
+
 const newsButton = document.getElementById("news-button");
 const newsPanel = document.getElementById("news-panel");
 const newsGlobal = document.getElementById("news-global");
