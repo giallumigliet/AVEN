@@ -26,6 +26,7 @@ import { initBirthdays, openBirthdayModal } from "./birthdays.js";
 import { initBackpacks, openBackpackModal } from "./backpack.js";
 import { isHealthKitAvailable, requestHealthPermission, getTodayHealth } from "./health.js";
 import { initRecap, refreshCalendarEvents } from "./recap.js";
+import { getWeather } from "./news.js";
 import {
   getGoogleCalendarList,
   getGoogleCalendarSettings,
@@ -764,6 +765,7 @@ const hours = getHourlyPreview(weatherData);
 const days = getNextDays(weatherData);
 
 weatherLocation.innerHTML = weatherData.location
+setNewsLocation(weatherData.newsLocation);
 
 weatherButton.innerHTML = `
     <span class="weather-icon">${currentWeather.icon}</span>
