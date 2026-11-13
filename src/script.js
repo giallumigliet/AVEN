@@ -26,7 +26,7 @@ import { initBirthdays, openBirthdayModal } from "./birthdays.js";
 import { initBackpacks, openBackpackModal } from "./backpack.js";
 import { isHealthKitAvailable, requestHealthPermission, getTodayHealth } from "./health.js";
 import { initRecap, refreshCalendarEvents } from "./recap.js";
-import { setNewsLocation } from "./news.js";
+import { setNewsLocation, loadAllNews, refreshNews, loadNewsSection} from "./news.js";
 import {
   getGoogleCalendarList,
   getGoogleCalendarSettings,
@@ -743,6 +743,9 @@ initBackpacks();
 
 // TODOS =========================================================
 initTodos();
+
+// NEWS ==========================================================
+loadAllNews();
 
 
 
