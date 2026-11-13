@@ -834,6 +834,7 @@ weatherButton.addEventListener("click", (event) => {
     openWeatherPanel();
   }
   closeAccountMenu();
+  closeNewsPanel();
   closeSidebar();
 });
 
@@ -859,6 +860,63 @@ document.addEventListener("click", (event) => {
     closeWeatherPanel();
   }
 });
+
+
+
+// NEWS =========================================================================
+const newsButton = document.getElementById("news-button");
+const newsPanel = document.getElementById("news-panel");
+const newsGlobal = document.getElementById("news-global");
+const newsLocal = document.getElementById("news-local");
+
+const newsGlobalTab = document.getElementById("news-global-tab");
+const newsLocalTab = document.getElementById("news-local-tab");
+
+
+newsButton.addEventListener("click", (event) => {
+  event.stopPropagation();
+
+  if (newsPanel.classList.contains("open")) {
+    closeNewsPanel();
+  } else {
+    openNewsPanel();
+  }
+  closeAccountMenu();
+  closeWeatherPanel();
+  closeSidebar();
+});
+
+
+function openNewsPanel() {
+  newsPanel.classList.add("open");
+  newsButton.classList.add("active");
+  newsButton.setAttribute("aria-expanded", "true");
+  updateMainViewTabsVisibility();
+}
+
+
+function closeNewsPanel() {
+  newsPanel.classList.remove("open");
+  newsButton.classList.remove("active");
+  newsButton.setAttribute("aria-expanded", "false");
+  updateMainViewTabsVisibility();
+}
+
+
+document.addEventListener("click", (event) => {
+  if (!event.target.closest(".news")) {
+    closeNewsPanel();
+  }
+});
+
+
+
+
+
+
+
+
+
 
 
 
@@ -906,6 +964,7 @@ menuButton.addEventListener("click", (event) => {
   }
   closeAccountMenu();
   closeWeatherPanel();
+  closeNewsPanel();
 });
 
 
