@@ -15,41 +15,62 @@ const NEWS_CONFIG = {
         }
     ],
 
-    rssConverter: "https://api.rss2json.com/v1/api.json?rss_url="
+    rssConverter:
+        "https://api.rss2json.com/v1/api.json?rss_url="
 };
 
+
+// =========================================
 // LOCALITÀ
-// Richiamare setNewsLocation() da weather.js
+// =========================================
+
 let newsLocation = {
     city: "",
     region: "",
-    country: "Italy"
+    country: "",
+    countryCode: ""
 };
 
+
+// =========================================
 // STATO
+// =========================================
+
 const newsLoaded = {
     global: false,
     local: false
 };
 
-let newsLoading = {
+const newsLoading = {
     global: false,
     local: false
 };
 
 
 // =========================================
-// LOCALITÀ
+// IMPOSTA LOCALITÀ DAL METEO
 // =========================================
+
 export function setNewsLocation(location) {
-    newsLocation = {
+
+    if (!location) return;
+
+    const newLocation = {
         city: location.city || "",
         region: location.region || "",
         country: location.country || "",
         countryCode: location.countryCode || ""
     };
 
-    newsLoaded.local = false;
+    const changed =
+        JSON.stringify(newLocation) !==
+        JSON.stringify(newsLocation);
+
+    newsLocation = newLocation;
+
+    if (changed) {
+        newsLoaded.local = false;
+    }
 }
 
 
@@ -59,12 +80,15 @@ export function setNewsLocation(location) {
 
 function getNewsContainer(type) {
     return document.getElementById(
-        type === "global" ? "news-global" : "news-local"
+        type === "global"
+            ? "news-global"
+            : "news-local"
     );
 }
 
 
 function formatNewsTime(dateString) {
+
     if (!dateString) return "";
 
     const date = new Date(dateString);
@@ -101,11 +125,12 @@ function formatNewsTime(dateString) {
 
 
 function isRecentArticle(dateString) {
-    if (!dateString) return true;
+
+    if (!dateString) return false;
 
     const date = new Date(dateString);
 
-    if (Number.isNaN(date.getTime())) return true;
+    if (Number.isNaN(date.getTime())) return false;
 
     const age = Date.now() - date.getTime();
 
@@ -115,6 +140,7 @@ function isRecentArticle(dateString) {
 
 
 function normalizeTitle(title) {
+
     return (title || "")
         .toLowerCase()
         .replace(/[^\p{L}\p{N} ]/gu, "")
@@ -128,6 +154,7 @@ function normalizeTitle(title) {
 // =========================================
 
 function isRelevantNews(article) {
+
     const title = (article.title || "").toLowerCase();
 
     if (!title) return false;
@@ -156,6 +183,7 @@ function isRelevantNews(article) {
 // =========================================
 
 function normalizeArticle(article, source) {
+
     return {
         title: article.title || "",
         url: article.link || article.url || "",
@@ -174,10 +202,13 @@ function normalizeArticle(article, source) {
 // =========================================
 
 async function fetchGlobalNews() {
+
     const results = [];
 
     for (const feed of NEWS_CONFIG.globalFeeds) {
+
         try {
+
             const endpoint =
                 NEWS_CONFIG.rssConverter +
                 encodeURIComponent(feed.url);
@@ -195,11 +226,14 @@ async function fetchGlobalNews() {
             }
 
             const articles = (data.items || [])
-                .map(item => normalizeArticle(item, feed.name));
+                .map(item =>
+                    normalizeArticle(item, feed.name)
+                );
 
             results.push(...articles);
 
         } catch (error) {
+
             console.error(
                 `Errore feed ${feed.name}:`,
                 error
@@ -216,7 +250,9 @@ async function fetchGlobalNews() {
 // =========================================
 
 async function fetchLocalNews() {
-    const location = newsLocation.city ||
+
+    const location =
+        newsLocation.city ||
         newsLocation.region;
 
     if (!location) {
@@ -247,7 +283,10 @@ async function fetchLocalNews() {
     const data = await response.json();
 
     return (data.articles || []).map(article =>
-        normalizeArticle(article, article.domain || "Fonte")
+        normalizeArticle(
+            article,
+            article.domain || "Fonte"
+        )
     );
 }
 
@@ -257,20 +296,28 @@ async function fetchLocalNews() {
 // =========================================
 
 function processNews(articles) {
+
     const uniqueArticles = new Map();
 
     articles
         .filter(isRelevantNews)
-        .filter(article => isRecentArticle(article.publishedAt))
+        .filter(article =>
+            isRecentArticle(article.publishedAt)
+        )
         .forEach(article => {
+
             if (!article.title || !article.url) return;
 
             try {
+
                 const url = new URL(article.url);
 
-                if (!["https:", "http:"].includes(url.protocol)) {
+                if (
+                    !["https:", "http:"].includes(url.protocol)
+                ) {
                     return;
                 }
+
             } catch {
                 return;
             }
@@ -284,8 +331,8 @@ function processNews(articles) {
 
     return [...uniqueArticles.values()]
         .sort((a, b) =>
-            new Date(b.publishedAt || 0) -
-            new Date(a.publishedAt || 0)
+            new Date(b.publishedAt) -
+            new Date(a.publishedAt)
         )
         .slice(0, NEWS_CONFIG.maxArticles);
 }
@@ -296,6 +343,7 @@ function processNews(articles) {
 // =========================================
 
 function renderNews(type, articles) {
+
     const container = getNewsContainer(type);
 
     if (!container) return;
@@ -303,18 +351,22 @@ function renderNews(type, articles) {
     container.replaceChildren();
 
     if (!articles.length) {
+
         showNewsMessage(
             type,
             "Nessuna notizia disponibile al momento."
         );
+
         return;
     }
 
     articles.forEach(article => {
+
         const item = document.createElement("article");
         item.className = "news-item";
 
         const link = document.createElement("a");
+
         link.className = "news-title";
         link.href = article.url;
         link.target = "_blank";
@@ -336,6 +388,7 @@ function renderNews(type, articles) {
 
         meta.append(source, time);
         item.append(link, meta);
+
         container.appendChild(item);
     });
 }
@@ -346,6 +399,7 @@ function renderNews(type, articles) {
 // =========================================
 
 function showNewsMessage(type, message) {
+
     const container = getNewsContainer(type);
 
     if (!container) return;
@@ -353,6 +407,7 @@ function showNewsMessage(type, message) {
     container.replaceChildren();
 
     const element = document.createElement("p");
+
     element.className = "news-message";
     element.textContent = message;
 
@@ -364,7 +419,10 @@ function showNewsMessage(type, message) {
 // CARICAMENTO
 // =========================================
 
-async function loadNews(type, force = false) {
+export async function loadNews(type, force = false) {
+
+    if (!["global", "local"].includes(type)) return;
+
     if (newsLoading[type]) return;
 
     if (newsLoaded[type] && !force) return;
@@ -373,11 +431,25 @@ async function loadNews(type, force = false) {
 
     if (!container) return;
 
+    if (
+        type === "local" &&
+        !newsLocation.city &&
+        !newsLocation.region
+    ) {
+        showNewsMessage(
+            type,
+            "In attesa della località..."
+        );
+
+        return;
+    }
+
     newsLoading[type] = true;
 
     showNewsMessage(type, "Caricamento notizie...");
 
     try {
+
         const articles = type === "global"
             ? await fetchGlobalNews()
             : await fetchLocalNews();
@@ -389,7 +461,11 @@ async function loadNews(type, force = false) {
         newsLoaded[type] = true;
 
     } catch (error) {
-        console.error("Errore caricamento news:", error);
+
+        console.error(
+            "Errore caricamento news:",
+            error
+        );
 
         showNewsMessage(
             type,
@@ -397,6 +473,7 @@ async function loadNews(type, force = false) {
         );
 
     } finally {
+
         newsLoading[type] = false;
     }
 }
@@ -406,14 +483,19 @@ async function loadNews(type, force = false) {
 // CARICAMENTO COMPLETO
 // =========================================
 
-function loadAllNews() {
+export function loadAllNews() {
+
     loadNews("global");
     loadNews("local");
 }
 
 
+// =========================================
 // AGGIORNAMENTO MANUALE
-function refreshNews() {
+// =========================================
+
+export function refreshNews() {
+
     loadNews("global", true);
     loadNews("local", true);
 }
