@@ -63,7 +63,19 @@ export async function getWeather() {
 
     const geoData = await geoResponse.json();
     
-    data.location = geoData.address.city || geoData.address.town || geoData.address.village || "";
+    data.location = geoData.address.city ||
+        geoData.address.town ||
+        geoData.address.village ||
+        geoData.address.municipality ||
+        "";
+    
+    // Informazioni aggiuntive per le news
+    data.newsLocation = {
+        city: data.location,
+        region: geoData.address.state || geoData.address.county || "",
+        country: geoData.address.country || "",
+        countryCode: geoData.address.country_code || ""
+    };
 
     return data;
 }
