@@ -3355,7 +3355,6 @@ body.light-mode select {
   .news-panel.open {
     opacity: 1;
     visibility: visible;
-    transform: translateY(0) scale(1);
   }
 
 
