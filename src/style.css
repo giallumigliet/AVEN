@@ -3345,7 +3345,7 @@ body.light-mode select {
 
 
   .news-panel {
-    left: 50%;
+    left: 5%;
     right: auto;
     transform: translate(-50%, -6px) scale(0.97);
     transform-origin: top center;
