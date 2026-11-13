@@ -3343,8 +3343,7 @@ body.light-mode select {
     width: calc(100vw - 40px);
   }
 
-
-
+  
   .news-panel {
     left: 50%;
     right: auto;
@@ -3358,7 +3357,6 @@ body.light-mode select {
     visibility: visible;
     transform: translateY(0) scale(1);
   }
-
 
 
   
