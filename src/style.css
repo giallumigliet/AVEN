@@ -547,6 +547,113 @@ body.light-mode .auth-gate {
 
 
 
+/* =========================================
+   AVEN - NEWS
+   ========================================= */
+
+/* CONTENITORI */
+
+#news-global,
+#news-local {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    width: 100%;
+}
+
+
+/* SINGOLA NOTIZIA */
+
+.news-item {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+
+    padding: 15px 0;
+
+    border-bottom: 1px solid var(--border-color);
+
+    min-width: 0;
+}
+
+.news-item:first-child {
+    padding-top: 5px;
+}
+
+.news-item:last-child {
+    border-bottom: none;
+    padding-bottom: 5px;
+}
+
+
+/* TITOLO */
+
+.news-title {
+    color: var(--text-color);
+
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.5;
+
+    text-decoration: none;
+
+    transition: color 0.2s ease;
+
+    overflow-wrap: anywhere;
+}
+
+.news-title:hover {
+    color: var(--main-color);
+}
+
+
+/* METADATI */
+
+.news-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+
+    font-size: 11px;
+    line-height: 1.4;
+}
+
+
+/* FONTE */
+
+.news-source {
+    color: var(--main-color);
+    font-weight: 600;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
+/* TEMPO PUBBLICAZIONE */
+
+.news-time {
+    color: var(--secondary-text-color);
+
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+
+/* MESSAGGI */
+
+.news-message {
+    margin: 15px 0;
+
+    color: var(--secondary-text-color);
+
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+
 /* =========================================================
    CONTENT + SIDEBAR
 ========================================================= */
