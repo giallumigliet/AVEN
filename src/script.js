@@ -887,6 +887,22 @@ newsButton.addEventListener("click", (event) => {
 });
 
 
+
+newsGlobalTab.addEventListener("click", () => {
+  newsGlobal.style.display = "flex";
+  newsLocal.style.display = "none";
+  newsGlobalTab.classList.add("active");
+  newsLocalTab.classList.remove("active");
+});
+
+newsLocalTab.addEventListener("click", () => {
+  newsGlobal.style.display = "none";
+  newsLocal.style.display = "flex";
+  newsLocalTab.classList.add("active");
+  newsGlobalTab.classList.remove("active");
+});
+
+
 function openNewsPanel() {
   newsPanel.classList.add("open");
   newsButton.classList.add("active");
