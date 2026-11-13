@@ -41,12 +41,12 @@ let newsLoading = {
 // =========================================
 // LOCALITÀ
 // =========================================
-
-function setNewsLocation(location) {
+export function setNewsLocation(location) {
     newsLocation = {
         city: location.city || "",
         region: location.region || "",
-        country: location.country || "Italy"
+        country: location.country || "",
+        countryCode: location.countryCode || ""
     };
 
     newsLoaded.local = false;
