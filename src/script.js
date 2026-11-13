@@ -218,7 +218,7 @@ function openAccountMenu() {
   accountMenu.classList.add("open");
   profileButton.classList.add("active");
   profileButton.setAttribute("aria-expanded", "true");
-  updateMainViewTabsVisibility();
+  updateMainViewsVisibility();
 }
 
 
@@ -997,8 +997,9 @@ document.addEventListener("click", (event) => {
 function updateMainViewTabsVisibility() {
   const menuOpen = accountMenu.classList.contains("open");
   const weatherOpen = weatherPanel.classList.contains("open");
+  const newsOpen = newsPanel.classList.contains("open");
   const sidebarOpen = sidebar.classList.contains("open");
-  const hideTabs = menuOpen || weatherOpen || sidebarOpen;
+  const hideTabs = menuOpen || weatherOpen || newsOpen || sidebarOpen;
 
   recapTab.hidden = hideTabs;
   plannerTab.hidden = hideTabs;
