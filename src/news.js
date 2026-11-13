@@ -4,6 +4,7 @@
    ========================================= */
 
 // CONFIGURAZIONE
+
 const NEWS_CONFIG = {
     maxArticles: 8,
     maxAgeHours: 48,
@@ -48,29 +49,19 @@ const newsLoading = {
 
 
 // =========================================
-// IMPOSTA LOCALITÀ DAL METEO
+// LOCALITÀ - RICEVE I DATI DAL METEO
 // =========================================
 
 export function setNewsLocation(location) {
 
-    if (!location) return;
-
-    const newLocation = {
-        city: location.city || "",
-        region: location.region || "",
-        country: location.country || "",
-        countryCode: location.countryCode || ""
+    newsLocation = {
+        city: location?.city || "",
+        region: location?.region || "",
+        country: location?.country || "",
+        countryCode: location?.countryCode || ""
     };
 
-    const changed =
-        JSON.stringify(newLocation) !==
-        JSON.stringify(newsLocation);
-
-    newsLocation = newLocation;
-
-    if (changed) {
-        newsLoaded.local = false;
-    }
+    newsLoaded.local = false;
 }
 
 
@@ -79,6 +70,7 @@ export function setNewsLocation(location) {
 // =========================================
 
 function getNewsContainer(type) {
+
     return document.getElementById(
         type === "global"
             ? "news-global"
@@ -166,7 +158,6 @@ function isRelevantNews(article) {
         "grande fratello",
         "sanremo",
         "calciomercato",
-        "look",
         "red carpet",
         "influencer",
         "oroscopo"
@@ -179,7 +170,7 @@ function isRelevantNews(article) {
 
 
 // =========================================
-// NORMALIZZAZIONE
+// NORMALIZZAZIONE ARTICOLI
 // =========================================
 
 function normalizeArticle(article, source) {
@@ -198,7 +189,7 @@ function normalizeArticle(article, source) {
 
 
 // =========================================
-// RSS - GLOBAL
+// RSS - NOTIZIE GLOBALI
 // =========================================
 
 async function fetchGlobalNews() {
@@ -238,6 +229,7 @@ async function fetchGlobalNews() {
                 `Errore feed ${feed.name}:`,
                 error
             );
+
         }
     }
 
@@ -246,7 +238,7 @@ async function fetchGlobalNews() {
 
 
 // =========================================
-// GDELT - LOCAL
+// GDELT - NOTIZIE LOCALI
 // =========================================
 
 async function fetchLocalNews() {
@@ -260,7 +252,7 @@ async function fetchLocalNews() {
     }
 
     const query =
-        `"${location}" sourcecountry:Italy sourcelang:Italian`;
+        `"${location}" sourceCountry:IT sourcelang:Italian`;
 
     const params = new URLSearchParams({
         query,
@@ -366,7 +358,6 @@ function renderNews(type, articles) {
         item.className = "news-item";
 
         const link = document.createElement("a");
-
         link.className = "news-title";
         link.href = article.url;
         link.target = "_blank";
@@ -387,6 +378,7 @@ function renderNews(type, articles) {
         );
 
         meta.append(source, time);
+
         item.append(link, meta);
 
         container.appendChild(item);
@@ -419,7 +411,7 @@ function showNewsMessage(type, message) {
 // CARICAMENTO
 // =========================================
 
-export async function loadNews(type, force = false) {
+async function loadNews(type, force = false) {
 
     if (!["global", "local"].includes(type)) return;
 
@@ -431,22 +423,12 @@ export async function loadNews(type, force = false) {
 
     if (!container) return;
 
-    if (
-        type === "local" &&
-        !newsLocation.city &&
-        !newsLocation.region
-    ) {
-        showNewsMessage(
-            type,
-            "In attesa della località..."
-        );
-
-        return;
-    }
-
     newsLoading[type] = true;
 
-    showNewsMessage(type, "Caricamento notizie...");
+    showNewsMessage(
+        type,
+        "Caricamento notizie..."
+    );
 
     try {
 
@@ -463,7 +445,7 @@ export async function loadNews(type, force = false) {
     } catch (error) {
 
         console.error(
-            "Errore caricamento news:",
+            `Errore caricamento news ${type}:`,
             error
         );
 
@@ -480,9 +462,10 @@ export async function loadNews(type, force = false) {
 
 
 // =========================================
-// CARICAMENTO COMPLETO
+// FUNZIONI PUBBLICHE
 // =========================================
 
+// Carica entrambe le sezioni
 export function loadAllNews() {
 
     loadNews("global");
@@ -490,12 +473,16 @@ export function loadAllNews() {
 }
 
 
-// =========================================
-// AGGIORNAMENTO MANUALE
-// =========================================
-
+// Aggiorna entrambe le sezioni
 export function refreshNews() {
 
     loadNews("global", true);
     loadNews("local", true);
+}
+
+
+// Carica una singola sezione
+export function loadNewsSection(type) {
+
+    loadNews(type);
 }
