@@ -869,6 +869,7 @@ const newsButton = document.getElementById("news-button");
 const newsPanel = document.getElementById("news-panel");
 const newsGlobal = document.getElementById("news-global");
 const newsLocal = document.getElementById("news-local");
+newsLocal.style.display = "none";
 
 const newsGlobalTab = document.getElementById("news-global-tab");
 const newsLocalTab = document.getElementById("news-local-tab");
