@@ -450,7 +450,7 @@ body.light-mode .auth-gate {
 .news-panel {
   position: absolute;
   top: calc(100% + 10px);
-  left: -350%;
+  left: -300%;
   width: 400px;
   padding: 12px;
   display: flex;
