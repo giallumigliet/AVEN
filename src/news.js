@@ -42,9 +42,9 @@ const newsLoaded = {
     local: false
 };
 
-const newsLoading = {
-    global: false,
-    local: false
+const newsRequests = {
+    global: null,
+    local: null
 };
 
 
@@ -411,11 +411,15 @@ function showNewsMessage(type, message) {
 // CARICAMENTO
 // =========================================
 
+
 async function loadNews(type, force = false) {
 
     if (!["global", "local"].includes(type)) return;
 
-    if (newsLoading[type]) return;
+    // Se esiste già una richiesta, riutilizza quella.
+    if (newsRequests[type]) {
+        return newsRequests[type];
+    }
 
     if (newsLoaded[type] && !force) return;
 
@@ -423,41 +427,52 @@ async function loadNews(type, force = false) {
 
     if (!container) return;
 
-    newsLoading[type] = true;
+    let request;
 
-    showNewsMessage(
-        type,
-        "Caricamento notizie..."
-    );
-
-    try {
-
-        const articles = type === "global"
-            ? await fetchGlobalNews()
-            : await fetchLocalNews();
-
-        const processed = processNews(articles);
-
-        renderNews(type, processed);
-
-        newsLoaded[type] = true;
-
-    } catch (error) {
-
-        console.error(
-            `Errore caricamento news ${type}:`,
-            error
-        );
+    request = (async () => {
 
         showNewsMessage(
             type,
-            "Impossibile caricare le notizie."
+            "Caricamento notizie..."
         );
 
-    } finally {
+        try {
 
-        newsLoading[type] = false;
-    }
+            const articles = type === "global"
+                ? await fetchGlobalNews()
+                : await fetchLocalNews();
+
+            const processed = processNews(articles);
+
+            renderNews(type, processed);
+
+            newsLoaded[type] = true;
+
+        } catch (error) {
+
+            console.error(
+                `Errore caricamento news ${type}:`,
+                error
+            );
+
+            showNewsMessage(
+                type,
+                "Impossibile caricare le notizie."
+            );
+
+        } finally {
+
+            // Libera soltanto la richiesta corrente.
+            if (newsRequests[type] === request) {
+                newsRequests[type] = null;
+            }
+        }
+
+    })();
+
+    newsRequests[type] = request;
+
+    return request;
 }
 
 
@@ -467,17 +482,19 @@ async function loadNews(type, force = false) {
 
 // Carica entrambe le sezioni
 export function loadAllNews() {
-
-    loadNews("global");
-    loadNews("local");
+    return Promise.all([
+        loadNews("global"),
+        loadNews("local")
+    ]);
 }
 
 
 // Aggiorna entrambe le sezioni
 export function refreshNews() {
-
-    loadNews("global", true);
-    loadNews("local", true);
+    return Promise.all([
+        loadNews("global", true),
+        loadNews("local", true)
+    ]);
 }
 
 
