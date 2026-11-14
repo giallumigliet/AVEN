@@ -863,7 +863,6 @@ document.addEventListener("click", (event) => {
 
 // NEWS ========================================================================
 setNewsLocation(weatherData.newsLocation);
-loadAllNews();
 
 const newsButton = document.getElementById("news-button");
 const newsPanel = document.getElementById("news-panel");
@@ -881,6 +880,7 @@ newsButton.addEventListener("click", (event) => {
   if (newsPanel.classList.contains("open")) {
     closeNewsPanel();
   } else {
+    loadAllNews();
     openNewsPanel();
   }
   closeAccountMenu();
