@@ -464,7 +464,7 @@ body.light-mode .auth-gate {
   opacity: 0;
   visibility: hidden;
   transform: translateY(-50%, -6px) scale(0.97);
-  transform-origin: top right;
+  transform-origin: top center;
   transition: opacity var(--transition-fast), transform var(--transition-fast), visibility var(--transition-fast);
   z-index: 100;
 }
