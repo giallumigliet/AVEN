@@ -240,8 +240,16 @@ async function fetchGlobalNews() {
 // =========================================
 // GDELT - NOTIZIE LOCALI
 // =========================================
+let lastLocalNewsRequest = 0;
 
 async function fetchLocalNews() {
+    const now = Date.now();
+
+    if (now - lastLocalNewsRequest < 60000) {
+        throw new Error("Attendi un minuto prima di riprovare.");
+    }
+
+    lastLocalNewsRequest = now;
 
     const location =
         newsLocation.city ||
