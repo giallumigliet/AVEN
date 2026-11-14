@@ -258,7 +258,7 @@ async function fetchLocalNews() {
         query,
         mode: "ArtList",
         format: "json",
-        maxrecords: "30",
+        maxrecords: "6",
         sort: "HybridRel"
     });
 
