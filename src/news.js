@@ -6,7 +6,7 @@
 // CONFIGURAZIONE
 
 const NEWS_CONFIG = {
-    maxArticles: 8,
+    maxArticles: 6,
     maxAgeHours: 48,
 
     globalFeeds: [
