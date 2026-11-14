@@ -589,8 +589,8 @@ body.light-mode .auth-gate {
 .news-item {
     display: flex;
     flex-direction: column;
-    gap: 7px;
-    padding: 15px 0;
+    gap: 2px;
+    padding: 12px 0;
     border-bottom: 1px solid var(--border-color);
     width: 100%;
 }
@@ -610,7 +610,7 @@ body.light-mode .auth-gate {
 .news-title {
     color: var(--text-color);
 
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 500;
     line-height: 1.5;
 
