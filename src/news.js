@@ -238,64 +238,48 @@ async function fetchGlobalNews() {
 
 
 // =========================================
-// GDELT - NOTIZIE LOCALI
+// NOTIZIE LOCALI (Via Google News RSS)
 // =========================================
 let lastLocalNewsRequest = 0;
 
 async function fetchLocalNews() {
     const now = Date.now();
 
-    if (now - lastLocalNewsRequest < 60000) {
-        throw new Error("Attendi un minuto prima di riprovare.");
+    // Manteniamo comunque un piccolo debounce per sicurezza
+    if (now - lastLocalNewsRequest < 10000) {
+        throw new Error("Attendi qualche secondo prima di riprovare.");
     }
 
     lastLocalNewsRequest = now;
 
     const location =
         newsLocation.city ||
-        newsLocation.region;
+        newsLocation.region ||
+        "Italia"; // Fallback sull'Italia se la località non è definita
 
-    if (!location) {
-        throw new Error("Località non disponibile");
-    }
+    // Creiamo il feed RSS di Google News mirato sulla località e in lingua italiana
+    const googleNewsRssUrl = `https://news.google.com/rss/search?q=${encodeURIComponent(location + " notizie")}&hl=it&gl=IT&ceid=IT:it`;
 
-    const query =
-        `"${location}" sourceCountry:IT sourcelang:Italian`;
+    const endpoint =
+        NEWS_CONFIG.rssConverter +
+        encodeURIComponent(googleNewsRssUrl);
 
-    const params = new URLSearchParams({
-        query,
-        mode: "ArtList",
-        format: "json",
-        maxrecords: "6",
-        sort: "HybridRel"
-    });
-
-    const gdeltUrl =
-        "https://api.gdeltproject.org/api/v2/doc/doc?" +
-        params.toString();
-
-    // Utilizziamo un proxy CORS pubblico per evitare il blocco del browser
-    const proxyUrl = "https://api.allorigins.win/raw?url=" + encodeURIComponent(gdeltUrl);
-
-    const response = await fetch(proxyUrl);
-    
-    const responseText = await response.text();
+    const response = await fetch(endpoint);
 
     if (!response.ok) {
-        throw new Error("GDELT non disponibile o limite superato");
+        throw new Error("Impossibile contattare il servizio RSS locale");
     }
 
-    let data;
-    try {
-        data = JSON.parse(responseText);
-    } catch (e) {
-        throw new Error("Risposta non valida dal server");
+    const data = await response.json();
+
+    if (data.status !== "ok") {
+        throw new Error("Feed locale non disponibile");
     }
 
-    return (data.articles || []).map(article =>
+    return (data.items || []).map(article =>
         normalizeArticle(
             article,
-            article.domain || "Fonte"
+            article.author || "Google News"
         )
     );
 }
