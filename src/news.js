@@ -275,12 +275,21 @@ async function fetchLocalNews() {
         params.toString();
 
     const response = await fetch(endpoint);
+    
+    // 1. Leggi prima come testo per evitare crash in caso di errore HTML/Testuale del server
+    const responseText = await response.text();
 
     if (!response.ok) {
         throw new Error("GDELT non disponibile");
     }
 
-    const data = await response.json();
+    // 2. Prova a convertire in JSON in sicurezza
+    let data;
+    try {
+        data = JSON.parse(responseText);
+    } catch (e) {
+        throw new Error("Risposta non valida dal server GDELT");
+    }
 
     return (data.articles || []).map(article =>
         normalizeArticle(
