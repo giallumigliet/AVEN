@@ -723,7 +723,7 @@ body.light-mode .auth-gate {
 
 
 .nav-item {
-  width: 155px;
+  width: 100%;
   min-height: 44px;
   display: flex;
   align-items: center;
@@ -732,7 +732,7 @@ body.light-mode .auth-gate {
   border-radius: 16px;
   background: transparent;
   border: 1px solid transparent;
-  color: var(--color-muted);
+  color: var(--color-text);
   font-size: 13px;
   cursor: pointer;
   transition: background var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast), transform var(--transition-fast);
@@ -4131,10 +4131,10 @@ button:active {
   /* Mobile sidebar is a real overlay drawer. */
   .sidebar {
     position: fixed;
-    top: calc(50px + 10px);
+    top: calc(100% + 10px);
     left: 14px;
 
-    width: min(280px, calc(100vw - 28px));
+    width: max-content;
     height: auto;
 
     padding: 12px;
