@@ -479,7 +479,6 @@ body.light-mode .auth-gate {
 .news-panel.open {
   opacity: 1;
   visibility: visible;
-  transform: scale(1);
 }
 
 
