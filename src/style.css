@@ -4130,10 +4130,9 @@ button:active {
 
   /* Mobile sidebar is a real overlay drawer. */
   .sidebar {
-    position: fixed;
+    position: absolute;
     top: calc(100% + 10px);
-    left: 14px;
-
+    left: 0;
     width: max-content;
     height: auto;
 
