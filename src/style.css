@@ -448,9 +448,9 @@ body.light-mode .auth-gate {
 }
 
 .news-panel {
-  position: absolute;
-  top: calc(100% + 10px);
-  left: -260%;
+  position: fixed;
+  top: 74px;
+  left: 50%;
   width: 380px;
   padding: 12px;
   display: flex;
