@@ -219,7 +219,7 @@ function openAccountMenu() {
   accountMenu.classList.add("open");
   profileButton.classList.add("active");
   profileButton.setAttribute("aria-expanded", "true");
-  updateMainViewsVisibility();
+  updateMainViewTabsVisibility();
 }
 
 
