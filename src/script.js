@@ -923,7 +923,7 @@ function closeNewsPanel() {
 
 
 document.addEventListener("click", (event) => {
-  if (!event.target.closest(".news")) {
+  if (!event.target.closest(".news-panel")) {
     closeNewsPanel();
   }
 });
