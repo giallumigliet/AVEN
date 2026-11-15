@@ -463,16 +463,23 @@ body.light-mode .auth-gate {
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
   opacity: 0;
   visibility: hidden;
-  transform: translate(-50%, -6px) scale(0.97);
+  transform: translate(-50%, 0px) scale(0.97);
   transform-origin: top center;
   transition: opacity var(--transition-fast), transform var(--transition-fast), visibility var(--transition-fast);
   z-index: 100;
 }
 
-.weather-panel.open, .news-panel.open {
+.weather-panel.open {
   opacity: 1;
   visibility: visible;
   transform: translateY(0) scale(1);
+}
+
+
+.news-panel.open {
+  opacity: 1;
+  visibility: visible;
+  transform: scale(1);
 }
 
 
