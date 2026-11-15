@@ -270,25 +270,26 @@ async function fetchLocalNews() {
         sort: "HybridRel"
     });
 
-    const endpoint =
+    const gdeltUrl =
         "https://api.gdeltproject.org/api/v2/doc/doc?" +
         params.toString();
 
-    const response = await fetch(endpoint);
+    // Utilizziamo un proxy CORS pubblico per evitare il blocco del browser
+    const proxyUrl = "https://api.allorigins.win/raw?url=" + encodeURIComponent(gdeltUrl);
+
+    const response = await fetch(proxyUrl);
     
-    // 1. Leggi prima come testo per evitare crash in caso di errore HTML/Testuale del server
     const responseText = await response.text();
 
     if (!response.ok) {
-        throw new Error("GDELT non disponibile");
+        throw new Error("GDELT non disponibile o limite superato");
     }
 
-    // 2. Prova a convertire in JSON in sicurezza
     let data;
     try {
         data = JSON.parse(responseText);
     } catch (e) {
-        throw new Error("Risposta non valida dal server GDELT");
+        throw new Error("Risposta non valida dal server");
     }
 
     return (data.articles || []).map(article =>
