@@ -55,7 +55,6 @@ const newsRequests = {
 // =========================================
 
 export function setNewsLocation(location) {
-
     newsLocation = {
         city: location?.city || "",
         region: location?.region || "",
@@ -63,6 +62,7 @@ export function setNewsLocation(location) {
         countryCode: location?.countryCode || ""
     };
 
+    newsLoaded.global = false;
     newsLoaded.national = false;
     newsLoaded.local = false;
 }
@@ -187,55 +187,10 @@ function normalizeArticle(article, source) {
 
 
 // =========================================
-// RSS - NOTIZIE GLOBALI
+// RSS - NOTIZIE 
 // =========================================
 
-async function fetchGlobalNews() {
-
-    const results = [];
-
-    for (const feed of NEWS_CONFIG.globalFeeds) {
-
-        try {
-
-            const endpoint =
-                NEWS_CONFIG.rssConverter +
-                encodeURIComponent(feed.url);
-
-            const response = await fetch(endpoint);
-
-            if (!response.ok) {
-                throw new Error("Errore RSS");
-            }
-
-            const data = await response.json();
-
-            if (data.status !== "ok") {
-                throw new Error("Feed non disponibile");
-            }
-
-            const articles = (data.items || [])
-                .map(item =>
-                    normalizeArticle(item, feed.name)
-                );
-
-            results.push(...articles);
-
-        } catch (error) {
-
-            console.error(
-                `Errore feed ${feed.name}:`,
-                error
-            );
-
-        }
-    }
-
-    return results;
-}
-
-
-let lastNewsRequest = { national: 0, local: 0 };
+let lastNewsRequest = { global: 0, national: 0, local: 0 };
 
 async function fetchGoogleRss(rssUrl, fallbackSource) {
     const endpoint = NEWS_CONFIG.rssConverter + encodeURIComponent(rssUrl);
@@ -255,6 +210,28 @@ async function fetchGoogleRss(rssUrl, fallbackSource) {
         normalizeArticle(article, article.author || fallbackSource)
     );
 }
+
+
+
+// NOTIZIE GLOBALI (Topic Mondo nella lingua locale)
+async function fetchGlobalNews() {
+    const now = Date.now();
+    if (now - lastNewsRequest.global < 10000) {
+        throw new Error("Attendi qualche secondo prima di riprovare.");
+    }
+    lastNewsRequest.global = now;
+
+    const countryCode = (newsLocation.countryCode || "IT").toUpperCase();
+    const langCode = countryCode.toLowerCase();
+
+    // Google News RSS per le notizie dal mondo filtrate per lingua/paese dell'utente
+    const rssUrl = `https://news.google.com/rss/headlines/section/topic/WORLD?hl=${langCode}&gl=${countryCode}&ceid=${countryCode}:${langCode}`;
+    
+    return fetchGoogleRss(rssUrl, "Google News Mondo");
+}
+
+
+
 
 // NOTIZIE NAZIONALI (Stato)
 async function fetchNationalNews() {
