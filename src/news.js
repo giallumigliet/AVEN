@@ -39,11 +39,13 @@ let newsLocation = {
 
 const newsLoaded = {
     global: false,
+    national: false,
     local: false
 };
 
 const newsRequests = {
     global: null,
+    national: null,
     local: null
 };
 
@@ -61,6 +63,7 @@ export function setNewsLocation(location) {
         countryCode: location?.countryCode || ""
     };
 
+    newsLoaded.national = false;
     newsLoaded.local = false;
 }
 
@@ -70,12 +73,7 @@ export function setNewsLocation(location) {
 // =========================================
 
 function getNewsContainer(type) {
-
-    return document.getElementById(
-        type === "global"
-            ? "news-global"
-            : "news-local"
-    );
+    return document.getElementById(`news-${type}`);
 }
 
 
@@ -237,51 +235,58 @@ async function fetchGlobalNews() {
 }
 
 
-// =========================================
-// NOTIZIE LOCALI (Via Google News RSS)
-// =========================================
-let lastLocalNewsRequest = 0;
+let lastNewsRequest = { national: 0, local: 0 };
 
-async function fetchLocalNews() {
-    const now = Date.now();
-
-    // Manteniamo comunque un piccolo debounce per sicurezza
-    if (now - lastLocalNewsRequest < 10000) {
-        throw new Error("Attendi qualche secondo prima di riprovare.");
-    }
-
-    lastLocalNewsRequest = now;
-
-    const location =
-        newsLocation.city ||
-        newsLocation.region ||
-        "Italia"; // Fallback sull'Italia se la località non è definita
-
-    // Creiamo il feed RSS di Google News mirato sulla località e in lingua italiana
-    const googleNewsRssUrl = `https://news.google.com/rss/search?q=${encodeURIComponent(location + " notizie")}&hl=it&gl=IT&ceid=IT:it`;
-
-    const endpoint =
-        NEWS_CONFIG.rssConverter +
-        encodeURIComponent(googleNewsRssUrl);
-
+async function fetchGoogleRss(rssUrl, fallbackSource) {
+    const endpoint = NEWS_CONFIG.rssConverter + encodeURIComponent(rssUrl);
     const response = await fetch(endpoint);
 
     if (!response.ok) {
-        throw new Error("Impossibile contattare il servizio RSS locale");
+        throw new Error("Servizio RSS non disponibile");
     }
 
     const data = await response.json();
 
     if (data.status !== "ok") {
-        throw new Error("Feed locale non disponibile");
+        throw new Error("Feed non disponibile");
     }
 
     return (data.items || []).map(article =>
-        normalizeArticle(
-            article,
-            article.author || "Google News"
-        )
+        normalizeArticle(article, article.author || fallbackSource)
     );
+}
+
+// NOTIZIE NAZIONALI (Stato)
+async function fetchNationalNews() {
+    const now = Date.now();
+    if (now - lastNewsRequest.national < 10000) {
+        throw new Error("Attendi qualche secondo prima di riprovare.");
+    }
+    lastNewsRequest.national = now;
+
+    const country = newsLocation.country || "Italia";
+    const countryCode = (newsLocation.countryCode || "IT").toUpperCase();
+    const langCode = countryCode.toLowerCase();
+
+    const rssUrl = `https://news.google.com/rss?hl=${langCode}&gl=${countryCode}&ceid=${countryCode}:${langCode}`;
+    return fetchGoogleRss(rssUrl, `Google News ${country}`);
+}
+
+// NOTIZIE LOCALI (Città / Regione)
+async function fetchLocalNews() {
+    const now = Date.now();
+    if (now - lastNewsRequest.local < 10000) {
+        throw new Error("Attendi qualche secondo prima di riprovare.");
+    }
+    lastNewsRequest.local = now;
+
+    const location = newsLocation.city || newsLocation.region;
+    if (!location) {
+        throw new Error("Località non disponibile");
+    }
+
+    const rssUrl = `https://news.google.com/rss/search?q=${encodeURIComponent(location + " notizie")}&hl=it&gl=IT&ceid=IT:it`;
+    return fetchGoogleRss(rssUrl, `Google News ${location}`);
 }
 
 
@@ -413,88 +418,55 @@ function showNewsMessage(type, message) {
 // CARICAMENTO
 // =========================================
 
-
 async function loadNews(type, force = false) {
+    if (!["global", "national", "local"].includes(type)) return;
 
-    if (!["global", "local"].includes(type)) return;
-
-    // Se esiste già una richiesta, riutilizza quella.
-    if (newsRequests[type]) {
-        return newsRequests[type];
-    }
-
+    if (newsRequests[type]) return newsRequests[type];
     if (newsLoaded[type] && !force) return;
 
     const container = getNewsContainer(type);
-
     if (!container) return;
 
     let request;
-
     request = (async () => {
-
-        showNewsMessage(
-            type,
-            "Caricamento notizie..."
-        );
+        showNewsMessage(type, "Caricamento notizie...");
 
         try {
-
-            const articles = type === "global"
-                ? await fetchGlobalNews()
-                : await fetchLocalNews();
+            let articles = [];
+            if (type === "global") articles = await fetchGlobalNews();
+            else if (type === "national") articles = await fetchNationalNews();
+            else if (type === "local") articles = await fetchLocalNews();
 
             const processed = processNews(articles);
-
             renderNews(type, processed);
-
             newsLoaded[type] = true;
 
         } catch (error) {
-
-            console.error(
-                `Errore caricamento news ${type}:`,
-                error
-            );
-
-            showNewsMessage(
-                type,
-                "Impossibile caricare le notizie."
-            );
-
+            console.error(`Errore caricamento news ${type}:`, error);
+            showNewsMessage(type, "Impossibile caricare le notizie.");
         } finally {
-
-            // Libera soltanto la richiesta corrente.
             if (newsRequests[type] === request) {
                 newsRequests[type] = null;
             }
         }
-
     })();
 
     newsRequests[type] = request;
-
     return request;
 }
 
-
-// =========================================
-// FUNZIONI PUBBLICHE
-// =========================================
-
-// Carica entrambe le sezioni
 export function loadAllNews() {
     return Promise.all([
         loadNews("global"),
+        loadNews("national"),
         loadNews("local")
     ]);
 }
 
-
-// Aggiorna entrambe le sezioni
 export function refreshNews() {
     return Promise.all([
         loadNews("global", true),
+        loadNews("national", true),
         loadNews("local", true)
     ]);
 }
