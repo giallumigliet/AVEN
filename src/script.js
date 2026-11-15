@@ -870,7 +870,10 @@ const newsPanel = document.getElementById("news-panel");
 const newsGlobal = document.getElementById("news-global");
 const newsNational = document.getElementById("news-national");
 const newsLocal = document.getElementById("news-local");
+newsNational.style.display = "none";
 newsLocal.style.display = "none";
+newsNationalTab.classList.remove("active");
+newsLocalTab.classList.remove("active");
 
 const newsGlobalTab = document.getElementById("news-global-tab");
 const newsNationalTab = document.getElementById("news-national-tab");
