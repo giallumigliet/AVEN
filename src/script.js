@@ -868,10 +868,12 @@ setNewsLocation(weatherData.newsLocation);
 const newsButton = document.getElementById("news-button");
 const newsPanel = document.getElementById("news-panel");
 const newsGlobal = document.getElementById("news-global");
+const newsNational = document.getElementById("news-national");
 const newsLocal = document.getElementById("news-local");
 newsLocal.style.display = "none";
 
 const newsGlobalTab = document.getElementById("news-global-tab");
+const newsNationalTab = document.getElementById("news-national-tab");
 const newsLocalTab = document.getElementById("news-local-tab");
 
 
@@ -893,15 +895,28 @@ newsButton.addEventListener("click", (event) => {
 
 newsGlobalTab.addEventListener("click", () => {
   newsGlobal.style.display = "flex";
+  newsNational.style.display = "none";
   newsLocal.style.display = "none";
   newsGlobalTab.classList.add("active");
+  newsNationalTab.classList.remove("active");
+  newsLocalTab.classList.remove("active");
+});
+
+newsNationalTab.addEventListener("click", () => {
+  newsGlobal.style.display = "none";
+  newsNational.style.display = "flex";
+  newsLocal.style.display = "none";
+  newsGlobalTab.classList.remove("active");
+  newsNationalTab.classList.add("active");
   newsLocalTab.classList.remove("active");
 });
 
 newsLocalTab.addEventListener("click", () => {
   newsGlobal.style.display = "none";
+  newsNational.style.display = "none";
   newsLocal.style.display = "flex";
   newsLocalTab.classList.add("active");
+  newsNationalTab.classList.remove("active");
   newsGlobalTab.classList.remove("active");
 });
 
