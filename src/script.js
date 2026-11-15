@@ -208,6 +208,7 @@ profileButton.addEventListener("click", (event) => {
     openAccountMenu();
   }
   closeWeatherPanel();
+  closeNewsPanel();
   closeSidebar();
 
 });
