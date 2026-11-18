@@ -1,0 +1,19 @@
+{
+  "id": "/AVEN/",
+  "name": "AVEN",
+  "short_name": "AVEN",
+  "description": "Automated Virtual Everyday Network",
+  "start_url": "/AVEN/",
+  "scope": "/AVEN/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#101014",
+  "theme_color": "#101014",
+  "icons": [
+    {
+      "src": "/AVEN/aven.png",
+      "sizes": "991x991",
+      "type": "image/png"
+    }
+  ]
+}
