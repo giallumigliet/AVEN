@@ -4,6 +4,8 @@ import { auth } from "./firebase.js";
 import {
   GoogleAuthProvider,
   signInWithPopup,
+  signInWithRedirect,
+  getRedirectResult,
   setPersistence,
   browserLocalPersistence,
   onAuthStateChanged,
@@ -93,7 +95,7 @@ provider.addScope(
 );
 
 
-setPersistence(
+const authReady = setPersistence(
   auth,
   browserLocalPersistence
 ).catch((err) => {
@@ -104,6 +106,19 @@ setPersistence(
   );
 
 });
+
+
+
+const isIOS =
+  /iPhone|iPad|iPod/.test(navigator.userAgent) ||
+  (navigator.platform === "MacIntel" &&
+   navigator.maxTouchPoints > 1);
+
+const isStandalone =
+  window.matchMedia("(display-mode: standalone)").matches ||
+  window.navigator.standalone === true;
+
+const useRedirect = isIOS && isStandalone;
 
 
 // AUTH STATE =========================================================
@@ -136,6 +151,29 @@ onAuthStateChanged(auth, (user) => {
 });
 
 
+
+async function handleGoogleRedirect() {
+  try {
+    await authReady;
+
+    const result = await getRedirectResult(auth);
+
+    if (result) {
+      console.log(
+        "Login completato:",
+        result.user.email
+      );
+    }
+
+  } catch (err) {
+    console.error("Redirect error:", err);
+  }
+}
+
+handleGoogleRedirect();
+
+
+
 // LOGIN =========================================================
 
 loginButton.addEventListener(
@@ -147,11 +185,12 @@ loginButton.addEventListener(
 
     try {
 
-      const result =
-        await signInWithPopup(
-          auth,
-          provider
-        );
+      await authReady;
+      if (useRedirect) {
+        await signInWithRedirect(auth, provider);
+      } else {
+        await signInWithPopup(auth, provider);
+      }
       
       
       // AUTORIZZA GOOGLE CALENDAR
