@@ -25,6 +25,7 @@ import { initTodos, openTodoModal } from "./todo.js";
 import { initDailyPlanner } from "./daily-planner.js";
 import { initRoutines, openRoutineModal } from "./routines.js";
 import { initBirthdays, openBirthdayModal } from "./birthdays.js";
+import { initTimeHub } from "./time-hub.js"
 import { initBackpacks, openBackpackModal } from "./backpack.js";
 import { isHealthKitAvailable, requestHealthPermission, getTodayHealth } from "./health.js";
 import { initRecap, refreshCalendarEvents } from "./recap.js";
@@ -777,6 +778,9 @@ initRoutines();
 
 // BIRTHDAYS =====================================================
 initBirthdays();
+
+// TIME HUB =====================================================
+initTimeHub();
 
 // BACKPACKS =====================================================
 initBackpacks();
